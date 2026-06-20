@@ -14,13 +14,6 @@ const TYPE_COLOR: Record<string, string> = { '컴뱃': '#e53e3e', '블래스트'
 const TYPE_BG: Record<string, string> = { '컴뱃': '#2d1a1a', '블래스트': '#142929', '스피드': '#162e21', '유니버셜': '#231934' };
 const TYPE_ICON: Record<string, string> = { '컴뱃': '/images/Combat.png', '블래스트': '/images/Blast.webp', '스피드': '/images/Speed.webp', '유니버셜': '/images/Universal.webp' };
 
-// [옵션] 배치 모드 관리 ('drag' = 드래그 앤 드롭 / 'click' = 초상화 클릭 이동)
-const [placementMode, setPlacementMode] = useState<'drag' | 'click'>('drag');
-// [옵션] 아이디 메뉴 토글 상태
-const [isOptionMenuOpen, setIsOptionMenuOpen] = useState<boolean>(false);
-// [옵션] 현재 활성화(선택)된 티어 등급 ('S', 'A' 등)
-const [activeTier, setActiveTier] = useState<string | null>(null);
-
 interface UserCharacterState { owned: boolean; activeUniform: string; ownedUniforms?: Record<string, boolean>; }
 type UserCharactersData = Record<string, UserCharacterState>;
 type TierListData = Record<string, string[]>;
@@ -46,7 +39,12 @@ export default function MainDashboard({
 }: MainDashboardProps) {
   const [activeTab, setActiveTab] = useState<string>('characters');
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
-
+    // [옵션] 배치 모드 관리 ('drag' = 드래그 앤 드롭 / 'click' = 초상화 클릭 이동)
+  const [placementMode, setPlacementMode] = useState<'drag' | 'click'>('drag');
+  // [옵션] 아이디 메뉴 토글 상태
+  const [isOptionMenuOpen, setIsOptionMenuOpen] = useState<boolean>(false);
+  // [옵션] 현재 활성화(선택)된 티어 등급 ('S', 'A' 등)
+  const [activeTier, setActiveTier] = useState<string | null>(null);
   // =================================================================
   // [핵심 변경] page.tsx 통합 패키지 데이터 구조에 맞춘 자동 초깃값 맵핑 연동
   // =================================================================
