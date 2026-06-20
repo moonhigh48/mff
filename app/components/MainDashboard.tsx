@@ -14,6 +14,13 @@ const TYPE_COLOR: Record<string, string> = { '컴뱃': '#e53e3e', '블래스트'
 const TYPE_BG: Record<string, string> = { '컴뱃': '#2d1a1a', '블래스트': '#142929', '스피드': '#162e21', '유니버셜': '#231934' };
 const TYPE_ICON: Record<string, string> = { '컴뱃': '/images/Combat.png', '블래스트': '/images/Blast.webp', '스피드': '/images/Speed.webp', '유니버셜': '/images/Universal.webp' };
 
+// [옵션] 배치 모드 관리 ('drag' = 드래그 앤 드롭 / 'click' = 초상화 클릭 이동)
+const [placementMode, setPlacementMode] = useState<'drag' | 'click'>('drag');
+// [옵션] 아이디 메뉴 토글 상태
+const [isOptionMenuOpen, setIsOptionMenuOpen] = useState<boolean>(false);
+// [옵션] 현재 활성화(선택)된 티어 등급 ('S', 'A' 등)
+const [activeTier, setActiveTier] = useState<string | null>(null);
+
 interface UserCharacterState { owned: boolean; activeUniform: string; ownedUniforms?: Record<string, boolean>; }
 type UserCharactersData = Record<string, UserCharacterState>;
 type TierListData = Record<string, string[]>;
@@ -163,8 +170,76 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
             {t.label}
           </button>
         ))}
-        <div style={{ marginLeft: 'auto', color: '#666', fontSize: 13 }}>{userId} 님 <button onClick={onLogout} style={{ marginLeft: 8, background: 'none', border: 'none', color: '#e05252', cursor: 'pointer', fontSize: 12 }}>로그아웃</button></div>
-      </div>
+        {/* 우상단 유저 정보 및 로그아웃 영역 */}
+          <div style={{ marginLeft: 'auto', color: '#666', fontSize: 13, position: 'relative', display: 'flex', alignItems: 'center' }}>
+            {/* ID 클릭 시 설정 메뉴 팝업 토글 */}
+            <span 
+              onClick={() => setIsOptionMenuOpen(!isOptionMenuOpen)} 
+              style={{ 
+                cursor: 'pointer', 
+                fontWeight: 600, 
+                color: '#aaa', 
+                padding: '4px 8px', 
+                borderRadius: 4, 
+                background: isOptionMenuOpen ? '#2a2a40' : 'transparent', 
+                transition: 'background 0.2s',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+                userSelect: 'none'
+              }}
+              title="클릭하여 배치 옵션 변경"
+            >
+              👤 {userId} 님 <span style={{ fontSize: 10 }}>{isOptionMenuOpen ? '▲' : '▼'}</span>
+            </span>
+
+            {/* 원래 있던 로그아웃 버튼 구조 그대로 유지 */}
+            <button 
+              onClick={onLogout} 
+              style={{ marginLeft: 8, background: 'none', border: 'none', color: '#e05252', cursor: 'pointer', fontSize: 12 }}
+            >
+              로그아웃
+            </button>
+
+            {/* 유저 ID 클릭 시 바로 아래 열리는 배치 옵션 레이어 창 */}
+            {isOptionMenuOpen && (
+              <div style={{ 
+                position: 'absolute', 
+                top: '130%', 
+                left: 0, 
+                background: '#191926', 
+                border: '1px solid #2a2a40', 
+                borderRadius: 8, 
+                padding: '12px 14px', 
+                width: '180px', 
+                zIndex: 999, 
+                boxShadow: '0 4px 15px rgba(0,0,0,0.5)', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: 8 
+              }}>
+                <div style={{ color: '#888', fontSize: 11, fontWeight: 700, borderBottom: '1px solid #2a2a40', paddingBottom: 4 }}>배치 옵션 설정</div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 12, cursor: 'pointer', margin: 0 }}>
+                  <input 
+                    type="radio" 
+                    name="pmode" 
+                    checked={placementMode === 'drag'} 
+                    onChange={() => { setPlacementMode('drag'); setActiveTier(null); }} // 드래그 모드 시 활성칸 해제
+                  />
+                  드래그 앤 드롭 (기존)
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 12, cursor: 'pointer', margin: 0 }}>
+                  <input 
+                    type="radio" 
+                    name="pmode" 
+                    checked={placementMode === 'click'} 
+                    onChange={() => setPlacementMode('click')} 
+                  />
+                  초상화 클릭 이동 (신규)
+                </label>
+              </div>
+            )}
+          </div>      </div>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem' }}>
         {activeTab === 'characters' && <Chr userCharacters={userCharacters} toggleOwned={toggleOwned} setSelectedCharId={setSelectedCharId} getDynamicPortrait={getDynamicPortrait} />}
@@ -176,12 +251,15 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
             setAbxLayout={setAbxLayout} 
             ablLayout={ablLayout} 
             setAblLayout={setAblLayout} 
-            getDynamicPortrait={getDynamicPortrait} 
+            getDynamicPortrait={getDynamicPortrait}
+            placementMode={placementMode}
+            activeSession={activeTier}       // MainDashboard에 선언해 둔 activeTier 상태를 요일 선택용으로 공유 연동
+            setActiveSession={setActiveTier}
             saveToServer={(updatedAbx, updatedAbl) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl)} 
           />
         )}
         
-        {activeTab === 'shadowland' && <SL userCharacters={userCharacters} tierList={tierList} setTierList={setTierList} slLayout={slLayout} setSlLayout={setSlLayout} getDynamicPortrait={getDynamicPortrait} saveToServer={(updatedTier, updatedSl) => saveAllToServer(userCharacters, updatedTier, updatedSl, abxLayout, ablLayout)} />}
+        {activeTab === 'shadowland' && <SL userCharacters={userCharacters} placementMode={placementMode} tierList={tierList} setTierList={setTierList} slLayout={slLayout} setSlLayout={setSlLayout} getDynamicPortrait={getDynamicPortrait} saveToServer={(updatedTier, updatedSl) => saveAllToServer(userCharacters, updatedTier, updatedSl, abxLayout, ablLayout)} />}
       </div>
 
       {selectedCharId && overlayCharacter && (

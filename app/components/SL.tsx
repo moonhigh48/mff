@@ -36,6 +36,7 @@ interface SLProps {
   getDynamicPortrait: (char: any, uniformName?: string) => string;
   saveToServer: (updatedTier: TierListData, updatedSl: ShadowlandLayoutData) => void;
   stageConditions?: StageConditionData;
+  placementMode: 'drag' | 'click';
 }
 
 export default function SL({ 
@@ -46,11 +47,13 @@ export default function SL({
   setSlLayout, 
   getDynamicPortrait, 
   saveToServer,
-  stageConditions: initialConditions
+  stageConditions: initialConditions,
+  placementMode
 }: SLProps) {
   const [shadowlandMode, setShadowlandMode] = useState<'layout' | 'tier'>('layout');
   const assignedTierCharIds = Object.values(tierList).flat();
-
+  const [activeFloor, setActiveFloor] = useState<number | null>(null);
+  const [activeTier, setActiveTier] = useState<string | null>(null);
   const [maxFloor, setMaxFloor] = useState<number>(() => {
     const savedKeys = Object.keys(slLayout).map(Number);
     const highest = savedKeys.length > 0 ? Math.max(...savedKeys) : 35;
@@ -586,7 +589,41 @@ export default function SL({
                   const tagColor = TIER_COLORS[tTag] || '#666';
 
                   return (
-                    <div key={char.id} draggable={true} onDragStart={(e) => handleDragStart(e, char.id)} style={{ position: 'relative', width: '48px', height: '48px', borderRadius: '50%', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, cursor: 'grab' }}>
+                    <div 
+                      key={char.id} 
+                      // ⭕ 드래그 모드일 때만 활성화
+                      draggable={placementMode === 'drag'} 
+                      onDragStart={(e) => handleDragStart(e, char.id)} 
+                      // ⭕ 클릭 배치 로직 연동
+                      onClick={() => {
+                        if (placementMode === 'click') {
+                          // 스테이지 팝업(모달)이 열려있으면 해당 층, 닫혀있으면 선택된 activeFloor를 타겟으로 지정
+                          const targetFloor = activeModalFloor !== null ? activeModalFloor : activeFloor;
+                          
+                          if (targetFloor !== null) {
+                            const mockEvent = {
+                              dataTransfer: { getData: () => char.id },
+                              preventDefault: () => {}
+                            } as any;
+                            
+                            // 🔍 실제 확인된 함수명인 handleDropToFloor 호출
+                            handleDropToFloor(mockEvent, targetFloor); 
+                          } else {
+                            alert("캐릭터를 배치할 층을 먼저 선택하거나 스테이지 조건 설정창을 열어주세요.");
+                          }
+                        }
+                      }}
+                      style={{ 
+                        position: 'relative', 
+                        width: '48px', 
+                        height: '48px', 
+                        borderRadius: '50%', 
+                        border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, 
+                        // 클릭 모드 시 시각적 피드백 제공
+                        cursor: placementMode === 'click' ? 'pointer' : 'grab',
+                        transition: 'transform 0.1s ease'
+                      }}
+                    >
                       <img src={getDynamicPortrait(char, char.matchedUniformName)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', pointerEvents: 'none' }} />
                       <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#0d0d14', border: `1px solid ${tagColor}`, color: tagColor, fontSize: 8, fontWeight: 900, padding: '1px 3px', borderRadius: 4, lineHeight: 1 }}>{tTag}</span>
                     </div>
@@ -603,7 +640,26 @@ export default function SL({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div style={{ border: '1px solid #2a2a40', borderRadius: 12, overflow: 'hidden', background: '#13131e' }}>
             {TIERS.map((tier, index) => (
-              <div key={tier} onDragOver={handleDragOver} onDrop={(e) => handleDropToTier(e, tier)} style={{ display: 'flex', borderBottom: index === TIERS.length - 1 ? 'none' : '1px solid #2a2a40', minHeight: '80px', alignItems: 'stretch' }}>
+              <div 
+                key={tier} 
+                onDragOver={handleDragOver} 
+                onDrop={(e) => handleDropToTier(e, tier)} 
+                // 👇 [추가] 클릭 모드일 때 해당 등급 칸(S~F)을 선택된 상태로 저장
+                onClick={() => {
+                  if (placementMode === 'click') {
+                    setActiveTier(tier);
+                  }
+                }}
+                style={{ 
+                  display: 'flex', 
+                  borderBottom: index === TIERS.length - 1 ? 'none' : '1px solid #2a2a40', 
+                  minHeight: '80px', 
+                  alignItems: 'stretch',
+                  // 👇 [추가] 클릭 배치 모드이면서 현재 이 등급이 선택되었다면 주황색(#ff9100) 테두리 효과를 적용
+                  border: placementMode === 'click' && activeTier === tier ? '2px solid #ff9100' : 'none',
+                  cursor: placementMode === 'click' ? 'pointer' : 'default'
+                }}
+              >
                 <div style={{ width: '70px', background: `${TIER_COLORS[tier]}15`, borderRight: '1px solid #2a2a40', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 900, color: TIER_COLORS[tier] }}>{tier}</div>
                 <div style={{ flex: 1, padding: '10px', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', background: '#0d0d1410' }}>
                   {(tierList[tier] || []).map(id => {
@@ -634,7 +690,38 @@ export default function SL({
                 const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
 
                 return (
-                  <div key={char.id} draggable={true} onDragStart={(e) => handleDragStart(e, char.id)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, cursor: 'grab', width: '64px' }}>
+                  <div 
+                    key={char.id} 
+                    // ⭕ 드래그 모드일 때만 활성화
+                    draggable={placementMode === 'drag'} 
+                    onDragStart={(e) => handleDragStart(e, char.id)} 
+                    // ⭕ 클릭 배치 로직 연동
+                    onClick={() => {
+                      if (placementMode === 'click') {
+                        // 만약 MainDashboard나 컴포넌트 내부에 선택된 티어 상태(예: activeTier)가 있다면 연동
+                        // 여기서는 예시로 activeTier 변수를 매핑합니다.
+                        if (typeof activeTier !== 'undefined' && activeTier) {
+                          const mockEvent = {
+                            dataTransfer: { getData: () => char.id },
+                            preventDefault: () => {}
+                          } as any;
+                          
+                          // 🔍 실제 확인된 티어 드롭 함수 호출
+                          handleDropToTier(mockEvent, activeTier);
+                        } else {
+                          alert("배치할 티어 등급(S~F) 좌측 버튼을 먼저 선택해주세요.");
+                        }
+                      }
+                    }}
+                    style={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      alignItems: 'center', 
+                      gap: 4, 
+                      cursor: placementMode === 'click' ? 'pointer' : 'grab', 
+                      width: '64px' 
+                    }}
+                  >
                     <div style={{ width: '56px', height: '56px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, background: '#0d0d14' }}>
                       <img src={getDynamicPortrait(char, userState.activeUniform)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
                     </div>
