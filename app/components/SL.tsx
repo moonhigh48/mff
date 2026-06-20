@@ -479,14 +479,35 @@ export default function SL({
                     key={floor}
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDropToFloor(e, floor)}
-                    // 👍 카드 배경(빈 영역) 클릭 시 모달 없이 대기열 필터만 연동하도록 설정
-                    onClick={(e) => handleFloorBackgroundClick(floor, e)}
-                    style={{ background: '#13131e', border: '1px solid #2a2a40', borderRadius: 10, padding: '12px', display: 'flex', flexDirection: 'column', gap: 10, position: 'relative', opacity: currentVersionData.isReadOnly ? 0.9 : 1, cursor: currentVersionData.isReadOnly ? 'default' : 'pointer' }}
+                    // 👍 카드 배경(빈 영역) 클릭 시 기존 필터 기능과 함께 '클릭 모드용 층 선택(activeFloor)' 기능을 동시에 수행합니다.
+                    onClick={(e) => {handleFloorBackgroundClick(floor, e);
+                      if (placementMode === 'click') {
+                        setActiveFloor(floor);
+                      }
+                    }}
+                    style={{ 
+                        background: '#13131e', 
+                      // 💡 [수정] 클릭 배치 모드이면서 현재 이 층이 activeFloor로 선택되었다면 주황색 테두리(#ff9100) 하이라이트를 적용합니다.
+                        border: placementMode === 'click' && activeFloor === floor 
+                        ? '2px solid #ff9100' 
+                        : '1px solid #2a2a40', 
+                        borderRadius: 10, 
+                        padding: '12px', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        gap: 10, 
+                        position: 'relative', 
+                        opacity: currentVersionData.isReadOnly ? 0.9 : 1, 
+                        cursor: currentVersionData.isReadOnly ? 'default' : 'pointer',
+                        transition: 'border 0.2s ease'
+                    }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, pointerEvents: 'auto' }}>
-                      {/* 👍 {floor}층 버튼을 누르면 조건이 있건 없건 언제나 수정 모달이 열림 */}
                       <div 
-                        onClick={() => handleFloorButtonClick(floor)}
+                          onClick={(e) => {
+                          e.stopPropagation(); // 💡 중요: 버튼을 눌렀을 때는 배경의 onClick이 중복 발동하지 않도록 차단합니다.
+                          handleFloorButtonClick(floor);
+                        }}
                         style={{ fontSize: 12, fontWeight: 800, color: '#fff', background: activeColor, minWidth: '58px', padding: '6px 2px', borderRadius: 6, textAlign: 'center', cursor: currentVersionData.isReadOnly ? 'default' : 'pointer', border: '1px solid #ffffff15', lineHeight: 1.2 }}
                         title={currentVersionData.isReadOnly ? "" : "클릭: 스테이지 조건 선택 및 수정"}
                       >
