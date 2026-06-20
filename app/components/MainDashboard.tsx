@@ -7,7 +7,8 @@ import AB from './AB';
 import SL from './SL';
 
 import { db } from '../../lib/firebase'; 
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore'; // onSnapshot 추가
+import { useEffect } from 'react'; // useEffect도 필요하므로 확인 후 추가
 
 const TYPE_COLOR: Record<string, string> = { '컴뱃': '#e53e3e', '블래스트': '#319795', '스피드': '#38a169', '유니버셜': '#805ad5' };
 const TYPE_BG: Record<string, string> = { '컴뱃': '#2d1a1a', '블래스트': '#142929', '스피드': '#162e21', '유니버셜': '#231934' };
@@ -42,11 +43,38 @@ export default function MainDashboard({
   // =================================================================
   // [핵심 변경] page.tsx 통합 패키지 데이터 구조에 맞춘 자동 초깃값 맵핑 연동
   // =================================================================
-  const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initialData?.characters || {});
+const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initialData?.characters || {});
   const [tierList, setTierList] = useState<TierListData>(initialData?.tierList || { S: [], A: [], B: [], C: [], D: [], E: [] });
   const [slLayout, setSlLayout] = useState<ShadowlandLayoutData>(initialData?.slLayout || {});
   const [abxLayout, setAbxLayout] = useState<EolbaeLayoutData>(initialData?.abxLayout || {});
   const [ablLayout, setAblLayout] = useState<EolbaeLayoutData>(initialData?.ablLayout || {});
+
+  // [추가] Firebase 실시간 데이터 리스너 작동
+  useEffect(() => {
+    if (!userId) return;
+
+    const userDocRef = doc(db, 'users', userId);
+    
+    // Firestore의 해당 유저 문서를 실시간 감시
+    const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        
+        // 데이터가 변경되면 리액트 상태를 최신화하여 화면을 강제 갱신합니다.
+        if (data.characters) setUserCharacters(data.characters);
+        if (data.tierList) setTierList(data.tierList);
+        if (data.slLayout) setSlLayout(data.slLayout);
+        if (data.abxLayout) setAbxLayout(data.abxLayout);
+        if (data.ablLayout) setAblLayout(data.ablLayout);
+
+        // 로컬스토리지 캐시도 최신으로 동기화
+        localStorage.setItem("mff_initial_data", JSON.stringify(data));
+      }
+    });
+
+    // 컴포넌트가 언마운트될 때 감시를 종료하여 메모리 누수 방지
+    return () => unsubscribe();
+  }, [userId]);
 
   const saveAllToServer = async (
     updatedChars: UserCharactersData, 
