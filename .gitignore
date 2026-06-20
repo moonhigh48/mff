@@ -1,4 +1,3 @@
 node_modules/
 mongodb_data.json
-.env*.local
-public/
+.env.local

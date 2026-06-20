@@ -2431,7 +2431,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   name: '선스팟',
   portrait: '/images/sunspot.png',
   uniforms: [
-    { name: "엑스맨 '97", type: ['유니버셜', '뮤턴트', '남성', '영웅', '질서' ], role: ['딜러', '서포터'], ability: ['화염', '고속 이동'] }
+    { name: "엑스맨 '97", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서' ], role: ['딜러', '서포터'], ability: ['화염', '고속 이동'] }
   ]
 },
 {
