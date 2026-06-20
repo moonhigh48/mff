@@ -6,6 +6,9 @@ import Chr from './Chr';
 import AB from './AB';
 import SL from './SL';
 
+import { db } from '../../lib/firebase'; 
+import { doc, setDoc } from 'firebase/firestore';
+
 const TYPE_COLOR: Record<string, string> = { '컴뱃': '#e53e3e', '블래스트': '#319795', '스피드': '#38a169', '유니버셜': '#805ad5' };
 const TYPE_BG: Record<string, string> = { '컴뱃': '#2d1a1a', '블래스트': '#142929', '스피드': '#162e21', '유니버셜': '#231934' };
 const TYPE_ICON: Record<string, string> = { '컴뱃': '/images/Combat.png', '블래스트': '/images/Blast.webp', '스피드': '/images/Speed.webp', '유니버셜': '/images/Universal.webp' };
@@ -60,26 +63,19 @@ export default function MainDashboard({
       ablLayout: updatedAbl
     };
 
-    // [핵심] 서버 저장과 동시에 로컬 스토리지 캐시도 실시간으로 업데이트 (새로고침 방어)
+    // 로컬 스토리지 캐시 실시간 업데이트 유지
     if (typeof window !== 'undefined') {
       localStorage.setItem("mff_initial_data", JSON.stringify(updatedPayload));
     }
     
     try {
-      await fetch('/api/save-data', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          userId, 
-          characters: updatedChars, 
-          tierList: updatedTier, 
-          slLayout: updatedSl, 
-          abxLayout: updatedAbx,
-          ablLayout: updatedAbl
-        }),
-      });
+      // 'users' 컬렉션에 userId를 도큐먼트 Key로 지정하여 대입
+      // merge: true 옵션을 주면 기존 필드를 유지하면서 수정된 부분만 안전하게 덮어씁니다.
+      const userDocRef = doc(db, 'users', userId);
+      await setDoc(userDocRef, updatedPayload, { merge: true });
+      
     } catch (e) { 
-      console.error('서버 데이터 동기화 실패'); 
+      console.error('Firebase 데이터 동기화 실패:', e); 
     }
   };
 
