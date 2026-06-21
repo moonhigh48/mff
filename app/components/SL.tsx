@@ -628,10 +628,10 @@ export default function SL({
                         }
                         handleDragStart(e, char.id);
                       }}
+                      {...{ onSelectStart: (e: any) => e.preventDefault() }}
                       // ⭕ 클릭 배치 로직 연동
                       onClick={() => {
                         if (placementMode === 'click') {
-                          // 스테이지 팝업(모달)이 열려있으면 해당 층, 닫혀있으면 선택된 activeFloor를 타겟으로 지정
                           const targetFloor = activeModalFloor !== null ? activeModalFloor : activeFloor;
                           if (targetFloor !== null) {
                             const mockEvent = {
@@ -651,7 +651,12 @@ export default function SL({
                         borderRadius: '50%', 
                         border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, 
                         cursor: placementMode === 'click' ? 'pointer' : 'grab',
-                        transition: 'transform 0.1s ease'
+                        transition: 'transform 0.1s ease',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
+                        KhtmlUserSelect: 'none',
+                        MozUserSelect: 'none',
+                        msUserSelect: 'none',
                       }}
                     >
                       <img 
@@ -668,7 +673,7 @@ export default function SL({
                           pointerEvents: 'none'
                         }} 
                       />
-                      <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#0d0d14', border: `1px solid ${tagColor}`, color: tagColor, fontSize: 8, fontWeight: 900, padding: '1px 3px', borderRadius: 4, lineHeight: 1 }}>{tTag}</span>
+                      <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#0d0d14', border: `1px solid ${tagColor}`, color: tagColor, fontSize: 8, fontWeight: 900, padding: '1px 3px', borderRadius: 4, lineHeight: 1, userSelect: 'none' }}>{tTag}</span>
                     </div>
                   );
                 })}
