@@ -277,8 +277,21 @@ export default function MainDashboard({
           />
         )}
         
-        {activeTab === 'shadowland' && <SL userCharacters={userCharacters} placementMode={placementMode} tierList={tierList} setTierList={setTierList} slLayout={slLayout} setSlLayout={setSlLayout} getDynamicPortrait={getDynamicPortrait} saveToServer={(updatedTier, updatedSl, updatedConditions) => saveAllToServer(userCharacters, updatedTier, updatedSl, abxLayout, ablLayout, updatedConditions)} />}
-      </div>
+        {activeTab === 'shadowland' && (
+          <SL 
+            userCharacters={userCharacters} 
+            placementMode={placementMode} 
+            tierList={tierList} 
+            setTierList={setTierList} 
+            slLayout={slLayout} 
+            setSlLayout={setSlLayout} 
+            getDynamicPortrait={getDynamicPortrait} 
+            stageConditions={stageConditions} 
+            saveToServer={(updatedTier, updatedSl, updatedConditions) => 
+              saveAllToServer(userCharacters, updatedTier, updatedSl, abxLayout, ablLayout, updatedConditions)
+              } 
+            />
+          )}      </div>
 
       {selectedCharId && overlayCharacter && (
         <div onClick={() => setSelectedCharId(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.75)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '1rem' }}>
