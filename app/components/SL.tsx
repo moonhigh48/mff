@@ -34,7 +34,7 @@ interface SLProps {
   slLayout: ShadowlandLayoutData;
   setSlLayout: (layout: ShadowlandLayoutData) => void;
   getDynamicPortrait: (char: any, uniformName?: string) => string;
-  saveToServer: (updatedTier: TierListData, updatedSl: ShadowlandLayoutData) => void;
+  saveToServer: (updatedTier: TierListData, updatedSl: ShadowlandLayoutData, updatedConditions?: StageConditionData) => void;
   stageConditions?: StageConditionData;
   placementMode: 'drag' | 'click';
 }
@@ -179,7 +179,7 @@ export default function SL({
       setStageConditions(nextConditions);
       localStorage.setItem('mff_sl_stage_conditions', JSON.stringify(nextConditions));
       setMaxFloor(35);
-      saveToServer(tierList, nextSlLayout);
+      saveToServer(tierList, nextSlLayout, nextConditions);
     }
   };
 
@@ -241,7 +241,7 @@ export default function SL({
     
     // 모달에서 스테이지 입장 완료 시 대기열 자동 필터 연동
     applyMatchFilters(matchTypesArray);
-    saveToServer(tierList, slLayout);
+    saveToServer(tierList, slLayout, nextConditions);
   };
 
   const handleDragStart = (e: React.DragEvent, charId: string) => { 

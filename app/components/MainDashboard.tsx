@@ -19,6 +19,7 @@ type UserCharactersData = Record<string, UserCharacterState>;
 type TierListData = Record<string, string[]>;
 type ShadowlandLayoutData = Record<number, string[]>;
 type EolbaeLayoutData = Record<string, string[]>;
+type StageConditionData = Record<number, { id: string; matchTypes: string[]; }>;
 
 interface MainDashboardProps { 
   userId: string; 
@@ -26,6 +27,7 @@ interface MainDashboardProps {
     characters: UserCharactersData;
     tierList?: TierListData;
     slLayout?: ShadowlandLayoutData;
+    stageConditions?: StageConditionData;
     abxLayout?: EolbaeLayoutData;
     ablLayout?: EolbaeLayoutData;
     placementMode?: 'drag' | 'click';
@@ -49,6 +51,7 @@ export default function MainDashboard({
   const [slLayout, setSlLayout] = useState<ShadowlandLayoutData>(initialData?.slLayout || {});
   const [abxLayout, setAbxLayout] = useState<EolbaeLayoutData>(initialData?.abxLayout || {});
   const [ablLayout, setAblLayout] = useState<EolbaeLayoutData>(initialData?.ablLayout || {});
+  const [stageConditions, setStageConditions] = useState<StageConditionData>(initialData?.stageConditions || {});
 
   useEffect(() => {
     if (!userId) return;
@@ -67,6 +70,7 @@ export default function MainDashboard({
         if (data.abxLayout) setAbxLayout(data.abxLayout);
         if (data.ablLayout) setAblLayout(data.ablLayout);
         if (data.placementMode) setPlacementMode(data.placementMode);
+        if (data.stageConditions) setStageConditions(data.stageConditions);
 
         // 로컬스토리지 캐시도 최신으로 동기화
         localStorage.setItem("mff_initial_data", JSON.stringify(data));
@@ -82,16 +86,21 @@ export default function MainDashboard({
     updatedTier: TierListData, 
     updatedSl: ShadowlandLayoutData,
     updatedAbx: EolbaeLayoutData,
-    updatedAbl: EolbaeLayoutData
+    updatedAbl: EolbaeLayoutData,
+    conditions?: StageConditionData
   ) => {
     const updatedPayload = {
       characters: updatedChars,
       tierList: updatedTier,
       slLayout: updatedSl,
       abxLayout: updatedAbx,
-      ablLayout: updatedAbl
-    };
+      ablLayout: updatedAbl,
+      ...(conditions ? { stageConditions: conditions } : {})
 
+    };
+    if (conditions) {
+      updatedPayload.stageConditions = conditions;
+    }
     // 로컬 스토리지 캐시 실시간 업데이트 유지
     if (typeof window !== 'undefined') {
       localStorage.setItem("mff_initial_data", JSON.stringify(updatedPayload));
@@ -268,7 +277,7 @@ export default function MainDashboard({
           />
         )}
         
-        {activeTab === 'shadowland' && <SL userCharacters={userCharacters} placementMode={placementMode} tierList={tierList} setTierList={setTierList} slLayout={slLayout} setSlLayout={setSlLayout} getDynamicPortrait={getDynamicPortrait} saveToServer={(updatedTier, updatedSl) => saveAllToServer(userCharacters, updatedTier, updatedSl, abxLayout, ablLayout)} />}
+        {activeTab === 'shadowland' && <SL userCharacters={userCharacters} placementMode={placementMode} tierList={tierList} setTierList={setTierList} slLayout={slLayout} setSlLayout={setSlLayout} getDynamicPortrait={getDynamicPortrait} saveToServer={(updatedTier, updatedSl, updatedConditions) => saveAllToServer(userCharacters, updatedTier, updatedSl, abxLayout, ablLayout, updatedConditions)} />}
       </div>
 
       {selectedCharId && overlayCharacter && (
