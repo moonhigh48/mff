@@ -88,7 +88,6 @@ export default function SL({
   });
   const [selectedVersionId, setSelectedVersionId] = useState<string>('current'); 
   const [newVersionName, setNewVersionName] = useState<string>('');
-
   const [filterType, setFilterType] = useState<string>('전체');
   const [filterRace, setFilterRace] = useState<string>('전체');
   const [filterGender, setFilterGender] = useState<string>('전체');
@@ -109,6 +108,9 @@ export default function SL({
 
   const floorsArray = useMemo(() => Array.from({ length: currentVersionData.maxFloor }, (_, i) => i + 1), [currentVersionData.maxFloor]);
 
+  const hangeulSortedDatabase = [...MFF_DATABASE_CHARACTERS].sort((a, b) => 
+    a.name.localeCompare(b.name, 'ko')
+  );
   const handleSaveVersion = () => {
     if (!newVersionName.trim()) {
       alert('버전 이름을 입력해주세요.');
@@ -333,13 +335,10 @@ export default function SL({
   const sortedLayoutCharacters = useMemo(() => {
     const deployedCharIds = Object.values(currentVersionData.layout).flat();
     const pool: any[] = [];
-
     TIERS.forEach(tier => {
       const tierCharIds = tierList[tier] || [];
-      tierCharIds.forEach(id => {
-        if (deployedCharIds.includes(id)) return;
-        const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
-        if (char) {
+      hangeulSortedDatabase.forEach(char => {
+        if (tierCharIds.includes(char.id) && !deployedCharIds.includes(char.id)) {
           const matchResult = checkFilterMatch(char);
           if (matchResult) {
             pool.push({ ...char, customTierTag: tier, matchedUniformName: matchResult.matchedUniformName });
@@ -348,7 +347,7 @@ export default function SL({
       });
     });
 
-    MFF_DATABASE_CHARACTERS.forEach(char => {
+    hangeulSortedDatabase.forEach(char => {
       if (!assignedTierCharIds.includes(char.id) && !deployedCharIds.includes(char.id)) {
         const matchResult = checkFilterMatch(char);
         if (matchResult) {
@@ -687,12 +686,14 @@ export default function SL({
       {shadowlandMode === 'tier' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div style={{ border: '1px solid #2a2a40', borderRadius: 12, overflow: 'hidden', background: '#13131e' }}>
-            {TIERS.map((tier, index) => (
+            {TIERS.map((tier, index) => {
+              const tierCharIds = tierList[tier] || [];
+              const sortedTierCharacters = hangeulSortedDatabase.filter(char => tierCharIds.includes(char.id));
+              return (
               <div 
                 key={tier} 
                 onDragOver={handleDragOver} 
-                onDrop={(e) => handleDropToTier(e, tier)} 
-                // 👇 [추가] 클릭 모드일 때 해당 등급 칸(S~F)을 선택된 상태로 저장
+                onDrop={(e) => handleDropToTier(e, tier)}
                 onClick={() => {
                   if (placementMode === 'click') {
                     setActiveTier(tier);
@@ -703,16 +704,13 @@ export default function SL({
                   borderBottom: index === TIERS.length - 1 ? 'none' : '1px solid #2a2a40', 
                   minHeight: '80px', 
                   alignItems: 'stretch',
-                  // 👇 [추가] 클릭 배치 모드이면서 현재 이 등급이 선택되었다면 주황색(#ff9100) 테두리 효과를 적용
                   border: placementMode === 'click' && activeTier === tier ? '2px solid #ff9100' : 'none',
                   cursor: placementMode === 'click' ? 'pointer' : 'default'
                 }}
               >
                 <div style={{ width: '70px', background: `${TIER_COLORS[tier]}15`, borderRight: '1px solid #2a2a40', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 900, color: TIER_COLORS[tier] }}>{tier}</div>
                 <div style={{ flex: 1, padding: '10px', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', background: '#0d0d1410' }}>
-                  {(tierList[tier] || []).map(id => {
-                    const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
-                    if (!char) return null;
+                  {sortedTierCharacters.map(char => {
                     const userState = userCharacters[char.id] || { activeUniform: '' };
                     const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
 
@@ -724,7 +722,8 @@ export default function SL({
                   })}
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
 
           <div>
@@ -733,7 +732,7 @@ export default function SL({
               {maxFloor > 35 && <button onClick={handleResetExtraFloors} style={{ background: '#bd3a3a', border: 'none', color: '#fff', padding: '6px 12px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>⚠️ 35층 초과 확장층 일괄 삭제</button>}
             </div>
             <div onDragOver={handleDragOver} onDrop={handleDropToTierPool} style={{ background: '#13131e', border: '1px dashed #2a2a40', borderRadius: 14, padding: '1.2rem', display: 'flex', flexWrap: 'wrap', gap: 12, minHeight: '140px' }}>
-              {MFF_DATABASE_CHARACTERS.filter(char => userCharacters[char.id]?.owned && !assignedTierCharIds.includes(char.id)).map(char => {
+              {hangeulSortedDatabase.filter(char => userCharacters[char.id]?.owned && !assignedTierCharIds.includes(char.id)).map(char => {
                 const userState = userCharacters[char.id] || { activeUniform: '' };
                 const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
 

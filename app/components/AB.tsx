@@ -145,7 +145,7 @@ export default function AB({
       if (filterAbility !== '전체' && !activeUni.ability.includes(filterAbility)) return false;
 
       return true;
-    });
+    }).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   }, [userCharacters, selectedSessionKey, filterType, filterRace, filterGender, filterFaction, filterElement, filterAbility]);
 
   return (
