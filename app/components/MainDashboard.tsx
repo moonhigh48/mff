@@ -28,6 +28,7 @@ interface MainDashboardProps {
     slLayout?: ShadowlandLayoutData;
     abxLayout?: EolbaeLayoutData;
     ablLayout?: EolbaeLayoutData;
+    placementMode?: 'drag' | 'click';
   };
   onLogout: () => void; 
 }
@@ -39,22 +40,16 @@ export default function MainDashboard({
 }: MainDashboardProps) {
   const [activeTab, setActiveTab] = useState<string>('characters');
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
-    // [옵션] 배치 모드 관리 ('drag' = 드래그 앤 드롭 / 'click' = 초상화 클릭 이동)
-  const [placementMode, setPlacementMode] = useState<'drag' | 'click'>('drag');
-  // [옵션] 아이디 메뉴 토글 상태
+  //  [수정] initialData에 저장된 모드가 있다면 불러오고 없으면 기본 'drag'
+  const [placementMode, setPlacementMode] = useState<'drag' | 'click'>(initialData?.placementMode || 'drag');
   const [isOptionMenuOpen, setIsOptionMenuOpen] = useState<boolean>(false);
-  // [옵션] 현재 활성화(선택)된 티어 등급 ('S', 'A' 등)
   const [activeTier, setActiveTier] = useState<string | null>(null);
-  // =================================================================
-  // [핵심 변경] page.tsx 통합 패키지 데이터 구조에 맞춘 자동 초깃값 맵핑 연동
-  // =================================================================
-const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initialData?.characters || {});
+  const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initialData?.characters || {});
   const [tierList, setTierList] = useState<TierListData>(initialData?.tierList || { S: [], A: [], B: [], C: [], D: [], E: [] });
   const [slLayout, setSlLayout] = useState<ShadowlandLayoutData>(initialData?.slLayout || {});
   const [abxLayout, setAbxLayout] = useState<EolbaeLayoutData>(initialData?.abxLayout || {});
   const [ablLayout, setAblLayout] = useState<EolbaeLayoutData>(initialData?.ablLayout || {});
 
-  // [추가] Firebase 실시간 데이터 리스너 작동
   useEffect(() => {
     if (!userId) return;
 
@@ -71,6 +66,7 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
         if (data.slLayout) setSlLayout(data.slLayout);
         if (data.abxLayout) setAbxLayout(data.abxLayout);
         if (data.ablLayout) setAblLayout(data.ablLayout);
+        if (data.placementMode) setPlacementMode(data.placementMode);
 
         // 로컬스토리지 캐시도 최신으로 동기화
         localStorage.setItem("mff_initial_data", JSON.stringify(data));
@@ -222,7 +218,15 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
                     type="radio" 
                     name="pmode" 
                     checked={placementMode === 'drag'} 
-                    onChange={() => { setPlacementMode('drag'); setActiveTier(null); }} // 드래그 모드 시 활성칸 해제
+                    // 💡 [수정] 드래그 선택 시 상태 변경 및 파이어베이스 수동 1회 저장
+                    onChange={async () => { 
+                      setPlacementMode('drag'); 
+                      setActiveTier(null); 
+                      if (userId) {
+                        await setDoc(doc(db, 'users', userId), { placementMode: 'drag' }, { merge: true })
+                          .catch((err) => console.error("배치 모드 저장 실패:", err));
+                      }
+                    }} 
                   />
                   드래그 앤 드롭 (기존)
                 </label>
@@ -231,7 +235,14 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
                     type="radio" 
                     name="pmode" 
                     checked={placementMode === 'click'} 
-                    onChange={() => setPlacementMode('click')} 
+                    // 💡 [수정] 클릭 선택 시 상태 변경 및 파이어베이스 수동 1회 저장
+                    onChange={async () => { 
+                      setPlacementMode('click'); 
+                        if (userId) {
+                            await setDoc(doc(db, 'users', userId), { placementMode: 'click' }, { merge: true })
+                          .catch((err) => console.error("배치 모드 저장 실패:", err));
+                        }
+                    }} 
                   />
                   초상화 클릭 이동 (신규)
                 </label>
