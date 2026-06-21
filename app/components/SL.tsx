@@ -481,6 +481,13 @@ export default function SL({
                     onDrop={(e) => handleDropToFloor(e, floor)}
                     // 👍 카드 배경(빈 영역) 클릭 시 기존 필터 기능과 함께 '클릭 모드용 층 선택(activeFloor)' 기능을 동시에 수행합니다.
                     onClick={(e) => {handleFloorBackgroundClick(floor, e);
+                      const condition = stageConditions[floor];
+                      if (condition && condition.matchTypes && condition.matchTypes.length > 0) {
+                        applyMatchFilters(condition.matchTypes);
+                      } else {
+                        applyMatchFilters([]);
+                      }
+
                       if (placementMode === 'click') {
                         setActiveFloor(floor);
                       }
@@ -614,20 +621,23 @@ export default function SL({
                       key={char.id} 
                       // ⭕ 드래그 모드일 때만 활성화
                       draggable={placementMode === 'drag'} 
-                      onDragStart={(e) => handleDragStart(e, char.id)} 
+                      onDragStart={(e) => {
+                        if (placementMode !== 'drag') {
+                          e.preventDefault();
+                          return;
+                        }
+                        handleDragStart(e, char.id);
+                      }}
                       // ⭕ 클릭 배치 로직 연동
                       onClick={() => {
                         if (placementMode === 'click') {
                           // 스테이지 팝업(모달)이 열려있으면 해당 층, 닫혀있으면 선택된 activeFloor를 타겟으로 지정
                           const targetFloor = activeModalFloor !== null ? activeModalFloor : activeFloor;
-                          
                           if (targetFloor !== null) {
                             const mockEvent = {
                               dataTransfer: { getData: () => char.id },
                               preventDefault: () => {}
                             } as any;
-                            
-                            // 🔍 실제 확인된 함수명인 handleDropToFloor 호출
                             handleDropToFloor(mockEvent, targetFloor); 
                           } else {
                             alert("캐릭터를 배치할 층을 먼저 선택하거나 스테이지 조건 설정창을 열어주세요.");
@@ -640,12 +650,24 @@ export default function SL({
                         height: '48px', 
                         borderRadius: '50%', 
                         border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, 
-                        // 클릭 모드 시 시각적 피드백 제공
                         cursor: placementMode === 'click' ? 'pointer' : 'grab',
                         transition: 'transform 0.1s ease'
                       }}
                     >
-                      <img src={getDynamicPortrait(char, char.matchedUniformName)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', pointerEvents: 'none' }} />
+                      <img 
+                        src={getDynamicPortrait(char, char.matchedUniformName)} 
+                        alt={char.name} 
+                        // 💡 [추가] 클릭 모드에서 마우스로 캐릭터를 비벼도 이미지 유령 잔상이 생성되지 않도록 절대 차단
+                        draggable={false}
+                        onDragStart={(e) => e.preventDefault()}
+                        style={{ 
+                          width: '100%', 
+                          height: '100%', 
+                          objectFit: 'cover', 
+                          borderRadius: '50%', 
+                          pointerEvents: 'none'
+                        }} 
+                      />
                       <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#0d0d14', border: `1px solid ${tagColor}`, color: tagColor, fontSize: 8, fontWeight: 900, padding: '1px 3px', borderRadius: 4, lineHeight: 1 }}>{tTag}</span>
                     </div>
                   );
