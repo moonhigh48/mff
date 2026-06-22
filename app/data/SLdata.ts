@@ -92,9 +92,9 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
   {
     floor: 7,
     options: [
-      { id: 'blast4', matchTypes: ['블래스트'], description: '블래스트 타입 유리', bossPreviews: ['redhulk', 'docteroctapus', 'venom', 'crossbones'] },
+      { id: 'blast4', matchTypes: ['블래스트'], description: '블래스트 타입 유리', bossPreviews: ['redhulk', 'doctoroctopus', 'venom', 'crossbones'] },
       { id: 'hero2', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['wiccan', 'whitetiger', 'hulkling', 'songbird', 'squirrelgirl'] },
-      { id: 'supervillain3', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리', bossPreviews: ['lash', 'docteroctapus', 'venom', 'carnige', 'crossbones'] }
+      { id: 'supervillain3', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리', bossPreviews: ['lash', 'doctoroctopus', 'venom', 'carnage', 'crossbones'] }
     ]
   },
   {
@@ -116,7 +116,7 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
   {
     floor: 10,
     options: [
-      { id: 'speed3', matchTypes: ['스피드'], description: '스피드 타입 유리\n에너지 피해 반사', bossPreviews: ['nadiavandain', 'rescue', 'ironheart', 'wasp'] },
+      { id: 'speed3', matchTypes: ['스피드'], description: '스피드 타입 유리\n에너지 피해 반사', bossPreviews: ['nadiavandyne', 'rescue', 'ironheart', 'wasp'] },
       { id: 'blast3', matchTypes: ['블래스트'], description: '블래스트 타입 유리\n물리 피해 반사', bossPreviews: ['hulk', 'hulkling', 'amadeuscho', 'shehulk'] },
       { id: 'combat3', matchTypes: ['컴뱃'], description: '컴뱃 타입 유리\n회피율이 높은 적', bossPreviews: ['milesmorales', 'silk', 'spidergwen', 'spiderman', 'spiderman1'] }
     ]
@@ -124,9 +124,9 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
   {
     floor: 11,
     options: [
-      { id: 'electron1', matchTypes: [], description: '전기 속성 면역', bossPreviews: ['thor', 'groot', 'janeposter'] },
+      { id: 'electron1', matchTypes: [], description: '전기 속성 면역', bossPreviews: ['thor', 'groot', 'janefoster'] },
       { id: 'fire1', matchTypes: [], description: '화염 속성 면역', bossPreviews: ['ghostrider', 'angela', 'greengoblin', 'redhulk'] },
-      { id: 'poison1', matchTypes: [], description: '독 속성 면역', bossPreviews: ['greengoblin', 'lizard', 'scolpion', 'viper'] }
+      { id: 'poison1', matchTypes: [], description: '독 속성 면역', bossPreviews: ['greengoblin', 'lizard', 'scorpion', 'viper'] }
     ]
   },
   {
@@ -148,7 +148,7 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
   {
     floor: 14,
     options: [
-      { id: 'blast4', matchTypes: ['블래스트'], description: '블래스트 타입 유리', bossPreviews: ['redhulk', 'docteroctapus', 'venom', 'crossbones'] },
+      { id: 'blast4', matchTypes: ['블래스트'], description: '블래스트 타입 유리', bossPreviews: ['redhulk', 'doctoroctopus', 'venom', 'crossbones'] },
       { id: 'combat2', matchTypes: ['컴뱃'], description: '컴뱃 타입 유리\n에너지, 물리 피해 반사', bossPreviews: ['blackwidow', 'gamora', 'sharoncarter', 'elsabloodstone'] },
       { id: 'hero2', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['wiccan', 'whitetiger', 'hulkling', 'songbird', 'squirrelgirl'] }
     ]
@@ -162,7 +162,7 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
   {
     floor: 16,
     options: [
-      { id: 'electron1', matchTypes: [], description: '전기 속성 면역', bossPreviews: ['thor', 'groot', 'janeposter'] },
+      { id: 'electron1', matchTypes: [], description: '전기 속성 면역', bossPreviews: ['thor', 'groot', 'janefoster'] },
       { id: 'supervillain9', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리', bossPreviews: ['modok', 'sin', 'malekith'] },
       { id: 'supervillain8', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리\n물리 피해 반사', bossPreviews: ['hulk', 'kingpin', 'hulk1'] }
     ]
@@ -172,14 +172,14 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
     options: [
       { id: 'free3', matchTypes: [], description: '적이 회피하면 회피 면역 발동', bossPreviews: ['rocketraccoon'] },
       { id: 'supervillain10', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리', bossPreviews: ['destroyer1', 'destroyer'] },
-      { id: 'fire2', matchTypes: ['화염'], description: '화염 속성 유리', bossPreviews: ['agentvenom', 'carnige'] }
+      { id: 'fire2', matchTypes: ['화염'], description: '화염 속성 유리', bossPreviews: ['agentvenom', 'carnage'] }
     ]
   },
   {
     floor: 18,
     options: [
       { id: 'hero2', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['wiccan', 'whitetiger', 'hulkling', 'songbird', 'squirrelgirl'] },
-      { id: 'supervillain3', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리', bossPreviews: ['lash', 'docteroctapus', 'venom', 'carnige', 'crossbones'] },
+      { id: 'supervillain3', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리', bossPreviews: ['lash', 'doctoroctopus', 'venom', 'carnage', 'crossbones'] },
       { id: 'supervillain2', matchTypes: ['슈퍼 빌런', '유니버셜'], description: '슈퍼 빌런 진영, 유니버셜 타입.', bossPreviews: ['ultron3', 'ultron', 'ultron1'] }
     ]
   },
@@ -196,8 +196,8 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
     floor: 20,
     options: [
       { id: 'entry1', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['hawkeye', 'captainamerica', 'ironman', 'katebishop', 'sharonrogers', 'ironheart'] },
-      { id: 'entry2', matchTypes: [], description: '상태 이상 해제하는 적', bossPreviews: ['bolstak', 'fanderl', 'hogarn', 'odin', 'thor', 'loki'] },
-      { id: 'entry3', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['cyclops', 'rogan', 'beast', 'wolverin', 'magnito', 'storm'] }
+      { id: 'entry2', matchTypes: [], description: '상태 이상 해제하는 적', bossPreviews: ['volstagg', 'fandral', 'hogun', 'odin', 'thor', 'loki'] },
+      { id: 'entry3', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['cyclops', 'rogue', 'beast', 'wolverine', 'magneto', 'storm'] }
     ]
   },
   {
@@ -229,13 +229,13 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
     options: [
       { id: 'free3', matchTypes: [], description: '적이 회피하면 회피 면역 발동', bossPreviews: ['rocketraccoon'] },
       { id: 'supervillain10', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리', bossPreviews: ['destroyer1', 'destroyer'] },
-      { id: 'fire2', matchTypes: ['화염'], description: '화염 속성 유리', bossPreviews: ['agentvenom', 'carnige'] }
+      { id: 'fire2', matchTypes: ['화염'], description: '화염 속성 유리', bossPreviews: ['agentvenom', 'carnage'] }
     ]
   },
   {
     floor: 25,
     options: [
-      { id: 'entry3', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['cyclops', 'rogan', 'beast', 'wolverin', 'magnito', 'storm'] }
+      { id: 'entry3', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['cyclops', 'rogue', 'beast', 'wolverine', 'magneto', 'storm'] }
     ]
   },
   {
@@ -249,7 +249,7 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
   {
     floor: 27,
     options: [
-      { id: 'entry4', matchTypes: [], description: '일정 확률로 에너지 피해 면역', bossPreviews: ['dormamu', 'satana', 'hellstone', 'docterstrange', 'clea', 'ancientone'] }
+      { id: 'entry4', matchTypes: [], description: '일정 확률로 에너지 피해 면역', bossPreviews: ['dormammu', 'satana', 'hellstorm', 'doctorstrange', 'clea', 'ancientone'] }
     ]
   },
   {
@@ -263,23 +263,23 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
   {
     floor: 29,
     options: [
-      { id: 'entry5', matchTypes: [], description: '강력한 팀으로 도전하세요', bossPreviews: ['blackdwarf', 'proximamidnight', 'colebusgrave', 'thanos', 'supergiant', 'ebonimo'] }
+      { id: 'entry5', matchTypes: [], description: '강력한 팀으로 도전하세요', bossPreviews: ['blackdwarf', 'proximamidnight', 'corvusglaive', 'thanos', 'supergiant', 'ebonimo'] }
     ]
   },
   {
     floor: 30,
     options: [
       { id: 'entry6', matchTypes: ['슈퍼 빌런'], description: '슈퍼 빌런 진영 유리', bossPreviews: ['crossbones', 'captainamerica', 'viper', 'baronzemo', 'redskull', 'sin'] },
-      { id: 'entry7', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['wave', 'airo', 'swordmaster', 'lunasnow', 'crescent', 'whitefox'] },
-      { id: 'entry8', matchTypes: ['유니버셜'], description: '유니버셜 타입 유리\n화염 속성 면역\n전기 속성 면역', bossPreviews: ['thor', 'loki', 'angela', 'haimdal', 'hela', 'odin'] }
+      { id: 'entry7', matchTypes: ['영웅'], description: '영웅 진영 유리', bossPreviews: ['wave', 'aero', 'swordmaster', 'lunasnow', 'crescent', 'whitefox'] },
+      { id: 'entry8', matchTypes: ['유니버셜'], description: '유니버셜 타입 유리\n화염 속성 면역\n전기 속성 면역', bossPreviews: ['thor', 'loki', 'angela', 'heimdall', 'hela', 'odin'] }
     ]
   },
   {
     floor: 31,
     options: [
-      { id: 'blast5', matchTypes: ['블래스트', '슈퍼 빌런'], description: '블래스트 타입, 슈퍼 빌런 진영 유리\n물리 피해 반사', bossPreviews: ['beast', 'zuggernut', 'killmonger', 'savertooth'] },
-      { id: 'speed5', matchTypes: ['스피드', '슈퍼 빌런'], description: '스피드 타입, 슈퍼 빌런 진영 유리\n에너지 피해 반사', bossPreviews: ['magneto', 'mistersinster', 'stripe', 'cyclops'] },
-      { id: 'combat5', matchTypes: ['컴뱃', '영웅'], description: '컴뱃 타입, 영웅 진영 유리\n에너지 피해 반사', bossPreviews: ['모르도', 'lunasnow', 'wave', 'airo'] }
+      { id: 'blast5', matchTypes: ['블래스트', '슈퍼 빌런'], description: '블래스트 타입, 슈퍼 빌런 진영 유리\n물리 피해 반사', bossPreviews: ['beast', 'juggernaut', 'killmonger', 'sabretooth'] },
+      { id: 'speed5', matchTypes: ['스피드', '슈퍼 빌런'], description: '스피드 타입, 슈퍼 빌런 진영 유리\n에너지 피해 반사', bossPreviews: ['magneto', 'mistersinister', 'stryfe', 'cyclops'] },
+      { id: 'combat5', matchTypes: ['컴뱃', '영웅'], description: '컴뱃 타입, 영웅 진영 유리\n에너지 피해 반사', bossPreviews: ['baronmordo', 'lunasnow', 'wave', 'aero'] }
     ]
   },
   {
@@ -293,7 +293,7 @@ const RAW_DATABASE: Omit<FixedFloorData, 'mode'>[] = [
     options: [
       { id: 'fire3', matchTypes: ['화염'], description: '화염 속성 유리', bossPreviews: ['iceman'] },
       { id: 'free6', matchTypes: [], description: '뮤턴트 종족이 아닌 캐릭터 유리', bossPreviews: ['scarletwitch'] },
-      { id: 'free7', matchTypes: ['슈퍼 빌런'], description: '기계 또는 정신 저항 고유 능력을 가진 슈퍼 빌런 진영', bossPreviews: ['인챈트리스'] }
+      { id: 'free7', matchTypes: ['슈퍼 빌런'], description: '기계 또는 정신 저항 고유 능력을 가진 슈퍼 빌런 진영', bossPreviews: ['enchantress'] }
     ]
   },
   {

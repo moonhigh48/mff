@@ -199,7 +199,31 @@ export default function SL({
       else if (['인간', '뮤턴트', '인휴먼', '외계인', '창조물', '불명'].includes(condition)) setFilterRace(condition);
     });
   };
+  const handleMouseDownScroll = (e: React.MouseEvent<HTMLDivElement>) => {
+    const container = e.currentTarget;
+    let isDown = true;
+    let startX = e.pageX - container.offsetLeft;
+    let scrollLeft = container.scrollLeft;
 
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      if (!isDown) return;
+      moveEvent.preventDefault();
+      const x = moveEvent.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.5; // 👈 1.5는 드래그 속도 배율 (원하는 만큼 조절 가능)
+      container.scrollLeft = scrollLeft - walk;
+    };
+
+    const handleMouseUpOrLeave = () => {
+      isDown = false;
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUpOrLeave);
+      document.removeEventListener('mouseleave', handleMouseUpOrLeave);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUpOrLeave);
+    document.addEventListener('mouseleave', handleMouseUpOrLeave);
+  };
   // 👍 [수정] 층수 칸({floor}층 버튼) 누르면 언제나 모달 오픈 + 자동 필터 연동
   const handleFloorButtonClick = (floorNum: number) => {
     if (currentVersionData.isReadOnly) return;
@@ -627,7 +651,6 @@ export default function SL({
                         }
                         handleDragStart(e, char.id);
                       }}
-                      {...{ onSelectStart: (e: any) => e.preventDefault() }}
                       // ⭕ 클릭 배치 로직 연동
                       onClick={() => {
                         if (placementMode === 'click') {
@@ -796,7 +819,13 @@ export default function SL({
               <div style={{ fontSize: 18, fontWeight: 700, textAlign: 'center', marginBottom: 24, color: '#fff' }}>
                 섀도우랜드 {activeModalFloor}층 <span style={{ color: '#a3e635' }}>{SLmode}</span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+              <div style={{ 
+                display: options.length === 1 ? 'flex' : 'grid',
+                justifyContent: options.length === 1 ? 'center' : 'stretch',
+                gridTemplateColumns: options.length === 1 ? 'none' : 'repeat(3, 1fr)', 
+                gap: 16, 
+                marginBottom: 24 
+              }}>
                 {options.map(option => {
                   const isCurrentlySelected = currentSelectedId === option.id;
                   const currentOptionTypes: string[] = Array.isArray(option.matchTypes)
@@ -821,14 +850,71 @@ export default function SL({
                         <div style={{ fontSize: 11, color: isCurrentlySelected ? '#38bdf8' : '#888', marginBottom: 12, fontWeight: 600 }}>
                           {isCurrentlySelected ? '● 현재 선택됨' : '등장 보스'}
                         </div>
-                        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 14, minHeight: '40px', alignItems: 'center' }}>
-                          {option.bossPreviews && option.bossPreviews.length > 0 ? (
+                        <div
+                        style={{ display: 'flex', gap: 8, justifyContent: option.bossPreviews && option.bossPreviews.length > 3 ? 'flex-start' : 'center',
+                          marginBottom: 14,
+                          minHeight: '42px',
+                          alignItems: 'center',
+                          width: '100%', 
+                          overflowX: 'auto',
+                          overflowY: 'hidden',
+                          whiteSpace: 'nowrap',
+                          WebkitOverflowScrolling: 'touch',
+                          scrollbarWidth: 'none',       // 파이어폭스 & 최신 크롬/엣지 표준 표준 속성
+                          msOverflowStyle: 'none',
+                          cursor: option.bossPreviews && option.bossPreviews.length > 3 ? 'grab' : 'default',
+                          userSelect: 'none',
+                          WebkitUserSelect: 'none'
+                        }}
+                        onMouseDown={(e) => {
+                          const container = e.currentTarget;
+                          // 보스가 3명 이하라 넘칠 일이 없으면 드래그 로직을 작동시키지 않습니다.
+                          if (!option.bossPreviews || option.bossPreviews.length <= 3) return;
+
+                          container.style.cursor = 'grabbing'; // 누르고 있을 때는 꽉 쥔 손모양으로 변경
+          
+                          let isDown = true;
+                          const startX = e.pageX - container.offsetLeft;
+                          const scrollLeft = container.scrollLeft;
+
+                          const handleMouseMove = (moveEvent: MouseEvent) => {
+                            if (!isDown) return;
+                            moveEvent.preventDefault(); // 드래그 중 텍스트나 이미지가 긁히는 현상 차단
+                            const x = moveEvent.pageX - container.offsetLeft;
+                            // 1.8은 드래그 감도입니다. 숫자가 높을수록 마우스를 조금만 움직여도 휙휙 잘 넘어갑니다.
+                            const walk = (x - startX) * 1.0; 
+                            container.scrollLeft = scrollLeft - walk;
+                          };
+
+                          const handleMouseUpOrLeave = () => {
+                            isDown = false;
+                            container.style.cursor = 'grab'; // 마우스를 떼면 다시 평상시 손모양으로 환원
+                            document.removeEventListener('mousemove', handleMouseMove);
+                            document.removeEventListener('mouseup', handleMouseUpOrLeave);
+                            document.removeEventListener('mouseleave', handleMouseUpOrLeave);
+                          };
+
+                          // 마우스가 컨테이너 밖으로 나가거나 떼어졌을 때를 대비해 document 전체에 이벤트 감지
+                          document.addEventListener('mousemove', handleMouseMove);
+                          document.addEventListener('mouseup', handleMouseUpOrLeave);
+                          document.addEventListener('mouseleave', handleMouseUpOrLeave);
+                        }}
+                      >
+                        {option.bossPreviews && option.bossPreviews.length > 0 ? (
                             option.bossPreviews.map(bossId => (
-                              <div key={bossId} style={{ width: 42, height: 42, borderRadius: 4, overflow: 'hidden', border: '1px solid #333', background: '#050508' }}>
+                              <div key={bossId} style={{ width: 42, height: 42, borderRadius: 4, overflow: 'hidden', border: '1px solid #333', background: '#050508', flex: '0 0 42px' }}>
                                 <img 
                                   src={`/images/${bossId.toLowerCase()}.png`} 
                                   alt={bossId} 
-                                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                  onDragStart={(e) => e.preventDefault()} 
+                                  style={{ 
+                                    width: '100%', 
+                                    height: '100%', 
+                                    objectFit: 'cover',
+                                    pointerEvents: 'none', // 마우스 포인터 이벤트를 부모 div로 관통시킵니다.
+                                    userSelect: 'none',
+                                    WebkitUserSelect: 'none'
+                                  }} 
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42"><rect width="42" height="42" fill="%23222"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="%23666" font-size="9">ERR</text></svg>';
                                   }}

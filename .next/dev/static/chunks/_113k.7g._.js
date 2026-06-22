@@ -18894,7 +18894,7 @@ const RAW_DATABASE = [
                 description: '블래스트 타입 유리',
                 bossPreviews: [
                     'redhulk',
-                    'docteroctapus',
+                    'doctoroctopus',
                     'venom',
                     'crossbones'
                 ]
@@ -18921,9 +18921,9 @@ const RAW_DATABASE = [
                 description: '슈퍼 빌런 진영 유리',
                 bossPreviews: [
                     'lash',
-                    'docteroctapus',
+                    'doctoroctopus',
                     'venom',
-                    'carnige',
+                    'carnage',
                     'crossbones'
                 ]
             }
@@ -19024,7 +19024,7 @@ const RAW_DATABASE = [
                 ],
                 description: '스피드 타입 유리\n에너지 피해 반사',
                 bossPreviews: [
-                    'nadiavandain',
+                    'nadiavandyne',
                     'rescue',
                     'ironheart',
                     'wasp'
@@ -19069,7 +19069,7 @@ const RAW_DATABASE = [
                 bossPreviews: [
                     'thor',
                     'groot',
-                    'janeposter'
+                    'janefoster'
                 ]
             },
             {
@@ -19090,7 +19090,7 @@ const RAW_DATABASE = [
                 bossPreviews: [
                     'greengoblin',
                     'lizard',
-                    'scolpion',
+                    'scorpion',
                     'viper'
                 ]
             }
@@ -19178,7 +19178,7 @@ const RAW_DATABASE = [
                 description: '블래스트 타입 유리',
                 bossPreviews: [
                     'redhulk',
-                    'docteroctapus',
+                    'doctoroctopus',
                     'venom',
                     'crossbones'
                 ]
@@ -19242,7 +19242,7 @@ const RAW_DATABASE = [
                 bossPreviews: [
                     'thor',
                     'groot',
-                    'janeposter'
+                    'janefoster'
                 ]
             },
             {
@@ -19301,7 +19301,7 @@ const RAW_DATABASE = [
                 description: '화염 속성 유리',
                 bossPreviews: [
                     'agentvenom',
-                    'carnige'
+                    'carnage'
                 ]
             }
         ]
@@ -19331,9 +19331,9 @@ const RAW_DATABASE = [
                 description: '슈퍼 빌런 진영 유리',
                 bossPreviews: [
                     'lash',
-                    'docteroctapus',
+                    'doctoroctopus',
                     'venom',
-                    'carnige',
+                    'carnage',
                     'crossbones'
                 ]
             },
@@ -19417,9 +19417,9 @@ const RAW_DATABASE = [
                 matchTypes: [],
                 description: '상태 이상 해제하는 적',
                 bossPreviews: [
-                    'bolstak',
-                    'fanderl',
-                    'hogarn',
+                    'volstagg',
+                    'fandral',
+                    'hogun',
                     'odin',
                     'thor',
                     'loki'
@@ -19433,10 +19433,10 @@ const RAW_DATABASE = [
                 description: '영웅 진영 유리',
                 bossPreviews: [
                     'cyclops',
-                    'rogan',
+                    'rogue',
                     'beast',
-                    'wolverin',
-                    'magnito',
+                    'wolverine',
+                    'magneto',
                     'storm'
                 ]
             }
@@ -19586,7 +19586,7 @@ const RAW_DATABASE = [
                 description: '화염 속성 유리',
                 bossPreviews: [
                     'agentvenom',
-                    'carnige'
+                    'carnage'
                 ]
             }
         ]
@@ -19602,10 +19602,10 @@ const RAW_DATABASE = [
                 description: '영웅 진영 유리',
                 bossPreviews: [
                     'cyclops',
-                    'rogan',
+                    'rogue',
                     'beast',
-                    'wolverin',
-                    'magnito',
+                    'wolverine',
+                    'magneto',
                     'storm'
                 ]
             }
@@ -19650,10 +19650,10 @@ const RAW_DATABASE = [
                 matchTypes: [],
                 description: '일정 확률로 에너지 피해 면역',
                 bossPreviews: [
-                    'dormamu',
+                    'dormammu',
                     'satana',
-                    'hellstone',
-                    'docterstrange',
+                    'hellstorm',
+                    'doctorstrange',
                     'clea',
                     'ancientone'
                 ]
@@ -19715,7 +19715,7 @@ const RAW_DATABASE = [
                 bossPreviews: [
                     'blackdwarf',
                     'proximamidnight',
-                    'colebusgrave',
+                    'corvusglaive',
                     'thanos',
                     'supergiant',
                     'ebonimo'
@@ -19749,7 +19749,7 @@ const RAW_DATABASE = [
                 description: '영웅 진영 유리',
                 bossPreviews: [
                     'wave',
-                    'airo',
+                    'aero',
                     'swordmaster',
                     'lunasnow',
                     'crescent',
@@ -19766,7 +19766,7 @@ const RAW_DATABASE = [
                     'thor',
                     'loki',
                     'angela',
-                    'haimdal',
+                    'heimdall',
                     'hela',
                     'odin'
                 ]
@@ -19785,9 +19785,9 @@ const RAW_DATABASE = [
                 description: '블래스트 타입, 슈퍼 빌런 진영 유리\n물리 피해 반사',
                 bossPreviews: [
                     'beast',
-                    'zuggernut',
+                    'juggernaut',
                     'killmonger',
-                    'savertooth'
+                    'sabretooth'
                 ]
             },
             {
@@ -19799,8 +19799,8 @@ const RAW_DATABASE = [
                 description: '스피드 타입, 슈퍼 빌런 진영 유리\n에너지 피해 반사',
                 bossPreviews: [
                     'magneto',
-                    'mistersinster',
-                    'stripe',
+                    'mistersinister',
+                    'stryfe',
                     'cyclops'
                 ]
             },
@@ -19812,10 +19812,10 @@ const RAW_DATABASE = [
                 ],
                 description: '컴뱃 타입, 영웅 진영 유리\n에너지 피해 반사',
                 bossPreviews: [
-                    '모르도',
+                    'baronmordo',
                     'lunasnow',
                     'wave',
-                    'airo'
+                    'aero'
                 ]
             }
         ]
@@ -19868,7 +19868,7 @@ const RAW_DATABASE = [
                 ],
                 description: '기계 또는 정신 저항 고유 능력을 가진 슈퍼 빌런 진영',
                 bossPreviews: [
-                    '인챈트리스'
+                    'enchantress'
                 ]
             }
         ]
@@ -20216,6 +20216,28 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
             ].includes(condition)) setFilterRace(condition);
         });
     };
+    const handleMouseDownScroll = (e)=>{
+        const container = e.currentTarget;
+        let isDown = true;
+        let startX = e.pageX - container.offsetLeft;
+        let scrollLeft = container.scrollLeft;
+        const handleMouseMove = (moveEvent)=>{
+            if (!isDown) return;
+            moveEvent.preventDefault();
+            const x = moveEvent.pageX - container.offsetLeft;
+            const walk = (x - startX) * 1.5; // 👈 1.5는 드래그 속도 배율 (원하는 만큼 조절 가능)
+            container.scrollLeft = scrollLeft - walk;
+        };
+        const handleMouseUpOrLeave = ()=>{
+            isDown = false;
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUpOrLeave);
+            document.removeEventListener('mouseleave', handleMouseUpOrLeave);
+        };
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUpOrLeave);
+        document.addEventListener('mouseleave', handleMouseUpOrLeave);
+    };
     // 👍 [수정] 층수 칸({floor}층 버튼) 누르면 언제나 모달 오픈 + 자동 필터 연동
     const handleFloorButtonClick = (floorNum)=>{
         if (currentVersionData.isReadOnly) return;
@@ -20435,7 +20457,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                             children: "타입"
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 365,
+                            lineNumber: 389,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -20462,18 +20484,18 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                     children: v
                                 }, v, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 367,
+                                    lineNumber: 391,
                                     columnNumber: 57
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 366,
+                            lineNumber: 390,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/components/SL.tsx",
-                    lineNumber: 364,
+                    lineNumber: 388,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -20488,7 +20510,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                             children: "종족"
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 371,
+                            lineNumber: 395,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -20517,18 +20539,18 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                     children: v
                                 }, v, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 373,
+                                    lineNumber: 397,
                                     columnNumber: 68
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 372,
+                            lineNumber: 396,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/components/SL.tsx",
-                    lineNumber: 370,
+                    lineNumber: 394,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -20543,7 +20565,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                             children: "성별"
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 377,
+                            lineNumber: 401,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -20569,18 +20591,18 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                     children: v
                                 }, v, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 379,
+                                    lineNumber: 403,
                                     columnNumber: 49
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 378,
+                            lineNumber: 402,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/components/SL.tsx",
-                    lineNumber: 376,
+                    lineNumber: 400,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -20595,7 +20617,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                             children: "진영"
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 383,
+                            lineNumber: 407,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -20621,18 +20643,18 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                     children: v
                                 }, v, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 385,
+                                    lineNumber: 409,
                                     columnNumber: 49
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 384,
+                            lineNumber: 408,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/components/SL.tsx",
-                    lineNumber: 382,
+                    lineNumber: 406,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -20647,7 +20669,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                             children: "역할"
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 389,
+                            lineNumber: 413,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -20673,18 +20695,18 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                     children: v
                                 }, v, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 391,
+                                    lineNumber: 415,
                                     columnNumber: 47
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 390,
+                            lineNumber: 414,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/components/SL.tsx",
-                    lineNumber: 388,
+                    lineNumber: 412,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -20699,7 +20721,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                             children: "능력"
                         }, void 0, false, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 395,
+                            lineNumber: 419,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -20721,7 +20743,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                     children: "전체"
                                 }, void 0, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 397,
+                                    lineNumber: 421,
                                     columnNumber: 11
                                 }, this),
                                 allAbilities.map((v)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -20729,25 +20751,25 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                         children: v
                                     }, v, false, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 398,
+                                        lineNumber: 422,
                                         columnNumber: 34
                                     }, this))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 396,
+                            lineNumber: 420,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/components/SL.tsx",
-                    lineNumber: 394,
+                    lineNumber: 418,
                     columnNumber: 7
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/components/SL.tsx",
-            lineNumber: 363,
+            lineNumber: 387,
             columnNumber: 5
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -20778,7 +20800,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                         children: "섀도우랜드 배치"
                     }, void 0, false, {
                         fileName: "[project]/app/components/SL.tsx",
-                        lineNumber: 407,
+                        lineNumber: 431,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -20796,13 +20818,13 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                         children: "캐릭터 티어표"
                     }, void 0, false, {
                         fileName: "[project]/app/components/SL.tsx",
-                        lineNumber: 408,
+                        lineNumber: 432,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/components/SL.tsx",
-                lineNumber: 406,
+                lineNumber: 430,
                 columnNumber: 7
             }, this),
             shadowlandMode === 'layout' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -20834,7 +20856,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                 children: "기록 버전 조회:"
                             }, void 0, false, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 414,
+                                lineNumber: 438,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -20855,7 +20877,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                         children: "현재 편집 중인 배치"
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 420,
+                                        lineNumber: 444,
                                         columnNumber: 15
                                     }, this),
                                     versions.map((v)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -20863,19 +20885,19 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                             children: v.versionName
                                         }, v.id, false, {
                                             fileName: "[project]/app/components/SL.tsx",
-                                            lineNumber: 422,
+                                            lineNumber: 446,
                                             columnNumber: 17
                                         }, this))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 415,
+                                lineNumber: 439,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/components/SL.tsx",
-                        lineNumber: 413,
+                        lineNumber: 437,
                         columnNumber: 11
                     }, this),
                     selectedVersionId !== 'current' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -20894,7 +20916,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                 children: "⚠️ 과거 기록 읽기 전용 모드 (메모 수정 가능)"
                             }, void 0, false, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 429,
+                                lineNumber: 453,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -20911,13 +20933,13 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                 children: "이 버전 기록 삭제"
                             }, void 0, false, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 430,
+                                lineNumber: 454,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/components/SL.tsx",
-                        lineNumber: 428,
+                        lineNumber: 452,
                         columnNumber: 13
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
@@ -20943,7 +20965,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 439,
+                                lineNumber: 463,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -20961,19 +20983,19 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                 children: "현재 배치 저장"
                             }, void 0, false, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 446,
+                                lineNumber: 470,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/components/SL.tsx",
-                        lineNumber: 438,
+                        lineNumber: 462,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/components/SL.tsx",
-                lineNumber: 412,
+                lineNumber: 436,
                 columnNumber: 9
             }, this),
             shadowlandMode === 'layout' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21071,7 +21093,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/components/SL.tsx",
-                                                        lineNumber: 512,
+                                                        lineNumber: 536,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21117,12 +21139,12 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                                 children: t
                                                                             }, t, false, {
                                                                                 fileName: "[project]/app/components/SL.tsx",
-                                                                                lineNumber: 529,
+                                                                                lineNumber: 553,
                                                                                 columnNumber: 33
                                                                             }, this))
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/components/SL.tsx",
-                                                                        lineNumber: 527,
+                                                                        lineNumber: 551,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     matchedOption && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -21137,13 +21159,13 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/components/SL.tsx",
-                                                                        lineNumber: 535,
+                                                                        lineNumber: 559,
                                                                         columnNumber: 31
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/components/SL.tsx",
-                                                                lineNumber: 526,
+                                                                lineNumber: 550,
                                                                 columnNumber: 27
                                                             }, this),
                                                             (currentVersionData.layout[floor] || []).map((id)=>{
@@ -21181,7 +21203,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                             }
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/components/SL.tsx",
-                                                                            lineNumber: 560,
+                                                                            lineNumber: 584,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -21201,13 +21223,13 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                             children: charTier
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/components/SL.tsx",
-                                                                            lineNumber: 561,
+                                                                            lineNumber: 585,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     ]
                                                                 }, id, true, {
                                                                     fileName: "[project]/app/components/SL.tsx",
-                                                                    lineNumber: 551,
+                                                                    lineNumber: 575,
                                                                     columnNumber: 29
                                                                 }, this);
                                                             }),
@@ -21221,19 +21243,19 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                 children: currentVersionData.isReadOnly ? '배치 기록 없음' : '왼쪽 층수 버튼을 눌러 스테이지 조건을 선택하세요.'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/components/SL.tsx",
-                                                                lineNumber: 568,
+                                                                lineNumber: 592,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/components/SL.tsx",
-                                                        lineNumber: 524,
+                                                        lineNumber: 548,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/components/SL.tsx",
-                                                lineNumber: 511,
+                                                lineNumber: 535,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21262,7 +21284,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                 children: "층별 공략 및 배치 메모"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/components/SL.tsx",
-                                                                lineNumber: 578,
+                                                                lineNumber: 602,
                                                                 columnNumber: 25
                                                             }, this),
                                                             selectedVersionId !== 'current' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -21273,13 +21295,13 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                 children: "*과거 기록 수동 갱신됨"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/components/SL.tsx",
-                                                                lineNumber: 579,
+                                                                lineNumber: 603,
                                                                 columnNumber: 61
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/components/SL.tsx",
-                                                        lineNumber: 577,
+                                                        lineNumber: 601,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -21301,19 +21323,19 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/components/SL.tsx",
-                                                        lineNumber: 581,
+                                                        lineNumber: 605,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/components/SL.tsx",
-                                                lineNumber: 576,
+                                                lineNumber: 600,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, floor, true, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 477,
+                                        lineNumber: 501,
                                         columnNumber: 19
                                     }, this);
                                 }),
@@ -21333,13 +21355,13 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                     children: "+ 다음 층수 추가하기"
                                 }, void 0, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 594,
+                                    lineNumber: 618,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 461,
+                            lineNumber: 485,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21374,7 +21396,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/components/SL.tsx",
-                                            lineNumber: 602,
+                                            lineNumber: 626,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -21398,18 +21420,18 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                             children: "필터 초기화"
                                         }, void 0, false, {
                                             fileName: "[project]/app/components/SL.tsx",
-                                            lineNumber: 603,
+                                            lineNumber: 627,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 601,
+                                    lineNumber: 625,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FilterDropdownPanel, {}, void 0, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 610,
+                                    lineNumber: 634,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21437,7 +21459,6 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                 }
                                                 handleDragStart(e, char.id);
                                             },
-                                            onSelectStart: (e)=>e.preventDefault(),
                                             // ⭕ 클릭 배치 로직 연동
                                             onClick: ()=>{
                                                 if (placementMode === 'click') {
@@ -21485,7 +21506,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/components/SL.tsx",
-                                                    lineNumber: 661,
+                                                    lineNumber: 684,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -21506,36 +21527,36 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                     children: tTag
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/components/SL.tsx",
-                                                    lineNumber: 675,
+                                                    lineNumber: 698,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, char.id, true, {
                                             fileName: "[project]/app/components/SL.tsx",
-                                            lineNumber: 619,
+                                            lineNumber: 643,
                                             columnNumber: 21
                                         }, this);
                                     })
                                 }, void 0, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 611,
+                                    lineNumber: 635,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/components/SL.tsx",
-                            lineNumber: 600,
+                            lineNumber: 624,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/components/SL.tsx",
-                    lineNumber: 459,
+                    lineNumber: 483,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/components/SL.tsx",
-                lineNumber: 458,
+                lineNumber: 482,
                 columnNumber: 9
             }, this),
             shadowlandMode === 'tier' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21587,7 +21608,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                         children: tier
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 711,
+                                        lineNumber: 734,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21627,30 +21648,30 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/components/SL.tsx",
-                                                    lineNumber: 719,
+                                                    lineNumber: 742,
                                                     columnNumber: 25
                                                 }, this)
                                             }, char.id, false, {
                                                 fileName: "[project]/app/components/SL.tsx",
-                                                lineNumber: 718,
+                                                lineNumber: 741,
                                                 columnNumber: 23
                                             }, this);
                                         })
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 712,
+                                        lineNumber: 735,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, tier, true, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 693,
+                                lineNumber: 716,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/app/components/SL.tsx",
-                        lineNumber: 688,
+                        lineNumber: 711,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21670,7 +21691,7 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                         children: "티어 미배치 캐릭터 목록"
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 731,
+                                        lineNumber: 754,
                                         columnNumber: 15
                                     }, this),
                                     maxFloor > 35 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -21688,13 +21709,13 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                         children: "⚠️ 35층 초과 확장층 일괄 삭제"
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 732,
+                                        lineNumber: 755,
                                         columnNumber: 33
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 730,
+                                lineNumber: 753,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21767,12 +21788,12 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/components/SL.tsx",
-                                                    lineNumber: 773,
+                                                    lineNumber: 796,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/components/SL.tsx",
-                                                lineNumber: 772,
+                                                lineNumber: 795,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21788,31 +21809,31 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                 children: char.name
                                             }, void 0, false, {
                                                 fileName: "[project]/app/components/SL.tsx",
-                                                lineNumber: 775,
+                                                lineNumber: 798,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, char.id, true, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 740,
+                                        lineNumber: 763,
                                         columnNumber: 19
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 734,
+                                lineNumber: 757,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/components/SL.tsx",
-                        lineNumber: 729,
+                        lineNumber: 752,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/components/SL.tsx",
-                lineNumber: 687,
+                lineNumber: 710,
                 columnNumber: 9
             }, this),
             activeModalFloor !== null && (()=>{
@@ -21866,19 +21887,20 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                         children: SLmode
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 797,
+                                        lineNumber: 820,
                                         columnNumber: 43
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 796,
+                                lineNumber: 819,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(3, 1fr)',
+                                    display: options.length === 1 ? 'flex' : 'grid',
+                                    justifyContent: options.length === 1 ? 'center' : 'stretch',
+                                    gridTemplateColumns: options.length === 1 ? 'none' : 'repeat(3, 1fr)',
                                     gap: 16,
                                     marginBottom: 24
                                 },
@@ -21919,17 +21941,55 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                         children: isCurrentlySelected ? '● 현재 선택됨' : '등장 보스'
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/components/SL.tsx",
-                                                        lineNumber: 821,
+                                                        lineNumber: 850,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         style: {
                                                             display: 'flex',
                                                             gap: 8,
-                                                            justifyContent: 'center',
+                                                            justifyContent: option.bossPreviews && option.bossPreviews.length > 3 ? 'flex-start' : 'center',
                                                             marginBottom: 14,
-                                                            minHeight: '40px',
-                                                            alignItems: 'center'
+                                                            minHeight: '42px',
+                                                            alignItems: 'center',
+                                                            width: '100%',
+                                                            overflowX: 'auto',
+                                                            overflowY: 'hidden',
+                                                            whiteSpace: 'nowrap',
+                                                            WebkitOverflowScrolling: 'touch',
+                                                            scrollbarWidth: 'none',
+                                                            msOverflowStyle: 'none',
+                                                            cursor: option.bossPreviews && option.bossPreviews.length > 3 ? 'grab' : 'default',
+                                                            userSelect: 'none',
+                                                            WebkitUserSelect: 'none'
+                                                        },
+                                                        onMouseDown: (e)=>{
+                                                            const container = e.currentTarget;
+                                                            // 보스가 3명 이하라 넘칠 일이 없으면 드래그 로직을 작동시키지 않습니다.
+                                                            if (!option.bossPreviews || option.bossPreviews.length <= 3) return;
+                                                            container.style.cursor = 'grabbing'; // 누르고 있을 때는 꽉 쥔 손모양으로 변경
+                                                            let isDown = true;
+                                                            const startX = e.pageX - container.offsetLeft;
+                                                            const scrollLeft = container.scrollLeft;
+                                                            const handleMouseMove = (moveEvent)=>{
+                                                                if (!isDown) return;
+                                                                moveEvent.preventDefault(); // 드래그 중 텍스트나 이미지가 긁히는 현상 차단
+                                                                const x = moveEvent.pageX - container.offsetLeft;
+                                                                // 1.8은 드래그 감도입니다. 숫자가 높을수록 마우스를 조금만 움직여도 휙휙 잘 넘어갑니다.
+                                                                const walk = (x - startX) * 1.0;
+                                                                container.scrollLeft = scrollLeft - walk;
+                                                            };
+                                                            const handleMouseUpOrLeave = ()=>{
+                                                                isDown = false;
+                                                                container.style.cursor = 'grab'; // 마우스를 떼면 다시 평상시 손모양으로 환원
+                                                                document.removeEventListener('mousemove', handleMouseMove);
+                                                                document.removeEventListener('mouseup', handleMouseUpOrLeave);
+                                                                document.removeEventListener('mouseleave', handleMouseUpOrLeave);
+                                                            };
+                                                            // 마우스가 컨테이너 밖으로 나가거나 떼어졌을 때를 대비해 document 전체에 이벤트 감지
+                                                            document.addEventListener('mousemove', handleMouseMove);
+                                                            document.addEventListener('mouseup', handleMouseUpOrLeave);
+                                                            document.addEventListener('mouseleave', handleMouseUpOrLeave);
                                                         },
                                                         children: option.bossPreviews && option.bossPreviews.length > 0 ? option.bossPreviews.map((bossId)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 style: {
@@ -21938,27 +21998,32 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                     borderRadius: 4,
                                                                     overflow: 'hidden',
                                                                     border: '1px solid #333',
-                                                                    background: '#050508'
+                                                                    background: '#050508',
+                                                                    flex: '0 0 42px'
                                                                 },
                                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                                                                     src: `/images/${bossId.toLowerCase()}.png`,
                                                                     alt: bossId,
+                                                                    onDragStart: (e)=>e.preventDefault(),
                                                                     style: {
                                                                         width: '100%',
                                                                         height: '100%',
-                                                                        objectFit: 'cover'
+                                                                        objectFit: 'cover',
+                                                                        pointerEvents: 'none',
+                                                                        userSelect: 'none',
+                                                                        WebkitUserSelect: 'none'
                                                                     },
                                                                     onError: (e)=>{
                                                                         e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42"><rect width="42" height="42" fill="%23222"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="%23666" font-size="9">ERR</text></svg>';
                                                                     }
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/components/SL.tsx",
-                                                                    lineNumber: 828,
+                                                                    lineNumber: 906,
                                                                     columnNumber: 33
                                                                 }, this)
                                                             }, bossId, false, {
                                                                 fileName: "[project]/app/components/SL.tsx",
-                                                                lineNumber: 827,
+                                                                lineNumber: 905,
                                                                 columnNumber: 31
                                                             }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             style: {
@@ -21968,12 +22033,12 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                             children: "보스 정보 없음"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/components/SL.tsx",
-                                                            lineNumber: 839,
+                                                            lineNumber: 925,
                                                             columnNumber: 29
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/components/SL.tsx",
-                                                        lineNumber: 824,
+                                                        lineNumber: 853,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -21997,12 +22062,12 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                                 children: t
                                                             }, t, false, {
                                                                 fileName: "[project]/app/components/SL.tsx",
-                                                                lineNumber: 845,
+                                                                lineNumber: 931,
                                                                 columnNumber: 29
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/components/SL.tsx",
-                                                        lineNumber: 843,
+                                                        lineNumber: 929,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -22015,13 +22080,13 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                         children: option.description
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/components/SL.tsx",
-                                                        lineNumber: 851,
+                                                        lineNumber: 937,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/components/SL.tsx",
-                                                lineNumber: 820,
+                                                lineNumber: 849,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -22039,19 +22104,19 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                                 children: isCurrentlySelected ? '다시 입장' : '입장'
                                             }, void 0, false, {
                                                 fileName: "[project]/app/components/SL.tsx",
-                                                lineNumber: 853,
+                                                lineNumber: 939,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, option.id, true, {
                                         fileName: "[project]/app/components/SL.tsx",
-                                        lineNumber: 807,
+                                        lineNumber: 836,
                                         columnNumber: 21
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 799,
+                                lineNumber: 822,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -22073,30 +22138,30 @@ function SL({ userCharacters, tierList, setTierList, slLayout, setSlLayout, getD
                                     children: "취소"
                                 }, void 0, false, {
                                     fileName: "[project]/app/components/SL.tsx",
-                                    lineNumber: 873,
+                                    lineNumber: 959,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/components/SL.tsx",
-                                lineNumber: 872,
+                                lineNumber: 958,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/components/SL.tsx",
-                        lineNumber: 795,
+                        lineNumber: 818,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/components/SL.tsx",
-                    lineNumber: 794,
+                    lineNumber: 817,
                     columnNumber: 11
                 }, this);
             })()
         ]
     }, void 0, true, {
         fileName: "[project]/app/components/SL.tsx",
-        lineNumber: 405,
+        lineNumber: 429,
         columnNumber: 5
     }, this);
 }
