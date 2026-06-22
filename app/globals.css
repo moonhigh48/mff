@@ -60,3 +60,9 @@ body {
   scrollbar-width: thin;          /* 스크롤바 두께를 얇게 지정 */
   scrollbar-color: #2a2a40 #0d0d14; /* 핸들 색상 | 트랙 색상 정의 */
 }
+
+.boss-portrait-scroll::-webkit-scrollbar {
+  display: none !important; 
+  width: 0 !important;
+  height: 0 !important;
+}

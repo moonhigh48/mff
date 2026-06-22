@@ -33,17 +33,26 @@ interface ABProps {
   setAblLayout: (layout: EolbaeLayoutData) => void;
   getDynamicPortrait: (char: any) => string;
   saveToServer: (updatedAbx: EolbaeLayoutData, updatedAbl: EolbaeLayoutData) => void;
+  // [추가] 클릭 배치를 위한 Props 설정
+  placementMode: 'drag' | 'click';
+  activeSession: string | null;
+  setActiveSession: (session: string | null) => void;
 }
 
-export default function AB({ 
-  userCharacters, 
-  abxLayout, 
-  setAbxLayout, 
-  ablLayout, 
-  setAblLayout, 
-  getDynamicPortrait, 
-  saveToServer 
+export default function AB({
+  userCharacters,
+  abxLayout,
+  setAbxLayout,
+  ablLayout,
+  setAblLayout,
+  getDynamicPortrait,
+  saveToServer,
+  // [추가] 구조분해 할당 수신
+  placementMode,
+  activeSession,
+  setActiveSession
 }: ABProps) {
+
   const [abMode, setAbMode] = useState<'abx' | 'abl'>('abx');
   
   const [selectedSessionKey, setSelectedSessionKey] = useState<string | null>(null);
@@ -136,7 +145,7 @@ export default function AB({
       if (filterAbility !== '전체' && !activeUni.ability.includes(filterAbility)) return false;
 
       return true;
-    });
+    }).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   }, [userCharacters, selectedSessionKey, filterType, filterRace, filterGender, filterFaction, filterElement, filterAbility]);
 
   return (
@@ -157,22 +166,35 @@ export default function AB({
             const currentKey = `${session}-${index}`;
             const isSelected = selectedSessionKey === currentKey;
             
+            // [추가] 클릭 모드일 때 이 요일 칸이 현재 캐릭터를 집어넣을 타겟인지 판별
+            const isClickTarget = placementMode === 'click' && activeSession === session;
+
             return (
               <div 
                 key={currentKey}
-                onClick={() => setSelectedSessionKey(isSelected ? null : currentKey)}
+                onClick={() => {
+                  // 기존 필터링 토글 작동
+                  setSelectedSessionKey(isSelected ? null : currentKey);
+                  
+                  // [추가] 클릭 모드라면 자동 배정용 타겟 세션 상태도 함께 세팅
+                  if (placementMode === 'click') {
+                    setActiveSession(activeSession === session ? null : session);
+                  }
+                }}
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDropToSession(e, session)}
                 style={{ 
-                  background: '#13131e', 
-                  border: isSelected ? '1px solid #5b8dee' : '1px solid #2a2a40', 
+                  background: isClickTarget ? '#1e1e2d' : '#13131e', 
+                  // 클릭 모드 타겟이거나 기존 필터 선택 상태일 때 테두리 강조 처리 확장
+                  border: isClickTarget ? '2px solid #0ea5e9' : (isSelected ? '1px solid #5b8dee' : '1px solid #2a2a40'), 
                   borderRadius: 10, 
                   padding: '14px', 
                   display: 'flex', 
                   flexDirection: 'column', 
                   gap: 8,
                   cursor: 'pointer',
-                  boxShadow: isSelected ? '0 0 12px #5b8dee20' : 'none'
+                  boxShadow: isClickTarget ? '0 0 14px #0ea5e930' : (isSelected ? '0 0 12px #5b8dee20' : 'none'),
+                  transition: 'all 0.15s'
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -259,9 +281,30 @@ export default function AB({
               return (
                 <div 
                   key={char.id}
-                  draggable
+                  // [수정] 배치 설정 모드에 따라 드래그 지원 여부를 가변 제어
+                  draggable={placementMode === 'drag'} 
                   onDragStart={(e) => handleDragStart(e, char.id)}
-                  style={{ width: '48px', height: '48px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}88`, cursor: 'grab' }}
+                  // [추가 클릭 배치 인터랙션] 요일 칸이 선택된 채 클릭 시 즉각 강제 드롭 연동
+                  onClick={() => {
+                    if (placementMode === 'click' && activeSession) {
+                      const mockEvent = {
+                        dataTransfer: { getData: () => char.id },
+                        preventDefault: () => {}
+                      } as any;
+                      handleDropToSession(mockEvent, activeSession); 
+                    }
+                  }}
+                  style={{ 
+                    width: '48px', 
+                    height: '48px', 
+                    borderRadius: '50%', 
+                    overflow: 'hidden', 
+                    border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}88`, 
+                    // [수정] 클릭 상태 유무에 따른 동적 마우스 모양 피드백 및 시각 효과 조절
+                    cursor: placementMode === 'click' ? (activeSession ? 'pointer' : 'not-allowed') : 'grab',
+                    opacity: placementMode === 'click' && !activeSession ? 0.35 : 1,
+                    transition: 'opacity 0.2s'
+                  }}
                   title={char.name}
                 >
                   <img src={getDynamicPortrait(char)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />

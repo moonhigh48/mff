@@ -34,8 +34,9 @@ interface SLProps {
   slLayout: ShadowlandLayoutData;
   setSlLayout: (layout: ShadowlandLayoutData) => void;
   getDynamicPortrait: (char: any, uniformName?: string) => string;
-  saveToServer: (updatedTier: TierListData, updatedSl: ShadowlandLayoutData) => void;
+  saveToServer: (updatedTier: TierListData, updatedSl: ShadowlandLayoutData, updatedConditions?: StageConditionData) => void;
   stageConditions?: StageConditionData;
+  placementMode: 'drag' | 'click';
 }
 
 export default function SL({ 
@@ -46,11 +47,13 @@ export default function SL({
   setSlLayout, 
   getDynamicPortrait, 
   saveToServer,
-  stageConditions: initialConditions
+  stageConditions: initialConditions,
+  placementMode
 }: SLProps) {
   const [shadowlandMode, setShadowlandMode] = useState<'layout' | 'tier'>('layout');
   const assignedTierCharIds = Object.values(tierList).flat();
-
+  const [activeFloor, setActiveFloor] = useState<number | null>(null);
+  const [activeTier, setActiveTier] = useState<string | null>(null);
   const [maxFloor, setMaxFloor] = useState<number>(() => {
     const savedKeys = Object.keys(slLayout).map(Number);
     const highest = savedKeys.length > 0 ? Math.max(...savedKeys) : 35;
@@ -85,7 +88,6 @@ export default function SL({
   });
   const [selectedVersionId, setSelectedVersionId] = useState<string>('current'); 
   const [newVersionName, setNewVersionName] = useState<string>('');
-
   const [filterType, setFilterType] = useState<string>('전체');
   const [filterRace, setFilterRace] = useState<string>('전체');
   const [filterGender, setFilterGender] = useState<string>('전체');
@@ -106,6 +108,9 @@ export default function SL({
 
   const floorsArray = useMemo(() => Array.from({ length: currentVersionData.maxFloor }, (_, i) => i + 1), [currentVersionData.maxFloor]);
 
+  const hangeulSortedDatabase = [...MFF_DATABASE_CHARACTERS].sort((a, b) => 
+    a.name.localeCompare(b.name, 'ko')
+  );
   const handleSaveVersion = () => {
     if (!newVersionName.trim()) {
       alert('버전 이름을 입력해주세요.');
@@ -176,7 +181,7 @@ export default function SL({
       setStageConditions(nextConditions);
       localStorage.setItem('mff_sl_stage_conditions', JSON.stringify(nextConditions));
       setMaxFloor(35);
-      saveToServer(tierList, nextSlLayout);
+      saveToServer(tierList, nextSlLayout, nextConditions);
     }
   };
 
@@ -194,7 +199,31 @@ export default function SL({
       else if (['인간', '뮤턴트', '인휴먼', '외계인', '창조물', '불명'].includes(condition)) setFilterRace(condition);
     });
   };
+  const handleMouseDownScroll = (e: React.MouseEvent<HTMLDivElement>) => {
+    const container = e.currentTarget;
+    let isDown = true;
+    let startX = e.pageX - container.offsetLeft;
+    let scrollLeft = container.scrollLeft;
 
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      if (!isDown) return;
+      moveEvent.preventDefault();
+      const x = moveEvent.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.5; // 👈 1.5는 드래그 속도 배율 (원하는 만큼 조절 가능)
+      container.scrollLeft = scrollLeft - walk;
+    };
+
+    const handleMouseUpOrLeave = () => {
+      isDown = false;
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUpOrLeave);
+      document.removeEventListener('mouseleave', handleMouseUpOrLeave);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUpOrLeave);
+    document.addEventListener('mouseleave', handleMouseUpOrLeave);
+  };
   // 👍 [수정] 층수 칸({floor}층 버튼) 누르면 언제나 모달 오픈 + 자동 필터 연동
   const handleFloorButtonClick = (floorNum: number) => {
     if (currentVersionData.isReadOnly) return;
@@ -238,7 +267,7 @@ export default function SL({
     
     // 모달에서 스테이지 입장 완료 시 대기열 자동 필터 연동
     applyMatchFilters(matchTypesArray);
-    saveToServer(tierList, slLayout);
+    saveToServer(tierList, slLayout, nextConditions);
   };
 
   const handleDragStart = (e: React.DragEvent, charId: string) => { 
@@ -330,13 +359,10 @@ export default function SL({
   const sortedLayoutCharacters = useMemo(() => {
     const deployedCharIds = Object.values(currentVersionData.layout).flat();
     const pool: any[] = [];
-
     TIERS.forEach(tier => {
       const tierCharIds = tierList[tier] || [];
-      tierCharIds.forEach(id => {
-        if (deployedCharIds.includes(id)) return;
-        const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
-        if (char) {
+      hangeulSortedDatabase.forEach(char => {
+        if (tierCharIds.includes(char.id) && !deployedCharIds.includes(char.id)) {
           const matchResult = checkFilterMatch(char);
           if (matchResult) {
             pool.push({ ...char, customTierTag: tier, matchedUniformName: matchResult.matchedUniformName });
@@ -345,7 +371,7 @@ export default function SL({
       });
     });
 
-    MFF_DATABASE_CHARACTERS.forEach(char => {
+    hangeulSortedDatabase.forEach(char => {
       if (!assignedTierCharIds.includes(char.id) && !deployedCharIds.includes(char.id)) {
         const matchResult = checkFilterMatch(char);
         if (matchResult) {
@@ -476,14 +502,42 @@ export default function SL({
                     key={floor}
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDropToFloor(e, floor)}
-                    // 👍 카드 배경(빈 영역) 클릭 시 모달 없이 대기열 필터만 연동하도록 설정
-                    onClick={(e) => handleFloorBackgroundClick(floor, e)}
-                    style={{ background: '#13131e', border: '1px solid #2a2a40', borderRadius: 10, padding: '12px', display: 'flex', flexDirection: 'column', gap: 10, position: 'relative', opacity: currentVersionData.isReadOnly ? 0.9 : 1, cursor: currentVersionData.isReadOnly ? 'default' : 'pointer' }}
+                    // 👍 카드 배경(빈 영역) 클릭 시 기존 필터 기능과 함께 '클릭 모드용 층 선택(activeFloor)' 기능을 동시에 수행합니다.
+                    onClick={(e) => {handleFloorBackgroundClick(floor, e);
+                      const condition = stageConditions[floor];
+                      if (condition && condition.matchTypes && condition.matchTypes.length > 0) {
+                        applyMatchFilters(condition.matchTypes);
+                      } else {
+                        applyMatchFilters([]);
+                      }
+
+                      if (placementMode === 'click') {
+                        setActiveFloor(floor);
+                      }
+                    }}
+                    style={{ 
+                        background: '#13131e', 
+                      // 💡 [수정] 클릭 배치 모드이면서 현재 이 층이 activeFloor로 선택되었다면 주황색 테두리(#ff9100) 하이라이트를 적용합니다.
+                        border: placementMode === 'click' && activeFloor === floor 
+                        ? '2px solid #ff9100' 
+                        : '1px solid #2a2a40', 
+                        borderRadius: 10, 
+                        padding: '12px', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        gap: 10, 
+                        position: 'relative', 
+                        opacity: currentVersionData.isReadOnly ? 0.9 : 1, 
+                        cursor: currentVersionData.isReadOnly ? 'default' : 'pointer',
+                        transition: 'border 0.2s ease'
+                    }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, pointerEvents: 'auto' }}>
-                      {/* 👍 {floor}층 버튼을 누르면 조건이 있건 없건 언제나 수정 모달이 열림 */}
                       <div 
-                        onClick={() => handleFloorButtonClick(floor)}
+                          onClick={(e) => {
+                          e.stopPropagation(); // 💡 중요: 버튼을 눌렀을 때는 배경의 onClick이 중복 발동하지 않도록 차단합니다.
+                          handleFloorButtonClick(floor);
+                        }}
                         style={{ fontSize: 12, fontWeight: 800, color: '#fff', background: activeColor, minWidth: '58px', padding: '6px 2px', borderRadius: 6, textAlign: 'center', cursor: currentVersionData.isReadOnly ? 'default' : 'pointer', border: '1px solid #ffffff15', lineHeight: 1.2 }}
                         title={currentVersionData.isReadOnly ? "" : "클릭: 스테이지 조건 선택 및 수정"}
                       >
@@ -586,9 +640,62 @@ export default function SL({
                   const tagColor = TIER_COLORS[tTag] || '#666';
 
                   return (
-                    <div key={char.id} draggable={true} onDragStart={(e) => handleDragStart(e, char.id)} style={{ position: 'relative', width: '48px', height: '48px', borderRadius: '50%', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, cursor: 'grab' }}>
-                      <img src={getDynamicPortrait(char, char.matchedUniformName)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', pointerEvents: 'none' }} />
-                      <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#0d0d14', border: `1px solid ${tagColor}`, color: tagColor, fontSize: 8, fontWeight: 900, padding: '1px 3px', borderRadius: 4, lineHeight: 1 }}>{tTag}</span>
+                    <div 
+                      key={char.id} 
+                      // ⭕ 드래그 모드일 때만 활성화
+                      draggable={placementMode === 'drag'} 
+                      onDragStart={(e) => {
+                        if (placementMode !== 'drag') {
+                          e.preventDefault();
+                          return;
+                        }
+                        handleDragStart(e, char.id);
+                      }}
+                      // ⭕ 클릭 배치 로직 연동
+                      onClick={() => {
+                        if (placementMode === 'click') {
+                          const targetFloor = activeModalFloor !== null ? activeModalFloor : activeFloor;
+                          if (targetFloor !== null) {
+                            const mockEvent = {
+                              dataTransfer: { getData: () => char.id },
+                              preventDefault: () => {}
+                            } as any;
+                            handleDropToFloor(mockEvent, targetFloor); 
+                          } else {
+                            alert("캐릭터를 배치할 층을 먼저 선택하거나 스테이지 조건 설정창을 열어주세요.");
+                          }
+                        }
+                      }}
+                      style={{ 
+                        position: 'relative', 
+                        width: '48px', 
+                        height: '48px', 
+                        borderRadius: '50%', 
+                        border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, 
+                        cursor: placementMode === 'click' ? 'pointer' : 'grab',
+                        transition: 'transform 0.1s ease',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
+                        KhtmlUserSelect: 'none',
+                        MozUserSelect: 'none',
+                        msUserSelect: 'none',
+                      }}
+                    >
+                      <img 
+                        src={getDynamicPortrait(char, char.matchedUniformName)} 
+                        alt={char.name} 
+                        // 💡 [추가] 클릭 모드에서 마우스로 캐릭터를 비벼도 이미지 유령 잔상이 생성되지 않도록 절대 차단
+                        draggable={false}
+                        onDragStart={(e) => e.preventDefault()}
+                        style={{ 
+                          width: '100%', 
+                          height: '100%', 
+                          objectFit: 'cover', 
+                          borderRadius: '50%', 
+                          pointerEvents: 'none'
+                        }} 
+                      />
+                      <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#0d0d14', border: `1px solid ${tagColor}`, color: tagColor, fontSize: 8, fontWeight: 900, padding: '1px 3px', borderRadius: 4, lineHeight: 1, userSelect: 'none' }}>{tTag}</span>
                     </div>
                   );
                 })}
@@ -602,13 +709,31 @@ export default function SL({
       {shadowlandMode === 'tier' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div style={{ border: '1px solid #2a2a40', borderRadius: 12, overflow: 'hidden', background: '#13131e' }}>
-            {TIERS.map((tier, index) => (
-              <div key={tier} onDragOver={handleDragOver} onDrop={(e) => handleDropToTier(e, tier)} style={{ display: 'flex', borderBottom: index === TIERS.length - 1 ? 'none' : '1px solid #2a2a40', minHeight: '80px', alignItems: 'stretch' }}>
+            {TIERS.map((tier, index) => {
+              const tierCharIds = tierList[tier] || [];
+              const sortedTierCharacters = hangeulSortedDatabase.filter(char => tierCharIds.includes(char.id));
+              return (
+              <div 
+                key={tier} 
+                onDragOver={handleDragOver} 
+                onDrop={(e) => handleDropToTier(e, tier)}
+                onClick={() => {
+                  if (placementMode === 'click') {
+                    setActiveTier(tier);
+                  }
+                }}
+                style={{ 
+                  display: 'flex', 
+                  borderBottom: index === TIERS.length - 1 ? 'none' : '1px solid #2a2a40', 
+                  minHeight: '80px', 
+                  alignItems: 'stretch',
+                  border: placementMode === 'click' && activeTier === tier ? '2px solid #ff9100' : 'none',
+                  cursor: placementMode === 'click' ? 'pointer' : 'default'
+                }}
+              >
                 <div style={{ width: '70px', background: `${TIER_COLORS[tier]}15`, borderRight: '1px solid #2a2a40', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 900, color: TIER_COLORS[tier] }}>{tier}</div>
                 <div style={{ flex: 1, padding: '10px', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', background: '#0d0d1410' }}>
-                  {(tierList[tier] || []).map(id => {
-                    const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
-                    if (!char) return null;
+                  {sortedTierCharacters.map(char => {
                     const userState = userCharacters[char.id] || { activeUniform: '' };
                     const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
 
@@ -620,7 +745,8 @@ export default function SL({
                   })}
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
 
           <div>
@@ -629,12 +755,43 @@ export default function SL({
               {maxFloor > 35 && <button onClick={handleResetExtraFloors} style={{ background: '#bd3a3a', border: 'none', color: '#fff', padding: '6px 12px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>⚠️ 35층 초과 확장층 일괄 삭제</button>}
             </div>
             <div onDragOver={handleDragOver} onDrop={handleDropToTierPool} style={{ background: '#13131e', border: '1px dashed #2a2a40', borderRadius: 14, padding: '1.2rem', display: 'flex', flexWrap: 'wrap', gap: 12, minHeight: '140px' }}>
-              {MFF_DATABASE_CHARACTERS.filter(char => userCharacters[char.id]?.owned && !assignedTierCharIds.includes(char.id)).map(char => {
+              {hangeulSortedDatabase.filter(char => userCharacters[char.id]?.owned && !assignedTierCharIds.includes(char.id)).map(char => {
                 const userState = userCharacters[char.id] || { activeUniform: '' };
                 const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
 
                 return (
-                  <div key={char.id} draggable={true} onDragStart={(e) => handleDragStart(e, char.id)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, cursor: 'grab', width: '64px' }}>
+                  <div 
+                    key={char.id} 
+                    // ⭕ 드래그 모드일 때만 활성화
+                    draggable={placementMode === 'drag'} 
+                    onDragStart={(e) => handleDragStart(e, char.id)} 
+                    // ⭕ 클릭 배치 로직 연동
+                    onClick={() => {
+                      if (placementMode === 'click') {
+                        // 만약 MainDashboard나 컴포넌트 내부에 선택된 티어 상태(예: activeTier)가 있다면 연동
+                        // 여기서는 예시로 activeTier 변수를 매핑합니다.
+                        if (typeof activeTier !== 'undefined' && activeTier) {
+                          const mockEvent = {
+                            dataTransfer: { getData: () => char.id },
+                            preventDefault: () => {}
+                          } as any;
+                          
+                          // 🔍 실제 확인된 티어 드롭 함수 호출
+                          handleDropToTier(mockEvent, activeTier);
+                        } else {
+                          alert("배치할 티어 등급(S~F) 좌측 버튼을 먼저 선택해주세요.");
+                        }
+                      }
+                    }}
+                    style={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      alignItems: 'center', 
+                      gap: 4, 
+                      cursor: placementMode === 'click' ? 'pointer' : 'grab', 
+                      width: '64px' 
+                    }}
+                  >
                     <div style={{ width: '56px', height: '56px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, background: '#0d0d14' }}>
                       <img src={getDynamicPortrait(char, userState.activeUniform)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
                     </div>
@@ -662,7 +819,13 @@ export default function SL({
               <div style={{ fontSize: 18, fontWeight: 700, textAlign: 'center', marginBottom: 24, color: '#fff' }}>
                 섀도우랜드 {activeModalFloor}층 <span style={{ color: '#a3e635' }}>{SLmode}</span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+              <div style={{ 
+                display: options.length === 1 ? 'flex' : 'grid',
+                justifyContent: options.length === 1 ? 'center' : 'stretch',
+                gridTemplateColumns: options.length === 1 ? 'none' : 'repeat(3, 1fr)', 
+                gap: 16, 
+                marginBottom: 24 
+              }}>
                 {options.map(option => {
                   const isCurrentlySelected = currentSelectedId === option.id;
                   const currentOptionTypes: string[] = Array.isArray(option.matchTypes)
@@ -687,14 +850,71 @@ export default function SL({
                         <div style={{ fontSize: 11, color: isCurrentlySelected ? '#38bdf8' : '#888', marginBottom: 12, fontWeight: 600 }}>
                           {isCurrentlySelected ? '● 현재 선택됨' : '등장 보스'}
                         </div>
-                        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 14, minHeight: '40px', alignItems: 'center' }}>
-                          {option.bossPreviews && option.bossPreviews.length > 0 ? (
+                        <div
+                        style={{ display: 'flex', gap: 8, justifyContent: option.bossPreviews && option.bossPreviews.length > 3 ? 'flex-start' : 'center',
+                          marginBottom: 14,
+                          minHeight: '42px',
+                          alignItems: 'center',
+                          width: '100%', 
+                          overflowX: 'auto',
+                          overflowY: 'hidden',
+                          whiteSpace: 'nowrap',
+                          WebkitOverflowScrolling: 'touch',
+                          scrollbarWidth: 'none',       // 파이어폭스 & 최신 크롬/엣지 표준 표준 속성
+                          msOverflowStyle: 'none',
+                          cursor: option.bossPreviews && option.bossPreviews.length > 3 ? 'grab' : 'default',
+                          userSelect: 'none',
+                          WebkitUserSelect: 'none'
+                        }}
+                        onMouseDown={(e) => {
+                          const container = e.currentTarget;
+                          // 보스가 3명 이하라 넘칠 일이 없으면 드래그 로직을 작동시키지 않습니다.
+                          if (!option.bossPreviews || option.bossPreviews.length <= 3) return;
+
+                          container.style.cursor = 'grabbing'; // 누르고 있을 때는 꽉 쥔 손모양으로 변경
+          
+                          let isDown = true;
+                          const startX = e.pageX - container.offsetLeft;
+                          const scrollLeft = container.scrollLeft;
+
+                          const handleMouseMove = (moveEvent: MouseEvent) => {
+                            if (!isDown) return;
+                            moveEvent.preventDefault(); // 드래그 중 텍스트나 이미지가 긁히는 현상 차단
+                            const x = moveEvent.pageX - container.offsetLeft;
+                            // 1.8은 드래그 감도입니다. 숫자가 높을수록 마우스를 조금만 움직여도 휙휙 잘 넘어갑니다.
+                            const walk = (x - startX) * 1.0; 
+                            container.scrollLeft = scrollLeft - walk;
+                          };
+
+                          const handleMouseUpOrLeave = () => {
+                            isDown = false;
+                            container.style.cursor = 'grab'; // 마우스를 떼면 다시 평상시 손모양으로 환원
+                            document.removeEventListener('mousemove', handleMouseMove);
+                            document.removeEventListener('mouseup', handleMouseUpOrLeave);
+                            document.removeEventListener('mouseleave', handleMouseUpOrLeave);
+                          };
+
+                          // 마우스가 컨테이너 밖으로 나가거나 떼어졌을 때를 대비해 document 전체에 이벤트 감지
+                          document.addEventListener('mousemove', handleMouseMove);
+                          document.addEventListener('mouseup', handleMouseUpOrLeave);
+                          document.addEventListener('mouseleave', handleMouseUpOrLeave);
+                        }}
+                      >
+                        {option.bossPreviews && option.bossPreviews.length > 0 ? (
                             option.bossPreviews.map(bossId => (
-                              <div key={bossId} style={{ width: 42, height: 42, borderRadius: 4, overflow: 'hidden', border: '1px solid #333', background: '#050508' }}>
+                              <div key={bossId} style={{ width: 42, height: 42, borderRadius: 4, overflow: 'hidden', border: '1px solid #333', background: '#050508', flex: '0 0 42px' }}>
                                 <img 
                                   src={`/images/${bossId.toLowerCase()}.png`} 
                                   alt={bossId} 
-                                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                  onDragStart={(e) => e.preventDefault()} 
+                                  style={{ 
+                                    width: '100%', 
+                                    height: '100%', 
+                                    objectFit: 'cover',
+                                    pointerEvents: 'none', // 마우스 포인터 이벤트를 부모 div로 관통시킵니다.
+                                    userSelect: 'none',
+                                    WebkitUserSelect: 'none'
+                                  }} 
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42"><rect width="42" height="42" fill="%23222"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="%23666" font-size="9">ERR</text></svg>';
                                   }}

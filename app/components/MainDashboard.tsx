@@ -19,6 +19,7 @@ type UserCharactersData = Record<string, UserCharacterState>;
 type TierListData = Record<string, string[]>;
 type ShadowlandLayoutData = Record<number, string[]>;
 type EolbaeLayoutData = Record<string, string[]>;
+type StageConditionData = Record<number, { id: string; matchTypes: string[]; }>;
 
 interface MainDashboardProps { 
   userId: string; 
@@ -26,8 +27,10 @@ interface MainDashboardProps {
     characters: UserCharactersData;
     tierList?: TierListData;
     slLayout?: ShadowlandLayoutData;
+    stageConditions?: StageConditionData;
     abxLayout?: EolbaeLayoutData;
     ablLayout?: EolbaeLayoutData;
+    placementMode?: 'drag' | 'click';
   };
   onLogout: () => void; 
 }
@@ -39,17 +42,17 @@ export default function MainDashboard({
 }: MainDashboardProps) {
   const [activeTab, setActiveTab] = useState<string>('characters');
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
-
-  // =================================================================
-  // [핵심 변경] page.tsx 통합 패키지 데이터 구조에 맞춘 자동 초깃값 맵핑 연동
-  // =================================================================
-const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initialData?.characters || {});
+  //  [수정] initialData에 저장된 모드가 있다면 불러오고 없으면 기본 'drag'
+  const [placementMode, setPlacementMode] = useState<'drag' | 'click'>(initialData?.placementMode || 'drag');
+  const [isOptionMenuOpen, setIsOptionMenuOpen] = useState<boolean>(false);
+  const [activeTier, setActiveTier] = useState<string | null>(null);
+  const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initialData?.characters || {});
   const [tierList, setTierList] = useState<TierListData>(initialData?.tierList || { S: [], A: [], B: [], C: [], D: [], E: [] });
   const [slLayout, setSlLayout] = useState<ShadowlandLayoutData>(initialData?.slLayout || {});
   const [abxLayout, setAbxLayout] = useState<EolbaeLayoutData>(initialData?.abxLayout || {});
   const [ablLayout, setAblLayout] = useState<EolbaeLayoutData>(initialData?.ablLayout || {});
+  const [stageConditions, setStageConditions] = useState<StageConditionData>(initialData?.stageConditions || {});
 
-  // [추가] Firebase 실시간 데이터 리스너 작동
   useEffect(() => {
     if (!userId) return;
 
@@ -66,6 +69,8 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
         if (data.slLayout) setSlLayout(data.slLayout);
         if (data.abxLayout) setAbxLayout(data.abxLayout);
         if (data.ablLayout) setAblLayout(data.ablLayout);
+        if (data.placementMode) setPlacementMode(data.placementMode);
+        if (data.stageConditions) setStageConditions(data.stageConditions);
 
         // 로컬스토리지 캐시도 최신으로 동기화
         localStorage.setItem("mff_initial_data", JSON.stringify(data));
@@ -81,16 +86,21 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
     updatedTier: TierListData, 
     updatedSl: ShadowlandLayoutData,
     updatedAbx: EolbaeLayoutData,
-    updatedAbl: EolbaeLayoutData
+    updatedAbl: EolbaeLayoutData,
+    conditions?: StageConditionData
   ) => {
     const updatedPayload = {
       characters: updatedChars,
       tierList: updatedTier,
       slLayout: updatedSl,
       abxLayout: updatedAbx,
-      ablLayout: updatedAbl
-    };
+      ablLayout: updatedAbl,
+      ...(conditions ? { stageConditions: conditions } : {})
 
+    };
+    if (conditions) {
+      updatedPayload.stageConditions = conditions;
+    }
     // 로컬 스토리지 캐시 실시간 업데이트 유지
     if (typeof window !== 'undefined') {
       localStorage.setItem("mff_initial_data", JSON.stringify(updatedPayload));
@@ -163,8 +173,91 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
             {t.label}
           </button>
         ))}
-        <div style={{ marginLeft: 'auto', color: '#666', fontSize: 13 }}>{userId} 님 <button onClick={onLogout} style={{ marginLeft: 8, background: 'none', border: 'none', color: '#e05252', cursor: 'pointer', fontSize: 12 }}>로그아웃</button></div>
-      </div>
+        {/* 우상단 유저 정보 및 로그아웃 영역 */}
+          <div style={{ marginLeft: 'auto', color: '#666', fontSize: 13, position: 'relative', display: 'flex', alignItems: 'center' }}>
+            {/* ID 클릭 시 설정 메뉴 팝업 토글 */}
+            <span 
+              onClick={() => setIsOptionMenuOpen(!isOptionMenuOpen)} 
+              style={{ 
+                cursor: 'pointer', 
+                fontWeight: 600, 
+                color: '#aaa', 
+                padding: '4px 8px', 
+                borderRadius: 4, 
+                background: isOptionMenuOpen ? '#2a2a40' : 'transparent', 
+                transition: 'background 0.2s',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+                userSelect: 'none'
+              }}
+              title="클릭하여 배치 옵션 변경"
+            >
+              👤 {userId} 님 <span style={{ fontSize: 10 }}>{isOptionMenuOpen ? '▲' : '▼'}</span>
+            </span>
+
+            {/* 원래 있던 로그아웃 버튼 구조 그대로 유지 */}
+            <button 
+              onClick={onLogout} 
+              style={{ marginLeft: 8, background: 'none', border: 'none', color: '#e05252', cursor: 'pointer', fontSize: 12 }}
+            >
+              로그아웃
+            </button>
+
+            {/* 유저 ID 클릭 시 바로 아래 열리는 배치 옵션 레이어 창 */}
+            {isOptionMenuOpen && (
+              <div style={{ 
+                position: 'absolute', 
+                top: '130%', 
+                left: 0, 
+                background: '#191926', 
+                border: '1px solid #2a2a40', 
+                borderRadius: 8, 
+                padding: '12px 14px', 
+                width: '180px', 
+                zIndex: 999, 
+                boxShadow: '0 4px 15px rgba(0,0,0,0.5)', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: 8 
+              }}>
+                <div style={{ color: '#888', fontSize: 11, fontWeight: 700, borderBottom: '1px solid #2a2a40', paddingBottom: 4 }}>배치 옵션 설정</div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 12, cursor: 'pointer', margin: 0 }}>
+                  <input 
+                    type="radio" 
+                    name="pmode" 
+                    checked={placementMode === 'drag'} 
+                    // 💡 [수정] 드래그 선택 시 상태 변경 및 파이어베이스 수동 1회 저장
+                    onChange={async () => { 
+                      setPlacementMode('drag'); 
+                      setActiveTier(null); 
+                      if (userId) {
+                        await setDoc(doc(db, 'users', userId), { placementMode: 'drag' }, { merge: true })
+                          .catch((err) => console.error("배치 모드 저장 실패:", err));
+                      }
+                    }} 
+                  />
+                  드래그 앤 드롭 (기존)
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 12, cursor: 'pointer', margin: 0 }}>
+                  <input 
+                    type="radio" 
+                    name="pmode" 
+                    checked={placementMode === 'click'} 
+                    // 💡 [수정] 클릭 선택 시 상태 변경 및 파이어베이스 수동 1회 저장
+                    onChange={async () => { 
+                      setPlacementMode('click'); 
+                        if (userId) {
+                            await setDoc(doc(db, 'users', userId), { placementMode: 'click' }, { merge: true })
+                          .catch((err) => console.error("배치 모드 저장 실패:", err));
+                        }
+                    }} 
+                  />
+                  초상화 클릭 이동 (신규)
+                </label>
+              </div>
+            )}
+          </div>      </div>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem' }}>
         {activeTab === 'characters' && <Chr userCharacters={userCharacters} toggleOwned={toggleOwned} setSelectedCharId={setSelectedCharId} getDynamicPortrait={getDynamicPortrait} />}
@@ -176,13 +269,29 @@ const [userCharacters, setUserCharacters] = useState<UserCharactersData>(initial
             setAbxLayout={setAbxLayout} 
             ablLayout={ablLayout} 
             setAblLayout={setAblLayout} 
-            getDynamicPortrait={getDynamicPortrait} 
+            getDynamicPortrait={getDynamicPortrait}
+            placementMode={placementMode}
+            activeSession={activeTier}       // MainDashboard에 선언해 둔 activeTier 상태를 요일 선택용으로 공유 연동
+            setActiveSession={setActiveTier}
             saveToServer={(updatedAbx, updatedAbl) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl)} 
           />
         )}
         
-        {activeTab === 'shadowland' && <SL userCharacters={userCharacters} tierList={tierList} setTierList={setTierList} slLayout={slLayout} setSlLayout={setSlLayout} getDynamicPortrait={getDynamicPortrait} saveToServer={(updatedTier, updatedSl) => saveAllToServer(userCharacters, updatedTier, updatedSl, abxLayout, ablLayout)} />}
-      </div>
+        {activeTab === 'shadowland' && (
+          <SL 
+            userCharacters={userCharacters} 
+            placementMode={placementMode} 
+            tierList={tierList} 
+            setTierList={setTierList} 
+            slLayout={slLayout} 
+            setSlLayout={setSlLayout} 
+            getDynamicPortrait={getDynamicPortrait} 
+            stageConditions={stageConditions} 
+            saveToServer={(updatedTier, updatedSl, updatedConditions) => 
+              saveAllToServer(userCharacters, updatedTier, updatedSl, abxLayout, ablLayout, updatedConditions)
+              } 
+            />
+          )}      </div>
 
       {selectedCharId && overlayCharacter && (
         <div onClick={() => setSelectedCharId(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.75)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '1rem' }}>

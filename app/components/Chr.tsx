@@ -133,7 +133,10 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
         .sort((a, b) => {
           const aOwned = userCharacters[a.id]?.owned ? 1 : 0;
           const bOwned = userCharacters[b.id]?.owned ? 1 : 0;
-          return bOwned - aOwned;
+          if (bOwned !== aOwned) {
+            return bOwned - aOwned;
+          }
+          return a.name.localeCompare(b.name, 'ko');
         })
         .map(char => {
           const userState = userCharacters[char.id] || { owned: false, activeUniform: '' };
