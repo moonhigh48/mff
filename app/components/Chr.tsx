@@ -184,67 +184,78 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                   
                   {/* 1. 티어 선택 영역 (보유 버튼 바로 아래 배치) */}
                   <div>
-                    <div style={{ fontSize: 10, color: '#666', fontWeight: 600, marginBottom: 4, letterSpacing: '0.5px' }}>TIER</div>
-                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                      {char.tier?.map((tCode) => {
+                   {/* 1. 티어 선택 드롭다운 (보유 버튼 바로 아래 배치) */}
+                  <div style={{ position: 'relative' }}>
+                    <div style={{ fontSize: 10, color: '#666', fontWeight: 600, marginBottom: 4, letterSpacing: '0.5px' }}>TIER SELECT</div>
+                    <select
+                      // 현재 저장된 티어 값을 숫자로 변환하여 value로 지정
+                      value={(() => {
+                        const currentT = userCharacters[char.id]?.tier || 1;
+                        // AW와 T3 구분을 위해 char.tier 배열을 확인하여 적절한 코드를 기본값으로 잡습니다.
+                        if (currentT === 3) return char.tier.includes('AW') ? 'AW' : 'T3';
+                        if (currentT === 4) return 'T4';
+                        if (currentT === 2) return 'T2';
+                        return 'T1';
+                      })()}
+                      onChange={async (e) => {
+                        const tCode = e.target.value;
+                        // 저장용 숫자값 계산
                         let tValue = 1;
                         if (tCode === 'T2') tValue = 2;
                         if (tCode === 'T3' || tCode === 'AW') tValue = 3;
                         if (tCode === 'T4') tValue = 4;
 
-                        // 현재 이 캐릭터에 저장된 티어와 일치하는지 확인
-                        const isSelected = (userCharacters[char.id]?.tier || 1) === tValue;
+                        const updated = {
+                          ...userCharacters,
+                          [char.id]: {
+                            ...userCharacters[char.id],
+                            tier: tValue
+                          }
+                        };
+                        setUserCharacters(updated);
 
-                        return (
-                          <button
-                            key={tCode}
-                            onClick={async () => {
-                              // 프론트 로컬 상태에 tier 값 주입 후 업데이트
-                              const updated = {
-                                ...userCharacters,
-                                [char.id]: {
-                                  ...userCharacters[char.id],
-                                  tier: tValue
-                                }
-                              };
-                              setUserCharacters(updated);
-
-                              // 백엔드 데이터베이스 서버에 실시간 저장 연동
-                              try {
-                                const token = localStorage.getItem('token');
-                                if (!token) return;
-                                await fetch('/api/import-data', {
-                                  method: 'POST',
-                                  headers: { 
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}`
-                                  },
-                                  body: JSON.stringify({ userCharacters: updated })
-                                });
-                              } catch (err) {
-                                console.error('티어 저장 연동 에러:', err);
-                              }
-                            }}
-                            style={{
-                              flex: 1,
-                              minWidth: '40px',
-                              padding: '4px 0',
-                              fontSize: 10,
-                              borderRadius: 4,
-                              border: isSelected ? `1px solid ${TYPE_COLOR[mainType]}` : '1px solid #2a2a40',
-                              background: isSelected ? `${TYPE_COLOR[mainType]}18` : '#13131e',
-                              color: isSelected ? TYPE_COLOR[mainType] : '#555',
-                              fontWeight: isSelected ? 700 : 400,
-                              cursor: 'pointer',
-                              textAlign: 'center',
-                              transition: 'all 0.15s'
-                            }}
-                          >
-                            {tCode}
-                          </button>
-                        );
-                      })}
-                    </div>
+                        // 서버 저장 연동
+                        try {
+                          const token = localStorage.getItem('token');
+                          if (!token) return;
+                          await fetch('/api/import-data', {
+                            method: 'POST',
+                            headers: { 
+                              'Content-Type': 'application/json',
+                              'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ userCharacters: updated })
+                          });
+                        } catch (err) {
+                          console.error('티어 저장 연동 에러:', err);
+                        }
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '6px 8px',
+                        fontSize: '12px',
+                        borderRadius: '6px',
+                        background: '#13131e',
+                        color: TYPE_COLOR[mainType], // 현재 타입 색상으로 글자색 강조
+                        border: `1px solid ${TYPE_COLOR[mainType]}44`,
+                        cursor: 'pointer',
+                        outline: 'none',
+                        appearance: 'none', // 기본 브라우저 화살표 숨김 (커스텀 스타일용)
+                        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>")`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'right 8px center'
+                      }}
+                    >
+                      {char.tier?.map((tCode) => (
+                        <option key={tCode} value={tCode} style={{ background: '#13131e', color: '#fff' }}>
+                          {tCode === 'T1' && '티어 1'}
+                          {tCode === 'T2' && '티어 2'}
+                          {tCode === 'T3' && '티어 3'}
+                          {tCode === 'AW' && '잠재력 초월'}
+                          {tCode === 'T4' && '티어 4'}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   {/* 2. 기존 상세 정보 태그 출력 (티어 영역 아래로 밀림) */}
