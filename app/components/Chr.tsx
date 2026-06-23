@@ -180,30 +180,25 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
               <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 2 }}>{char.name}</div>
               <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{currentUni.name}</div>
               {owned && (
-                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
                   
-                  {/* 1. 티어 선택 영역 (보유 버튼 바로 아래 배치) */}
-                  <div>
-                   {/* 1. 티어 선택 드롭다운 (보유 버튼 바로 아래 배치) */}
+                  {/* 1. 티어 선택 드롭다운 (보유 버튼 바로 아래 배치) */}
                   <div style={{ position: 'relative' }}>
                     <div style={{ fontSize: 10, color: '#666', fontWeight: 600, marginBottom: 4, letterSpacing: '0.5px' }}>TIER SELECT</div>
                     <select
-                      // 현재 저장된 티어 값을 숫자로 변환하여 value로 지정
                       value={(() => {
                         const currentT = userCharacters[char.id]?.tier || 1;
-                        // AW와 T3 구분을 위해 char.tier 배열을 확인하여 적절한 코드를 기본값으로 잡습니다.
                         if (currentT === 3) return char.tier.includes('AW') ? 'AW' : 'T3';
                         if (currentT === 4) return 'T4';
                         if (currentT === 2) return 'T2';
                         return 'T1';
                       })()}
                       onChange={async (e) => {
-                        const tCode = e.target.value;
-                        // 저장용 숫자값 계산
+                        const targetCode = e.target.value;
                         let tValue = 1;
-                        if (tCode === 'T2') tValue = 2;
-                        if (tCode === 'T3' || tCode === 'AW') tValue = 3;
-                        if (tCode === 'T4') tValue = 4;
+                        if (targetCode === 'T2') tValue = 2;
+                        if (targetCode === 'T3' || targetCode === 'AW') tValue = 3;
+                        if (targetCode === 'T4') tValue = 4;
 
                         const updated = {
                           ...userCharacters,
@@ -214,7 +209,6 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                         };
                         setUserCharacters(updated);
 
-                        // 서버 저장 연동
                         try {
                           const token = localStorage.getItem('token');
                           if (!token) return;
@@ -229,22 +223,22 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                         } catch (err) {
                           console.error('티어 저장 연동 에러:', err);
                         }
-                      }}
+                      }} // 💡 onChange 함수 중괄호 안전하게 마감
                       style={{
                         width: '100%',
                         padding: '6px 8px',
                         fontSize: '12px',
                         borderRadius: '6px',
                         background: '#13131e',
-                        color: TYPE_COLOR[mainType], // 현재 타입 색상으로 글자색 강조
+                        color: TYPE_COLOR[mainType],
                         border: `1px solid ${TYPE_COLOR[mainType]}44`,
                         cursor: 'pointer',
                         outline: 'none',
-                        appearance: 'none', // 기본 브라우저 화살표 숨김 (커스텀 스타일용)
+                        appearance: 'none',
                         backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>")`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'right 8px center'
-                      }}
+                      }} // 💡 style 객체 중괄호 안전하게 마감
                     >
                       {char.tier?.map((tCode) => (
                         <option key={tCode} value={tCode} style={{ background: '#13131e', color: '#fff' }}>
@@ -258,8 +252,8 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     </select>
                   </div>
 
-                  {/* 2. 기존 상세 정보 태그 출력 (티어 영역 아래로 밀림) */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                  {/* 2. 기존 상세 정보 태그 출력 */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
                     {currentUni.type
                       .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜'].includes(t))
                       .map(t => (
@@ -268,7 +262,6 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                         </span>
                       ))}
                   </div>
-
                 </div>
               )}  
             </div>
