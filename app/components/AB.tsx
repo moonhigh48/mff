@@ -113,6 +113,7 @@ export default function AB({
   }, []);
 
   const filteredCharacters = useMemo(() => {
+    const oppositeLayoutData = abMode === 'abx' ? ablLayout : abxLayout;
     return MFF_DATABASE_CHARACTERS.filter(char => {
       if (!userCharacters[char.id]?.owned) return false;
       
@@ -121,6 +122,43 @@ export default function AB({
       
       // 튜플 구조 분해 매핑 적용
       const [baseType, race, gender, faction, element] = activeUni.type;
+      
+      // ----------------------------------------------------------------
+      // [조건 1] 극한 ↔ 레전드 교차 중복 배제 로직
+      // ----------------------------------------------------------------
+      // 현재 회차의 인덱스를 찾아서, 상대 모드의 '동일한 순서 회차'에 이 캐릭터가 있는지 확인합니다.
+      let currentSessionIndex = -1;
+      let targetSessionName = '';
+
+      if (selectedSessionKey) {
+        // 필터링이 켜져있을 때 (예: "스피드/여성/영웅-0")
+        const [sessionName, idxStr] = selectedSessionKey.split('-');
+        currentSessionIndex = parseInt(idxStr, 10);
+        targetSessionName = sessionName;
+      } else if (placementMode === 'click' && activeSession) {
+        // 클릭 배치 모드로 세션을 찍어두었을 때
+        currentSessionIndex = currentSessions.indexOf(activeSession);
+        targetSessionName = activeSession;
+      }
+
+      // 동일한 순서(index)의 상대 세션 이름을 찾아 그곳에 배치되었는지 검사
+      if (currentSessionIndex !== -1) {
+        const oppositeSessions = abMode === 'abx' ? ABL_SESSIONS : ABX_SESSIONS;
+        const oppositeSessionName = oppositeSessions[currentSessionIndex];
+        const oppositeAllocatedIds = oppositeLayoutData[oppositeSessionName] || [];
+        
+        // 상대 모드 동일 회차에 이미 쓰였다면 대기열에서 제외
+        if (oppositeAllocatedIds.includes(char.id)) return false;
+      }
+
+      // ----------------------------------------------------------------
+      // 🔥 [조건 2] 현재 선택된 회차(세션) 내 중복 배제 로직
+      // ----------------------------------------------------------------
+      if (targetSessionName) {
+        const currentAllocatedIds = currentLayoutData[targetSessionName] || [];
+        // 현재 보고 있는 회차에 이미 들어가 있는 캐릭터라면 대기열에서 제외
+        if (currentAllocatedIds.includes(char.id)) return false;
+      }
 
       // 1. 회차 카드 선택 필터링 (카드 조건 텍스트 파싱 매칭)
       if (selectedSessionKey) {
@@ -146,7 +184,7 @@ export default function AB({
 
       return true;
     }).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-  }, [userCharacters, selectedSessionKey, filterType, filterRace, filterGender, filterFaction, filterElement, filterAbility]);
+  }, [userCharacters, selectedSessionKey, filterType, filterRace, filterGender, filterFaction, filterElement, filterAbility, abMode, abxLayout, ablLayout, placementMode, activeSession, currentSessions]);
 
   return (
     <div>

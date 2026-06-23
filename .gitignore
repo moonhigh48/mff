@@ -1,3 +1,4 @@
 node_modules/
 mongodb_data.json
 .env.local
+.next
