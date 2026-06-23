@@ -29,6 +29,7 @@ interface UserCharacterState {
   owned: boolean;
   activeUniform: string;
   ownedUniforms?: Record<string, boolean>;
+  tier?: number;
 }
 
 type UserCharactersData = Record<string, UserCharacterState>;
@@ -38,9 +39,10 @@ interface ChrProps {
   toggleOwned: (charId: string) => void;
   setSelectedCharId: (charId: string | null) => void;
   getDynamicPortrait: (char: any) => string;
+  setUserCharacters: (data: UserCharactersData) => void;
 }
 
-export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, getDynamicPortrait }: ChrProps) {
+export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, getDynamicPortrait, setUserCharacters }: ChrProps) {
   const [charFilter, setCharFilter] = useState<string>('전체');
   const [searchQuery, setSearchQuery] = useState<string>(''); // 💡 검색어 상태 추가
 
@@ -178,16 +180,86 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
               <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 2 }}>{char.name}</div>
               <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{currentUni.name}</div>
               {owned && (
-                <div style={{ marginTop: 'auto' }}>
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  
+                  {/* 1. 티어 선택 영역 (보유 버튼 바로 아래 배치) */}
+                  <div>
+                    <div style={{ fontSize: 10, color: '#666', fontWeight: 600, marginBottom: 4, letterSpacing: '0.5px' }}>TIER</div>
+                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                      {char.tier?.map((tCode) => {
+                        let tValue = 1;
+                        if (tCode === 'T2') tValue = 2;
+                        if (tCode === 'T3' || tCode === 'AW') tValue = 3;
+                        if (tCode === 'T4') tValue = 4;
+
+                        // 현재 이 캐릭터에 저장된 티어와 일치하는지 확인
+                        const isSelected = (userCharacters[char.id]?.tier || 1) === tValue;
+
+                        return (
+                          <button
+                            key={tCode}
+                            onClick={async () => {
+                              // 프론트 로컬 상태에 tier 값 주입 후 업데이트
+                              const updated = {
+                                ...userCharacters,
+                                [char.id]: {
+                                  ...userCharacters[char.id],
+                                  tier: tValue
+                                }
+                              };
+                              setUserCharacters(updated);
+
+                              // 백엔드 데이터베이스 서버에 실시간 저장 연동
+                              try {
+                                const token = localStorage.getItem('token');
+                                if (!token) return;
+                                await fetch('/api/import-data', {
+                                  method: 'POST',
+                                  headers: { 
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                  },
+                                  body: JSON.stringify({ userCharacters: updated })
+                                });
+                              } catch (err) {
+                                console.error('티어 저장 연동 에러:', err);
+                              }
+                            }}
+                            style={{
+                              flex: 1,
+                              minWidth: '40px',
+                              padding: '4px 0',
+                              fontSize: 10,
+                              borderRadius: 4,
+                              border: isSelected ? `1px solid ${TYPE_COLOR[mainType]}` : '1px solid #2a2a40',
+                              background: isSelected ? `${TYPE_COLOR[mainType]}18` : '#13131e',
+                              color: isSelected ? TYPE_COLOR[mainType] : '#555',
+                              fontWeight: isSelected ? 700 : 400,
+                              cursor: 'pointer',
+                              textAlign: 'center',
+                              transition: 'all 0.15s'
+                            }}
+                          >
+                            {tCode}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 2. 기존 상세 정보 태그 출력 (티어 영역 아래로 밀림) */}
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                     {currentUni.type
-                        .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜'].includes(t))
-                        .map(t => (
-                        <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>{t}</span>
-                    ))}
+                      .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜'].includes(t))
+                      .map(t => (
+                        <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>
+                          {t}
+                        </span>
+                      ))}
                   </div>
+
                 </div>
-              )}
+              )}  
             </div>
           );
         })}
