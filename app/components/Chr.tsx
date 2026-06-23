@@ -161,109 +161,119 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                 flexDirection: 'column'
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
-                <div 
-                  onClick={() => owned && setSelectedCharId(char.id)}
-                  style={{ position: 'relative', flexShrink: 0, cursor: owned ? 'pointer' : 'default' }}
+{/* 초상화 우측: 타이틀 및 통합 상태 설정 드롭다운 */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 2 }}>{char.name}</div>
+                  <div style={{ fontSize: 11, color: '#888' }}>{currentUni.name}</div>
+                </div>
+
+                {/* 💡 보유 버튼 자리에 상태 통합 드롭다운 배치 */}
+                <select
+                  value={(() => {
+                    if (!userCharacters[char.id]?.owned) return 'NOT_OWNED';
+                    
+                    const currentT = userCharacters[char.id]?.tier || 1;
+                    if (currentT === 3) return char.tier.includes('AW') ? 'AW' : 'T3';
+                    if (currentT === 4) return 'T4';
+                    if (currentT === 2) return 'T2';
+                    return 'T1';
+                  })()}
+                  onChange={async (e) => {
+                    const targetCode = e.target.value;
+                    
+                    // 💡 [핵심 해결책] 기존 데이터가 없을 때를 대비해 기본 UserCharacterState 구조를 명확히 선언해 줍니다.
+                    const existingState: UserCharacterState = userCharacters[char.id] || {
+                      owned: false,
+                      activeUniform: '모던',
+                      tier: 1
+                    };
+
+                    let updatedState: UserCharacterState = { ...existingState };
+
+                    if (targetCode === 'NOT_OWNED') {
+                      updatedState = {
+                        ...existingState,
+                        owned: false,
+                        tier: 1
+                      };
+                    } else {
+                      let tValue = 1;
+                      if (targetCode === 'T2') tValue = 2;
+                      if (targetCode === 'T3' || targetCode === 'AW') tValue = 3;
+                      if (targetCode === 'T4') tValue = 4;
+
+                      updatedState = {
+                        ...existingState,
+                        owned: true,
+                        tier: tValue
+                      };
+                    }
+
+                    // 💡 TypeScript가 형변환(Type Assertion)을 완벽히 인지하도록 as UserCharactersData를 명시해 줍니다.
+                    const updated: UserCharactersData = {
+                      ...userCharacters,
+                      [char.id]: updatedState
+                    } as UserCharactersData;
+                    
+                    setUserCharacters(updated);
+
+                    try {
+                      const token = localStorage.getItem('token');
+                      if (!token) return;
+                      await fetch('/api/import-data', {
+                        method: 'POST',
+                        headers: { 
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ userCharacters: updated })
+                      });
+                    } catch (err) {
+                      console.error('상태 저장 연동 에러:', err);
+                    }
+                  }}
+                  style={{
+                    padding: '4px 24px 4px 8px',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    borderRadius: '6px',
+                    background: userCharacters[char.id]?.owned ? TYPE_COLOR[mainType] : '#2a2a40',
+                    color: '#fff',
+                    border: 'none',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    appearance: 'none',
+                    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='white' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 6px center'
+                  }}
                 >
-                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${owned ? TYPE_COLOR[mainType] + 'aa' : '#2a2a40'}`, background: '#0d0d14', boxShadow: owned ? `0 0 8px ${TYPE_COLOR[mainType]}44` : 'none' }}>
-                    <img src={dynamicPortrait} alt={char.name} style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }} />
-                  </div>
-                  <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '24px', height: '24px', borderRadius: '50%', background: '#0d0d14', border: `1px solid ${TYPE_COLOR[mainType]}88`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', zIndex: 2 }}>
-                    <img src={TYPE_ICON[mainType]} alt={mainType} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-                  </div>
-                </div>
-                <button onClick={() => toggleOwned(char.id)} style={{ background: owned ? TYPE_COLOR[mainType] : '#2a2a40', border: 'none', borderRadius: 6, color: '#fff', fontSize: 11, padding: '4px 10px', cursor: 'pointer', fontWeight: 700 }}>
-                  {owned ? '보유' : '미보유'}
-                </button>
-              </div>
-              <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 2 }}>{char.name}</div>
-              <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{currentUni.name}</div>
-              {owned && (
-                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <option value="NOT_OWNED" style={{ background: '#13131e', color: '#fff' }}>미보유</option>
                   
-                  {/* 1. 티어 선택 드롭다운 (보유 버튼 바로 아래 배치) */}
-                  <div style={{ position: 'relative' }}>
-                    <div style={{ fontSize: 10, color: '#666', fontWeight: 600, marginBottom: 4, letterSpacing: '0.5px' }}>TIER SELECT</div>
-                    <select
-                      value={(() => {
-                        const currentT = userCharacters[char.id]?.tier || 1;
-                        if (currentT === 3) return char.tier.includes('AW') ? 'AW' : 'T3';
-                        if (currentT === 4) return 'T4';
-                        if (currentT === 2) return 'T2';
-                        return 'T1';
-                      })()}
-                      onChange={async (e) => {
-                        const targetCode = e.target.value;
-                        let tValue = 1;
-                        if (targetCode === 'T2') tValue = 2;
-                        if (targetCode === 'T3' || targetCode === 'AW') tValue = 3;
-                        if (targetCode === 'T4') tValue = 4;
+                  {char.tier?.map((tCode) => (
+                    <option key={tCode} value={tCode} style={{ background: '#13131e', color: '#fff' }}>
+                      {tCode === 'T1' && '티어 1'}
+                      {tCode === 'T2' && '티어 2'}
+                      {tCode === 'T3' && '티어 3'}
+                      {tCode === 'AW' && '잠재력 초월'}
+                      {tCode === 'T4' && '티어 4'}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                        const updated = {
-                          ...userCharacters,
-                          [char.id]: {
-                            ...userCharacters[char.id],
-                            tier: tValue
-                          }
-                        };
-                        setUserCharacters(updated);
+              {/* 하단: 기존 유니폼 세부 속성 태그 출력 구역 */}
+              <div style={{ marginTop: 'auto', display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {currentUni.type
+                  .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜'].includes(t))
+                  .map(t => (
+                    <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>
+                      {t}
+                    </span>
+                  ))}
+              </div>
 
-                        try {
-                          const token = localStorage.getItem('token');
-                          if (!token) return;
-                          await fetch('/api/import-data', {
-                            method: 'POST',
-                            headers: { 
-                              'Content-Type': 'application/json',
-                              'Authorization': `Bearer ${token}`
-                            },
-                            body: JSON.stringify({ userCharacters: updated })
-                          });
-                        } catch (err) {
-                          console.error('티어 저장 연동 에러:', err);
-                        }
-                      }} // 💡 onChange 함수 중괄호 안전하게 마감
-                      style={{
-                        width: '100%',
-                        padding: '6px 8px',
-                        fontSize: '12px',
-                        borderRadius: '6px',
-                        background: '#13131e',
-                        color: TYPE_COLOR[mainType],
-                        border: `1px solid ${TYPE_COLOR[mainType]}44`,
-                        cursor: 'pointer',
-                        outline: 'none',
-                        appearance: 'none',
-                        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>")`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'right 8px center'
-                      }} // 💡 style 객체 중괄호 안전하게 마감
-                    >
-                      {char.tier?.map((tCode) => (
-                        <option key={tCode} value={tCode} style={{ background: '#13131e', color: '#fff' }}>
-                          {tCode === 'T1' && '티어 1'}
-                          {tCode === 'T2' && '티어 2'}
-                          {tCode === 'T3' && '티어 3'}
-                          {tCode === 'AW' && '잠재력 초월'}
-                          {tCode === 'T4' && '티어 4'}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* 2. 기존 상세 정보 태그 출력 */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
-                    {currentUni.type
-                      .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜'].includes(t))
-                      .map(t => (
-                        <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>
-                          {t}
-                        </span>
-                      ))}
-                  </div>
-                </div>
-              )}  
             </div>
           );
         })}
