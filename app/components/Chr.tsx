@@ -161,14 +161,22 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                 flexDirection: 'column'
               }}
             >
-{/* 초상화 우측: 타이틀 및 통합 상태 설정 드롭다운 */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 2 }}>{char.name}</div>
-                  <div style={{ fontSize: 11, color: '#888' }}>{currentUni.name}</div>
+              {/* 상단: 캐릭터 초상화 및 일체형 상태/티어 드롭다운 */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+                {/* 왼쪽: 초상화 구역 */}
+                <div 
+                  onClick={() => userCharacters[char.id]?.owned && setSelectedCharId(char.id)}
+                  style={{ position: 'relative', flexShrink: 0, cursor: userCharacters[char.id]?.owned ? 'pointer' : 'default' }}
+                >
+                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${userCharacters[char.id]?.owned ? TYPE_COLOR[mainType] + 'aa' : '#2a2a40'}`, background: '#0d0d14', boxShadow: userCharacters[char.id]?.owned ? `0 0 8px ${TYPE_COLOR[mainType]}44` : 'none' }}>
+                    <img src={dynamicPortrait} alt={char.name} style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '24px', height: '24px', borderRadius: '50%', background: '#0d0d14', border: `1px solid ${TYPE_COLOR[mainType]}88`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', zIndex: 2 }}>
+                    <img src={TYPE_ICON[mainType]} alt={mainType} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                  </div>
                 </div>
 
-                {/* 💡 보유 버튼 자리에 상태 통합 드롭다운 배치 */}
+                {/* 오른쪽: [변경] 보유 버튼이 있던 자리에 상태 통합 드롭다운 배치 */}
                 <select
                   value={(() => {
                     if (!userCharacters[char.id]?.owned) return 'NOT_OWNED';
@@ -182,7 +190,6 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                   onChange={async (e) => {
                     const targetCode = e.target.value;
                     
-                    // 💡 [핵심 해결책] 기존 데이터가 없을 때를 대비해 기본 UserCharacterState 구조를 명확히 선언해 줍니다.
                     const existingState: UserCharacterState = userCharacters[char.id] || {
                       owned: false,
                       activeUniform: '모던',
@@ -210,7 +217,6 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                       };
                     }
 
-                    // 💡 TypeScript가 형변환(Type Assertion)을 완벽히 인지하도록 as UserCharactersData를 명시해 줍니다.
                     const updated: UserCharactersData = {
                       ...userCharacters,
                       [char.id]: updatedState
@@ -234,7 +240,7 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     }
                   }}
                   style={{
-                    padding: '4px 24px 4px 8px',
+                    padding: '6px 24px 6px 10px',
                     fontSize: '11px',
                     fontWeight: 700,
                     borderRadius: '6px',
@@ -246,11 +252,12 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     appearance: 'none',
                     backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='white' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>")`,
                     backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 6px center'
+                    backgroundPosition: 'right 6px center',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                    transition: 'all 0.2s'
                   }}
                 >
                   <option value="NOT_OWNED" style={{ background: '#13131e', color: '#fff' }}>미보유</option>
-                  
                   {char.tier?.map((tCode) => (
                     <option key={tCode} value={tCode} style={{ background: '#13131e', color: '#fff' }}>
                       {tCode === 'T1' && '티어 1'}
@@ -263,7 +270,11 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                 </select>
               </div>
 
-              {/* 하단: 기존 유니폼 세부 속성 태그 출력 구역 */}
+              {/* 중간: 영웅 이름 및 유니폼 정보 */}
+              <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 2 }}>{char.name}</div>
+              <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{currentUni.name}</div>
+
+              {/* 하단: 기존 유니폼 세부 속성 태그 출력 구역 (상시 노출) */}
               <div style={{ marginTop: 'auto', display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                 {currentUni.type
                   .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜'].includes(t))
@@ -273,7 +284,6 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     </span>
                   ))}
               </div>
-
             </div>
           );
         })}
