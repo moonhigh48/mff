@@ -210,7 +210,7 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     }
 
                     const dynamicWidth = (currentVal === 'AW' || currentVal === 'NOT_OWNED') ? '92px' : '68px';
-                    const dynamicPadding = (currentVal === 'AW' || currentVal === 'NOT_OWNED') ? '6px 24px 6px 8px' : '6px 20px 6px 14px';
+                    const dynamicPadding = (currentVal === 'AW' || currentVal === 'NOT_OWNED') ? '6px 6px 6px 6px' : '6px 6px 6px 6px';
                     
                     return {
                       width: dynamicWidth,             // 💡 글자 길이에 따라 너비 자동 변경!
