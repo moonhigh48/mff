@@ -69,18 +69,17 @@ export default function AB({
   const [filterElement, setFilterElement] = useState<string>('전체');
   const [filterAbility, setFilterAbility] = useState<string>('전체');
   
-  // 추후 부모나 DB와 연동하기 쉽도록 컴포넌트 내 score 상태 유지
   const [sessionScores, setSessionScores] = useState<Record<string, number>>({});
   
   const todaySessionInfo = useMemo(() => {
     const today = new Date();
-    const dayOfWeek = today.getDay(); // 0: 일요일
+    const dayOfWeek = today.getDay();
 
     if (dayOfWeek === 0) {
-      return { isSunday: true, sessionIndex: 1 }; // 일요일일 때 기본 노출할 자유 세션 인덱스 (예: 1)
+      return { isSunday: true, sessionIndex: 1 };
     }
 
-    const baseDate = new Date(2026, 5, 24); // 2026년 6월 24일
+    const baseDate = new Date(2026, 5, 24);
     today.setHours(0,0,0,0);
     baseDate.setHours(0,0,0,0);
 
@@ -113,7 +112,7 @@ export default function AB({
     };
   }, []);
 
- const handleDragStart = (e: React.DragEvent, charId: string, fromSession?: string) => {
+  const handleDragStart = (e: React.DragEvent, charId: string, fromSession?: string) => {
     e.dataTransfer.setData('text/plain', charId);
     if (fromSession) {
       e.dataTransfer.setData('fromSession', fromSession);
@@ -122,7 +121,7 @@ export default function AB({
 
   const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); };
 
-const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?: string) => {
+  const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?: string) => {
     e.preventDefault();
     const charId = e.dataTransfer.getData('text/plain');
     const fromSession = e.dataTransfer.getData('fromSession');
@@ -131,18 +130,14 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
     const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
     const setLayout = abMode === 'abx' ? setAbxLayout : setAblLayout;
     
-    // 원래 정의대로 session 변수를 그대로 사용하도록 원복했습니다.
     let currentLayout = [...(currentLayoutData[session] || [])];
 
-    // Case 1: 같은 세션 내에서 순서 바꿈 (드래그/클릭 모드 상관없이 작동)
     if (fromSession === session) {
       const fromIndex = currentLayout.indexOf(charId);
       if (fromIndex === -1) return;
       
-      // 먼저 리스트에서 드래그한 영웅 제거
       currentLayout.splice(fromIndex, 1);
       
-      // 특정 캐릭터 위에 떨군 경우 그 자리에 삽입, 그냥 카드 빈 곳에 떨군 경우 맨 뒤로 이동
       if (targetCharId) {
         const toIndex = currentLayout.indexOf(targetCharId);
         currentLayout.splice(toIndex, 0, charId);
@@ -157,7 +152,6 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
       return;
     }
 
-    // Case 2: 대기 목록이나 다른 세션에서 캐릭터가 넘어오는 기존 로직
     if (currentLayout.includes(charId)) return;
     
     if (targetCharId) {
@@ -254,7 +248,6 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
     }).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   }, [userCharacters, selectedSessionKey, filterType, filterRace, filterGender, filterFaction, filterElement, filterAbility, abMode, abxLayout, ablLayout, placementMode, activeSession, currentSessions]);
 
-  // 보기 탭 전용 오늘 세션 키 연산
   const todayViewInfo = useMemo(() => {
     const abxName = todaySessionInfo.isSunday ? '자유' : ABX_SESSIONS[todaySessionInfo.sessionIndex];
     const ablName = todaySessionInfo.isSunday ? '자유' : ABL_SESSIONS[todaySessionInfo.sessionIndex];
@@ -279,18 +272,10 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
           -moz-appearance: textfield;
         }
       `}</style>
+      
+      {/* 상단 탭 배치 수정 (편집/보기가 왼쪽, 극한/레전드가 오른쪽) */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 16 }}>
-        <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
-          <button 
-            onClick={() => { setAbMode('abx'); setSelectedSessionKey(null); }} 
-            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: abMode === 'abx' ? '#2a2a40' : 'transparent', color: abMode === 'abx' ? '#fff' : '#888' }}
-          >극한</button>
-          <button 
-            onClick={() => { setAbMode('abl'); setSelectedSessionKey(null); }} 
-            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: abMode === 'abl' ? '#2a2a40' : 'transparent', color: abMode === 'abl' ? '#fff' : '#888' }}
-          >레전드</button>
-        </div>
-
+        {/* 1-1. 편집 / 보기 탭 (왼쪽 고정) */}
         <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
           <button 
             onClick={() => setActiveTab('edit')} 
@@ -301,6 +286,20 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
             style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'view' ? '#0ea5e9' : 'transparent', color: activeTab === 'view' ? '#fff' : '#888', transition: 'all 0.2s' }}
           >보기</button>
         </div>
+
+        {/* 1-2. 극한 / 레전드 탭 (오른쪽 배치 + 편집 모드일 때만 조건부 노출) */}
+        {activeTab === 'edit' && (
+          <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
+            <button 
+              onClick={() => { setAbMode('abx'); setSelectedSessionKey(null); }} 
+              style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: abMode === 'abx' ? '#2a2a40' : 'transparent', color: abMode === 'abx' ? '#fff' : '#888' }}
+            >극한</button>
+            <button 
+              onClick={() => { setAbMode('abl'); setSelectedSessionKey(null); }} 
+              style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: abMode === 'abl' ? '#2a2a40' : 'transparent', color: abMode === 'abl' ? '#fff' : '#888' }}
+            >레전드</button>
+          </div>
+        )}
       </div>
 
       {activeTab === 'edit' && (
@@ -354,12 +353,11 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
                         return (
                           <div 
                             key={id}
-                            // 순서 변경을 위해 세션 내 캐릭터 초상화도 항상 드래그 가능하도록 설정합니다.
                             draggable={true}
                             onDragStart={(e) => handleDragStart(e, id, session)}
                             onDragOver={handleDragOver}
                             onDrop={(e) => {
-                              e.stopPropagation(); // 세션 카드 자체의 onDrop 이벤트 호출 방지
+                              e.stopPropagation();
                               handleDropToSession(e, session, id);
                             }}
                             onClick={() => removeCharFromSession(session, id)}
@@ -478,15 +476,17 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
 
       {activeTab === 'view' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '10px' }}>
-          <div style={{ fontSize: '16px', fontWeight: 800, color: '#0ea5e9', borderLeft: '4px solid #0ea5e9', paddingLeft: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>📊 오늘의 얼라이언스 배틀 현황판</span>
-            <span style={{ fontSize: '12px', color: '#888', fontWeight: 500 }}>
-              {todaySessionInfo.isSunday ? '📅 오늘은 즐거운 일요일 (자유 모드)' : `📅 로테이션 번호: ${todaySessionInfo.sessionIndex + 1}회차`}
+          
+          {/* 2. 타이틀 통합 및 페이지 가운데 정렬 처리 */}
+          <div style={{ fontSize: '18px', fontWeight: 800, color: '#0ea5e9', textAlign: 'center', width: '100%', margin: '10px 0 6px 0' }}>
+            <span>
+              {todaySessionInfo.isSunday 
+                ? '📅 인피니티 배틀 (일요일)' 
+                : `📅 ${todaySessionInfo.sessionIndex + 1}회차 얼라이언스 배틀`}
             </span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            {/* Left: 극한 배틀 요약 거대 카드 */}
             <div style={{ background: '#13131e', border: '1px solid #ff3e3e44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(229,62,62,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <span style={{ color: '#e53e3e', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>EXTREME MODE</span>
@@ -518,7 +518,6 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
               </div>
             </div>
 
-            {/* Right: 레전드 배틀 요약 거대 카드 */}
             <div style={{ background: '#13131e', border: '1px solid #00f0ff44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(0,240,255,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <span style={{ color: '#00f0ff', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>LEGEND MODE</span>
