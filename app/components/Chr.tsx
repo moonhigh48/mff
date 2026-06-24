@@ -256,11 +256,10 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     }
                   }}
                   style={{
-                    width: 'auto',
-                    minWidth:'fit-content',
-                    padding: '6px 22px 6px 10px',
-                    fontSize: '11px',
-                    fontWeight: 700,
+                    width: '92px',
+                    padding: '6px 20px 6px 20px',
+                    fontSize: '12px',
+                    fontWeight: 600,
                     borderRadius: '6px',
                     background: userCharacters[char.id]?.owned ? TYPE_COLOR[mainType] : '#2a2a40',
                     color: '#fff',
@@ -268,6 +267,8 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     cursor: 'pointer',
                     outline: 'none',
                     appearance: 'none',
+                    textAlign: 'center',
+                    textAlignLast: 'center',
                     backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='white' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>")`,
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'right 6px center',
