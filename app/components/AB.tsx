@@ -444,7 +444,7 @@ export default function AB({
     {/* ----------------------------------------------------------------- */}
     {/* [CASE 2] 보기 탭 활성화 UI (오늘의 극한/레전드 대형 대시보드)          */}
     {/* ----------------------------------------------------------------- */}
-    {activeTab === 'view' && (
+    {activeTab === 'view' && (() => {
       let xSessionName = '';
       let lSessionName = '';
       let xScoreKey = '';
@@ -526,9 +526,8 @@ export default function AB({
                 </div>
               </div>
             </div>
-          </div>
         );
-      )}
+      })()}
     </div>
   );
 }
