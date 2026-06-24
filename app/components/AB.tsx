@@ -115,6 +115,9 @@ export default function AB({
 
   const handleDragStart = (e: React.DragEvent, charId: string) => {
     e.dataTransfer.setData('text/plain', charId);
+    if (fromSession) {
+      e.dataTransfer.setData('fromSession', fromSession);
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); };
@@ -122,21 +125,51 @@ export default function AB({
   const handleDropToSession = (e: React.DragEvent, session: string) => {
     e.preventDefault();
     const charId = e.dataTransfer.getData('text/plain');
+    const fromSession = e.dataTransfer.getData('fromSession');
     if (!charId) return;
 
-    if (abMode === 'abx') {
-      const currentLayout = abxLayout[session] || [];
-      if (currentLayout.includes(charId)) return;
-      const nextLayout = { ...abxLayout, [session]: [...currentLayout, charId] };
-      setAbxLayout(nextLayout);
-      saveToServer(nextLayout, ablLayout);
-    } else {
-      const currentLayout = ablLayout[session] || [];
-      if (currentLayout.includes(charId)) return;
-      const nextLayout = { ...ablLayout, [session]: [...currentLayout, charId] };
-      setAblLayout(nextLayout);
-      saveToServer(abxLayout, nextLayout);
+    const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
+    const setLayout = abMode === 'abx' ? setAbxLayout : setAblLayout;
+    
+    let currentLayout = [...(currentLayoutData[targetSession] || [])];
+
+    // Case 1: 같은 세션 내에서 순서 바꿈 (드래그/클릭 모드 상관없이 작동)
+    if (fromSession === targetSession) {
+      const fromIndex = currentLayout.indexOf(charId);
+      if (fromIndex === -1) return;
+      
+      // 먼저 리스트에서 드래그한 영웅 제거
+      currentLayout.splice(fromIndex, 1);
+      
+      // 특정 캐릭터 위에 떨군 경우 그 자리에 삽입, 그냥 카드 빈 곳에 떨군 경우 맨 뒤로 이동
+      if (targetCharId) {
+        const toIndex = currentLayout.indexOf(targetCharId);
+        currentLayout.splice(toIndex, 0, charId);
+      } else {
+        currentLayout.push(charId);
+      }
+
+      const nextLayout = { ...currentLayoutData, [targetSession]: currentLayout };
+      setLayout(nextLayout);
+      if (abMode === 'abx') saveToServer(nextLayout, ablLayout);
+      else saveToServer(abxLayout, nextLayout);
+      return;
     }
+
+    // Case 2: 대기 목록이나 다른 세션에서 캐릭터가 넘어오는 기존 로직[cite: 3]
+    if (currentLayout.includes(charId)) return;
+    
+    if (targetCharId) {
+      const toIndex = currentLayout.indexOf(targetCharId);
+      currentLayout.splice(toIndex, 0, charId);
+    } else {
+      currentLayout.push(charId);
+    }
+
+    const nextLayout = { ...currentLayoutData, [targetSession]: currentLayout };
+    setLayout(nextLayout);
+    if (abMode === 'abx') saveToServer(nextLayout, ablLayout);
+    else saveToServer(abxLayout, nextLayout);
   };
 
   const removeCharFromSession = (session: string, charId: string) => {
@@ -320,9 +353,17 @@ export default function AB({
                         return (
                           <div 
                             key={id}
+                            // 순서 변경을 위해 세션 내 캐릭터 초상화도 항상 드래그 가능하도록 설정합니다.
+                            draggable={true}
+                            onDragStart={(e) => handleDragStart(e, id, session)}
+                            onDragOver={handleDragOver}
+                            onDrop={(e) => {
+                              e.stopPropagation(); // 세션 카드 자체의 onDrop 이벤트 호출 방지
+                              handleDropToSession(e, session, id);
+                            }}
                             onClick={() => removeCharFromSession(session, id)}
-                            style={{ width: '42px', height: '42px', borderRadius: '10px', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}aa`, cursor: 'pointer' }}
-                            title="클릭 시 팀에서 제외"
+                            style={{ width: '42px', height: '42px', borderRadius: '10px', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}aa`, cursor: 'move' }}
+                            title="드래그: 순서 변경 / 클릭: 팀에서 제외"
                           >
                             <img src={getDynamicPortrait(char)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
                           </div>
