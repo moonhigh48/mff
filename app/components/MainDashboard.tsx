@@ -271,7 +271,8 @@ export default function MainDashboard({
             setAblLayout={setAblLayout} 
             getDynamicPortrait={getDynamicPortrait}
             placementMode={placementMode}
-            activeSession={activeTier}       // MainDashboard에 선언해 둔 activeTier 상태를 요일 선택용으로 공유 연동
+            activeSession={activeTier}
+            setUserCharacters={setUserCharacters}       // MainDashboard에 선언해 둔 activeTier 상태를 요일 선택용으로 공유 연동
             setActiveSession={setActiveTier}
             saveToServer={(updatedAbx, updatedAbl) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl)} 
           />
