@@ -210,6 +210,13 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                       if (targetCode === 'T3' || targetCode === 'AW') tValue = 3;
                       if (targetCode === 'T4') tValue = 4;
 
+                      if (!existingState.owned && char.tier && char.tier.length > 0) {
+                        const defaultTierCode = char.tier[0];
+                        if (defaultTierCode === 'T2') tValue = 2;
+                        if (defaultTierCode === 'T3' || defaultTierCode === 'AW') tValue = 3;
+                        if (defaultTierCode === 'T4') tValue = 4;
+                      }
+
                       updatedState = {
                         ...existingState,
                         owned: true,

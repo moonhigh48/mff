@@ -632,7 +632,7 @@ export default function SL({
                 </button>
               </div>
               <FilterDropdownPanel />
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, maxHeight: '340px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, maxHeight: '340px', justifyContent: 'center',overflowY: 'auto', padding: '0 4px' }}>
                 {sortedLayoutCharacters.map(char => {
                   const userState = userCharacters[char.id] || { activeUniform: '' };
                   const currentUni = char.uniforms.find((u: any) => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
