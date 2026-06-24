@@ -241,7 +241,7 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                   }}
                   style={{
                     width: 'auto',
-                    minwidth: '70px',
+                    minWidth: '70px',
                     padding: '6px 22px 6px 10px',
                     fontSize: '11px',
                     fontWeight: 700,
