@@ -321,7 +321,7 @@ export default function AB({
                           <div 
                             key={id}
                             onClick={() => removeCharFromSession(session, id)}
-                            style={{ width: '42px', height: '42px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}aa`, cursor: 'pointer' }}
+                            style={{ width: '42px', height: '42px', borderRadius: '10px', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}aa`, cursor: 'pointer' }}
                             title="클릭 시 팀에서 제외"
                           >
                             <img src={getDynamicPortrait(char)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
@@ -415,7 +415,7 @@ export default function AB({
                     style={{ 
                       width: '48px', 
                       height: '48px', 
-                      borderRadius: '50%', 
+                      borderRadius: '10px', 
                       overflow: 'hidden', 
                       border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}88`, 
                       cursor: placementMode === 'click' ? (activeSession ? 'pointer' : 'not-allowed') : 'grab',
