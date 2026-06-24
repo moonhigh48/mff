@@ -168,10 +168,10 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                   onClick={() => userCharacters[char.id]?.owned && setSelectedCharId(char.id)}
                   style={{ position: 'relative', flexShrink: 0, cursor: userCharacters[char.id]?.owned ? 'pointer' : 'default' }}
                 >
-                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${userCharacters[char.id]?.owned ? TYPE_COLOR[mainType] + 'aa' : '#2a2a40'}`, background: '#0d0d14', boxShadow: userCharacters[char.id]?.owned ? `0 0 8px ${TYPE_COLOR[mainType]}44` : 'none' }}>
+                  <div style={{ width: '64px', height: '64px', borderRadius: '6px', overflow: 'hidden', border: `2px solid ${userCharacters[char.id]?.owned ? TYPE_COLOR[mainType] + 'aa' : '#2a2a40'}`, background: '#0d0d14', boxShadow: userCharacters[char.id]?.owned ? `0 0 8px ${TYPE_COLOR[mainType]}44` : 'none' }}>
                     <img src={dynamicPortrait} alt={char.name} style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }} />
                   </div>
-                  <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '24px', height: '24px', borderRadius: '50%', background: '#0d0d14', border: `1px solid ${TYPE_COLOR[mainType]}88`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', zIndex: 2 }}>
+                  <div style={{ position: 'absolute', bottom: '-4px', right: '-4px', width: '24px', height: '24px', borderRadius: '50%', background: '#0d0d14', border: `1px solid ${TYPE_COLOR[mainType]}88`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', zIndex: 2 }}>
                     <img src={TYPE_ICON[mainType]} alt={mainType} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                   </div>
                 </div>
@@ -240,7 +240,9 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     }
                   }}
                   style={{
-                    padding: '6px 24px 6px 10px',
+                    width: 'auto',
+                    minwidth: '70px',
+                    padding: '6px 22px 6px 10px',
                     fontSize: '11px',
                     fontWeight: 700,
                     borderRadius: '6px',

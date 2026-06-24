@@ -21,19 +21,26 @@ const ABL_SESSIONS = [
   '자유', '유니버셜/여성', '영웅/외계인', '뮤턴트/남성', '컴뱃/영웅/인간'
 ];
 
-interface UserCharacterState { owned: boolean; activeUniform: string; }
+interface UserCharacterState {
+  owned: boolean;
+  activeUniform: string;
+  ownedUniforms?: Record<string, boolean>;
+  tier?: number;
+  // 💡 각 속성(조건)별 점수를 저장할 수 있는 공간 추가
+  scores?: Record<string, number>;
+}
 type UserCharactersData = Record<string, UserCharacterState>;
 type EolbaeLayoutData = Record<string, string[]>;
 
 interface ABProps {
   userCharacters: UserCharactersData;
+  setUserCharacters: React.Dispatch<React.SetStateAction<UserCharactersData>>; // 점수 저장을 위해 추가
   abxLayout: EolbaeLayoutData;
   setAbxLayout: (layout: EolbaeLayoutData) => void;
   ablLayout: EolbaeLayoutData;
   setAblLayout: (layout: EolbaeLayoutData) => void;
   getDynamicPortrait: (char: any) => string;
   saveToServer: (updatedAbx: EolbaeLayoutData, updatedAbl: EolbaeLayoutData) => void;
-  // [추가] 클릭 배치를 위한 Props 설정
   placementMode: 'drag' | 'click';
   activeSession: string | null;
   setActiveSession: (session: string | null) => void;
@@ -41,20 +48,20 @@ interface ABProps {
 
 export default function AB({
   userCharacters,
+  setUserCharacters,
   abxLayout,
   setAbxLayout,
   ablLayout,
   setAblLayout,
   getDynamicPortrait,
   saveToServer,
-  // [추가] 구조분해 할당 수신
   placementMode,
   activeSession,
   setActiveSession
 }: ABProps) {
 
   const [abMode, setAbMode] = useState<'abx' | 'abl'>('abx');
-  
+  const [activeTab, setActiveTab] = useState<'edit' | 'view'>('edit');
   const [selectedSessionKey, setSelectedSessionKey] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<string>('전체');
   const [filterRace, setFilterRace] = useState<string>('전체');
@@ -62,6 +69,53 @@ export default function AB({
   const [filterFaction, setFilterFaction] = useState<string>('전체');
   const [filterElement, setFilterElement] = useState<string>('전체');
   const [filterAbility, setFilterAbility] = useState<string>('전체');
+  const [sessionScores, setSessionScores] = useState<Record<string, number>>({});
+  
+  const todaySessionInfo = useMemo(() => {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
+
+    // 1. 일요일 예외 처리
+    if (dayOfWeek === 0) {
+      return { isSunday: true, sessionIndex: -1 };
+    }
+
+    // 2. 2026년 6월 24일(수요일)을 기준점으로 잡고 날짜 차이 계산
+    const baseDate = new Date(2026, 5, 24); // 6월은 인덱스 5
+    // 시/분/초 초기화
+    today.setHours(0,0,0,0);
+    baseDate.setHours(0,0,0,0);
+
+    const msDiff = today.getTime() - baseDate.getTime();
+    const totalDaysDiff = Math.floor(msDiff / (1000 * 60 * 60 * 24));
+
+    // 기준일(6월 24일)의 회차 번호는 11 (배열 인덱스로는 10)
+    let currentSessionNum = 11; 
+
+    // 기준일부터 오늘까지 하루씩 전진/후진하며 일요일을 제외하고 회차 카운트
+    if (totalDaysDiff > 0) {
+      for (let i = 1; i <= totalDaysDiff; i++) {
+        const checkDate = new Date(baseDate.getTime() + (i * 1000 * 60 * 60 * 24));
+        if (checkDate.getDay() !== 0) { // 일요일이 아닐 때만 증가
+          currentSessionNum++;
+          if (currentSessionNum > 24) currentSessionNum = 1;
+        }
+      }
+    } else if (totalDaysDiff < 0) {
+      for (let i = -1; i >= totalDaysDiff; i--) {
+        const checkDate = new Date(baseDate.getTime() + (i * 1000 * 60 * 60 * 24));
+        if (checkDate.getDay() !== 0) { // 일요일이 아닐 때만 감소
+          currentSessionNum--;
+          if (currentSessionNum < 1) currentSessionNum = 24;
+        }
+      }
+    }
+
+    return {
+      isSunday: false,
+      sessionIndex: currentSessionNum - 1 // 배열 조회를 위해 0~23 인덱스로 변환
+    };
+  }, []);
 
   const handleDragStart = (e: React.DragEvent, charId: string) => {
     e.dataTransfer.setData('text/plain', charId);
@@ -174,7 +228,7 @@ export default function AB({
         }
       }
 
-      // 2. 드롭다운 필터링
+      // 드롭다운 필터링
       if (filterType !== '전체' && baseType !== filterType) return false;
       if (filterRace !== '전체' && race !== filterRace) return false;
       if (filterGender !== '전체' && gender !== filterGender) return false;
@@ -188,33 +242,49 @@ export default function AB({
 
   return (
     <div>
-      <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, marginBottom: 20, width: 'fit-content', border: '1px solid #2a2a40' }}>
-        <button onClick={() => { setAbMode('abx'); setSelectedSessionKey(null); }} style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: abMode === 'abx' ? '#2a2a40' : 'transparent', color: abMode === 'abx' ? '#fff' : '#888' }}>
-          극한
-        </button>
-        <button onClick={() => { setAbMode('abl'); setSelectedSessionKey(null); }} style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: abMode === 'abl' ? '#2a2a40' : 'transparent', color: abMode === 'abl' ? '#fff' : '#888' }}>
-          레전드
-        </button>
+      {/* 상단 컨트롤 바: 왼쪽(극한/레전드 모드) | 오른쪽(편집/보기 탭) */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 16 }}>
+        
+        {/* [왼쪽] 기존 극한 / 레전드 선택 바 */}
+        <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
+          <button 
+            onClick={() => { setAbMode('abx'); setSelectedSessionKey(null); }} 
+            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: abMode === 'abx' ? '#2a2a40' : 'transparent', color: abMode === 'abx' ? '#fff' : '#888' }}
+          >극한</button>
+          <button 
+            onClick={() => { setAbMode('abl'); setSelectedSessionKey(null); }} 
+            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: abMode === 'abl' ? '#2a2a40' : 'transparent', color: abMode === 'abl' ? '#fff' : '#888' }}
+          >레전드</button>
+        </div>
+
+        {/* [오른쪽] 새로 추가되는 편집 탭 / 보기 탭 전환 바 */}
+        <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
+          <button 
+            onClick={() => setActiveTab('edit')} 
+            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'edit' ? '#5b8dee' : 'transparent', color: activeTab === 'edit' ? '#fff' : '#888', transition: 'all 0.2s' }}
+          >편집</button>
+          <button 
+            onClick={() => setActiveTab('view')} 
+            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'view' ? '#0ea5e9' : 'transparent', color: activeTab === 'view' ? '#fff' : '#888', transition: 'all 0.2s' }}
+          >보기</button>
+        </div>
       </div>
 
+      {/* 편집 탭*/}
+      {activeTab === 'edit' && (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'flex-start' }}>
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: '740px', overflowY: 'auto', paddingRight: 4 }}>
           {currentSessions.map((session, index) => {
             const currentKey = `${session}-${index}`;
             const isSelected = selectedSessionKey === currentKey;
-            
-            // [추가] 클릭 모드일 때 이 요일 칸이 현재 캐릭터를 집어넣을 타겟인지 판별
             const isClickTarget = placementMode === 'click' && activeSession === session;
 
             return (
               <div 
                 key={currentKey}
                 onClick={() => {
-                  // 기존 필터링 토글 작동
                   setSelectedSessionKey(isSelected ? null : currentKey);
-                  
-                  // [추가] 클릭 모드라면 자동 배정용 타겟 세션 상태도 함께 세팅
                   if (placementMode === 'click') {
                     setActiveSession(activeSession === session ? null : session);
                   }
@@ -223,7 +293,6 @@ export default function AB({
                 onDrop={(e) => handleDropToSession(e, session)}
                 style={{ 
                   background: isClickTarget ? '#1e1e2d' : '#13131e', 
-                  // 클릭 모드 타겟이거나 기존 필터 선택 상태일 때 테두리 강조 처리 확장
                   border: isClickTarget ? '2px solid #0ea5e9' : (isSelected ? '1px solid #5b8dee' : '1px solid #2a2a40'), 
                   borderRadius: 10, 
                   padding: '14px', 
@@ -242,12 +311,14 @@ export default function AB({
                   </div>
                   {isSelected && <span style={{ fontSize: 10, background: '#5b8dee20', color: '#5b8dee', padding: '1px 5px', borderRadius: 4, fontWeight: 600 }}>필터링 적용됨</span>}
                 </div>
-                <div onClick={e => e.stopPropagation()} style={{ display: 'flex', flexWrap: 'wrap', gap: 8, minHeight: '44px', alignItems: 'center', background: '#0d0d1440', borderRadius: 6, padding: '6px' }}>
-                  {(currentLayoutData[session] || []).map(id => {
-                    const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
-                    if (!char) return null;
-                    const userState = userCharacters[char.id] || { activeUniform: '' };
-                    const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+                  <div onClick={e => e.stopPropagation()} style={{ display: 'flex', flexWrap: 'wrap', gap: 8, flex: 1, minHeight: '44px', alignItems: 'center', background: '#0d0d1440', borderRadius: 6, padding: '6px' }}>
+                    {(currentLayoutData[session] || []).map(id => {
+                      const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
+                      if (!char) return null;
+                      const userState = userCharacters[char.id] || { activeUniform: '' };
+                      const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
 
                     return (
                       <div 
@@ -262,10 +333,25 @@ export default function AB({
                   })}
                   {(currentLayoutData[session] || []).length === 0 && <span style={{ color: '#444', fontSize: 11 }}>캐릭터를 드래그하여 배치하세요.</span>}
                 </div>
+                
+                <div onClick={e => e.stopPropagation()} style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+                  <input 
+                    type="number"
+                    placeholder="0"
+                    value={sessionScores[currentKey] || ''}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value, 10) || 0;
+                      setSessionScores(prev => ({ ...prev, [currentKey]: val }));
+                    }}
+                    style={{ width: '75px', padding: '6px 8px', fontSize: '12px', background: '#0d0d14', border: '1px solid #2a2a40', borderRadius: 6, color: '#fff', textAlign: 'right', outline: 'none' }}
+                  />
+                  <span style={{ fontSize: 11, color: '#666', fontWeight: 600 }}>점</span>
+                </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
+      </div>
 
         <div style={{ background: '#13131e', border: '1px solid #2a2a40', borderRadius: 12, padding: '1rem', position: 'sticky', top: 70 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#aaa', marginBottom: 12 }}>📥 얼배 대기 캐릭터 목록 ({abMode === 'abx' ? '극한' : '레전드'})</div>
@@ -352,8 +438,97 @@ export default function AB({
             {filteredCharacters.length === 0 && <div style={{ color: '#444', fontSize: 12, padding: 10 }}>조건에 일치하는 캐릭터가 없습니다.</div>}
           </div>
         </div>
-
       </div>
+    )}
+
+    {/* ----------------------------------------------------------------- */}
+    {/* [CASE 2] 보기 탭 활성화 UI (오늘의 극한/레전드 대형 대시보드)          */}
+    {/* ----------------------------------------------------------------- */}
+    {activeTab === 'view' && (
+      let xSessionName = '';
+      let lSessionName = '';
+      let xScoreKey = '';
+      let lScoreKey = '';
+      if (todaySessionInfo.isSunday) {
+          // 일요일일 경우: '자유' 세션 강제 지정 (주기 인덱스 없음)
+          xSessionName = '자유';
+          lSessionName = '자유';
+          // 기존 편집 탭에서 대략 '자유'가 들어간 인덱스나 고정 키로 점수를 매핑
+          // 여기서는 첫 번째 자유 세션이 찍히도록 예시 처리
+          xScoreKey = '자유-1'; 
+          lScoreKey = '자유-1';
+        } else {
+          // 평일일 경우: 자동 계산된 로테이션 인덱스 세션 매핑
+          const idx = todaySessionInfo.sessionIndex;
+          xSessionName = ABX_SESSIONS[idx];[cite: 1]
+          lSessionName = ABL_SESSIONS[idx];[cite: 1]
+          xScoreKey = `${xSessionName}-${idx}`;
+          lScoreKey = `${lSessionName}-${idx}`;
+        }
+
+        return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '10px' }}>
+          <div style={{ fontSize: '16px', fontWeight: 800, color: '#0ea5e9', borderLeft: '4px solid #0ea5e9', paddingLeft: 10 }}>
+            <span>📊 오늘의 얼라이언스 배틀 현황판</span>
+              <span style={{ fontSize: '12px', color: '#888', fontWeight: 500 }}>
+                {todaySessionInfo.isSunday ? '일요일' : `${todaySessionInfo.sessionIndex + 1}회차`}
+              </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            {/* Left: 극한 배틀 요약 거대 카드 */}
+            <div style={{ background: '#13131e', border: '1px solid #ff3e3e44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(229,62,62,0.05)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <span style={{ color: '#e53e3e', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>EXTREME MODE</span>
+                <span style={{ color: '#fff', fontSize: 20, fontWeight: 800 }}>{xSessionName}</span>
+              </div>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: 20, background: '#0d0d1450', padding: 16, borderRadius: 12 }}>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {(abxLayout[xSessionName] || []).map(id => {
+                      const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
+                      return char ? (
+                        <div key={id} style={{ width: '60px', height: '60px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #e53e3e' }}>
+                          <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
+                      ) : null;
+                    })}
+                    {(abxLayout[xSessionName] || []).length === 0 && <div style={{ color: '#444', fontSize: 13 }}>배치된 영웅 없음</div>}
+                  </div>
+                  <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                    <div style={{ fontSize: 11, color: '#666' }}>최고 기록</div>
+                    <div style={{ fontSize: 24, fontWeight: 900, color: '#fff' }}>
+                      {(sessionScores[xScoreKey] || 0).toLocaleString()} <span style={{ fontSize: 13, color: '#aaa' }}>점</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            {/* Right: 레전드 배틀 요약 거대 카드 */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 20, background: '#0d0d1450', padding: 16, borderRadius: 12 }}>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {(ablLayout[lSessionName] || []).map(id => {
+                    const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
+                    return char ? (
+                      <div key={id} style={{ width: '60px', height: '60px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #00f0ff' }}>
+                        <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                      ) : null;
+                   })}
+                  {(ablLayout[lSessionName] || []).length === 0 && <div style={{ color: '#444', fontSize: 13 }}>배치된 영웅 없음</div>}
+                </div>
+                <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                  <div style={{ fontSize: 11, color: '#666' }}>최고 기록</div>
+                  <div style={{ fontSize: 24, fontWeight: 900, color: '#fff' }}>
+                    {(sessionScores[lScoreKey] || 0).toLocaleString()} <span style={{ fontSize: 13, color: '#aaa' }}>점</span>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      )}
     </div>
   );
 }
