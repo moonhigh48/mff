@@ -98,6 +98,7 @@ export default function MainDashboard({
       ...(conditions ? { stageConditions: conditions } : {})
 
     };
+
     if (conditions) {
       updatedPayload.stageConditions = conditions;
     }
@@ -111,7 +112,6 @@ export default function MainDashboard({
       // merge: true 옵션을 주면 기존 필드를 유지하면서 수정된 부분만 안전하게 덮어씁니다.
       const userDocRef = doc(db, 'users', userId);
       await setDoc(userDocRef, updatedPayload, { merge: true });
-      
     } catch (e) { 
       console.error('Firebase 데이터 동기화 실패:', e); 
     }
@@ -265,6 +265,7 @@ export default function MainDashboard({
         {activeTab === 'eolbae' && (
           <AB 
             userCharacters={userCharacters} 
+            setUserCharacters={setUserCharacters}
             abxLayout={abxLayout} 
             setAbxLayout={setAbxLayout} 
             ablLayout={ablLayout} 
@@ -272,7 +273,6 @@ export default function MainDashboard({
             getDynamicPortrait={getDynamicPortrait}
             placementMode={placementMode}
             activeSession={activeTier}
-            setUserCharacters={setUserCharacters}       // MainDashboard에 선언해 둔 activeTier 상태를 요일 선택용으로 공유 연동
             setActiveSession={setActiveTier}
             saveToServer={(updatedAbx, updatedAbl) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl)} 
           />
