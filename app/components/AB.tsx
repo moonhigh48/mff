@@ -113,7 +113,7 @@ export default function AB({
     };
   }, []);
 
-  const handleDragStart = (e: React.DragEvent, charId: string) => {
+ const handleDragStart = (e: React.DragEvent, charId: string, fromSession?: string) => {
     e.dataTransfer.setData('text/plain', charId);
     if (fromSession) {
       e.dataTransfer.setData('fromSession', fromSession);
