@@ -290,26 +290,6 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                       console.error('상태 저장 연동 에러:', err);
                     }
                   }}
-                  style={{
-                    width: '92px',
-                    padding: '6px 20px 6px 8px',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    borderRadius: '6px',
-                    background: userCharacters[char.id]?.owned ? TYPE_COLOR[mainType] : '#2a2a40',
-                    color: '#fff',
-                    border: 'none',
-                    cursor: 'pointer',
-                    outline: 'none',
-                    appearance: 'none',
-                    textAlign: 'center',
-                    textAlignLast: 'center',
-                    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='white' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>")`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 6px center',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                    transition: 'all 0.2s'
-                  }}
                 >
                   <option value="NOT_OWNED" style={{ background: '#1c1c28', color: '#fff' }}>미보유</option>
                   {char.tier?.map((tCode) => (
