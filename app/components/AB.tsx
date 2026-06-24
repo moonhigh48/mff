@@ -173,22 +173,6 @@ const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?:
     else saveToServer(abxLayout, nextLayout);
   };
 
-    // Case 2: 대기 목록이나 다른 세션에서 캐릭터가 넘어오는 기존 로직[cite: 3]
-    if (currentLayout.includes(charId)) return;
-    
-    if (targetCharId) {
-      const toIndex = currentLayout.indexOf(targetCharId);
-      currentLayout.splice(toIndex, 0, charId);
-    } else {
-      currentLayout.push(charId);
-    }
-
-    const nextLayout = { ...currentLayoutData, [targetSession]: currentLayout };
-    setLayout(nextLayout);
-    if (abMode === 'abx') saveToServer(nextLayout, ablLayout);
-    else saveToServer(abxLayout, nextLayout);
-  };
-
   const removeCharFromSession = (session: string, charId: string) => {
     if (abMode === 'abx') {
       const nextLayout = { ...abxLayout, [session]: (abxLayout[session] || []).filter(id => id !== charId) };
