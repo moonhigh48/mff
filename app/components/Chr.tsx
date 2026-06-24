@@ -177,15 +177,24 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                 </div>
 
                 {/* 오른쪽: [변경] 보유 버튼이 있던 자리에 상태 통합 드롭다운 배치 */}
-                <select
+<select
                   value={(() => {
-                    if (!userCharacters[char.id]?.owned) return 'NOT_OWNED';
-                    
-                    const currentT = userCharacters[char.id]?.tier || 1;
-                    if (currentT === 3) return char.tier.includes('AW') ? 'AW' : 'T3';
+                    const userState = userCharacters[char.id];
+
+                    // 1. 명시적으로 미보유 처리가 된 경우에만 'NOT_OWNED'로 썹니다.
+                    if (userState?.owned === false) {
+                      return 'NOT_OWNED';
+                    }
+
+                    // 2. 보유 중이거나 데이터가 비어있는 초기 상태라면 tier에 기록된 숫자를 봅니다.
+                    const currentT = userState?.tier;
                     if (currentT === 4) return 'T4';
+                    if (currentT === 3) return char.tier.includes('AW') ? 'AW' : 'T3';
                     if (currentT === 2) return 'T2';
-                    return 'T1';
+                    if (currentT === 1) return 'T1';
+
+                    // 3. 숫자가 없다면(데이터가 비어있다면), 캐릭터 데이터(char.tier)의 최하위 티어(첫 번째 값)를 기본값으로 삼습니다.
+                    return char.tier && char.tier.length > 0 ? char.tier[0] : 'NOT_OWNED';
                   })()}
                   onChange={async (e) => {
                     const targetCode = e.target.value;
