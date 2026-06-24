@@ -177,7 +177,7 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                 </div>
 
                 {/* 오른쪽: [변경] 보유 버튼이 있던 자리에 상태 통합 드롭다운 배치 */}
-<select
+                <select
                   value={(() => {
                     const userState = userCharacters[char.id];
 
@@ -256,8 +256,7 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     }
                   }}
                   style={{
-                    width: 'auto',
-                    minWidth: '70px',
+                    width: 'fit-content',
                     padding: '6px 22px 6px 10px',
                     fontSize: '11px',
                     fontWeight: 700,

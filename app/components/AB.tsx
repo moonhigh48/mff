@@ -122,7 +122,7 @@ export default function AB({
 
   const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); };
 
-  const handleDropToSession = (e: React.DragEvent, session: string) => {
+const handleDropToSession = (e: React.DragEvent, session: string, targetCharId?: string) => {
     e.preventDefault();
     const charId = e.dataTransfer.getData('text/plain');
     const fromSession = e.dataTransfer.getData('fromSession');
@@ -131,10 +131,11 @@ export default function AB({
     const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
     const setLayout = abMode === 'abx' ? setAbxLayout : setAblLayout;
     
-    let currentLayout = [...(currentLayoutData[targetSession] || [])];
+    // 원래 정의대로 session 변수를 그대로 사용하도록 원복했습니다.
+    let currentLayout = [...(currentLayoutData[session] || [])];
 
     // Case 1: 같은 세션 내에서 순서 바꿈 (드래그/클릭 모드 상관없이 작동)
-    if (fromSession === targetSession) {
+    if (fromSession === session) {
       const fromIndex = currentLayout.indexOf(charId);
       if (fromIndex === -1) return;
       
@@ -149,12 +150,28 @@ export default function AB({
         currentLayout.push(charId);
       }
 
-      const nextLayout = { ...currentLayoutData, [targetSession]: currentLayout };
+      const nextLayout = { ...currentLayoutData, [session]: currentLayout };
       setLayout(nextLayout);
       if (abMode === 'abx') saveToServer(nextLayout, ablLayout);
       else saveToServer(abxLayout, nextLayout);
       return;
     }
+
+    // Case 2: 대기 목록이나 다른 세션에서 캐릭터가 넘어오는 기존 로직
+    if (currentLayout.includes(charId)) return;
+    
+    if (targetCharId) {
+      const toIndex = currentLayout.indexOf(targetCharId);
+      currentLayout.splice(toIndex, 0, charId);
+    } else {
+      currentLayout.push(charId);
+    }
+
+    const nextLayout = { ...currentLayoutData, [session]: currentLayout };
+    setLayout(nextLayout);
+    if (abMode === 'abx') saveToServer(nextLayout, ablLayout);
+    else saveToServer(abxLayout, nextLayout);
+  };
 
     // Case 2: 대기 목록이나 다른 세션에서 캐릭터가 넘어오는 기존 로직[cite: 3]
     if (currentLayout.includes(charId)) return;
