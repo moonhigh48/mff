@@ -196,7 +196,42 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     // 3. 숫자가 없다면(데이터가 비어있다면), 캐릭터 데이터(char.tier)의 최하위 티어(첫 번째 값)를 기본값으로 삼습니다.
                     return char.tier && char.tier.length > 0 ? char.tier[0] : 'NOT_OWNED';
                   })()}
-                  onChange={async (e) => {
+
+                  style={(() => {
+                    const userState = userCharacters[char.id];
+                    let currentVal = 'NOT_OWNED';
+                    if (userState?.owned !== false) {
+                      const currentT = userState?.tier;
+                      if (currentT === 4) currentVal = 'T4';
+                      else if (currentT === 3) currentVal = char.tier.includes('AW') ? 'AW' : 'T3';
+                      else if (currentT === 2) currentVal = 'T2';
+                      else if (currentT === 1) currentVal = 'T1';
+                      else if (char.tier && char.tier.length > 0) currentVal = char.tier[0];
+                    }
+
+                    const dynamicWidth = (currentVal === 'AW' || currentVal === 'NOT_OWNED') ? '92px' : '68px';
+                    const dynamicPadding = (currentVal === 'AW' || currentVal === 'NOT_OWNED') ? '6px 24px 6px 8px' : '6px 20px 6px 14px';
+                    
+                    return {
+                      width: dynamicWidth,             // 💡 글자 길이에 따라 너비 자동 변경!
+                      padding: dynamicPadding,         // 💡 글자 길이에 따라 여백 밸런스 튜닝
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      background: '#1c1c28',
+                      color: '#fff',
+                      border: '1px solid #2a2a40',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      outline: 'none',
+                      appearance: 'none',
+                      textAlign: 'center',
+                      textAlignLast: 'center',
+                      backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23ffffff' viewBox='0 0 16 16'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'calc(100% - 8px) center',
+                    };
+                  })()}
+                    onChange={async (e) => {
                     const targetCode = e.target.value;
                     
                     const existingState: UserCharacterState = userCharacters[char.id] || {
@@ -276,9 +311,9 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     transition: 'all 0.2s'
                   }}
                 >
-                  <option value="NOT_OWNED" style={{ background: '#13131e', color: '#fff', textAlign: 'center' }}>미보유</option>
+                  <option value="NOT_OWNED" style={{ background: '#1c1c28', color: '#fff' }}>미보유</option>
                   {char.tier?.map((tCode) => (
-                    <option key={tCode} value={tCode} style={{ background: '#13131e', color: '#fff', textAlign: 'center', padding: '6px 0' }}>
+                    <option key={tCode} value={tCode} style={{ background: '#1c1c28', color: '#fff' }}>
                       {tCode === 'T1' && '티어 1'}
                       {tCode === 'T2' && '티어 2'}
                       {tCode === 'T3' && '티어 3'}
