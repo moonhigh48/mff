@@ -276,9 +276,9 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     transition: 'all 0.2s'
                   }}
                 >
-                  <option value="NOT_OWNED" style={{ background: '#13131e', color: '#fff' }}>미보유</option>
+                  <option value="NOT_OWNED" style={{ background: '#13131e', color: '#fff', textAlign: 'center' }}>미보유</option>
                   {char.tier?.map((tCode) => (
-                    <option key={tCode} value={tCode} style={{ background: '#13131e', color: '#fff' }}>
+                    <option key={tCode} value={tCode} style={{ background: '#13131e', color: '#fff', textAlign: 'center', padding: '6px 0' }}>
                       {tCode === 'T1' && '티어 1'}
                       {tCode === 'T2' && '티어 2'}
                       {tCode === 'T3' && '티어 3'}
