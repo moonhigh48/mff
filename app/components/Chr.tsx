@@ -40,12 +40,20 @@ interface ChrProps {
   setSelectedCharId: (charId: string | null) => void;
   getDynamicPortrait: (char: any) => string;
   setUserCharacters: (data: UserCharactersData) => void;
+  onTierChange: (updatedChars: UserCharactersData) => void;
 }
 
-export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, getDynamicPortrait, setUserCharacters }: ChrProps) {
+export default function Chr({
+  userCharacters,
+  toggleOwned,
+  setSelectedCharId,
+  getDynamicPortrait,
+  setUserCharacters,
+  onTierChange }: ChrProps) {
   const [charFilter, setCharFilter] = useState<string>('전체');
   const [searchQuery, setSearchQuery] = useState<string>(''); // 💡 검색어 상태 추가
-
+  const userState = userCharacters[char.id] || { owned: false, activeUniform: '', tier: 'NOT_OWNED' };
+  
   return (
     <div>
       {/* 상단 컨트롤러 (필터 버튼 + 검색창) */}
@@ -194,25 +202,21 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                   // 🌟 디자인, 고정 크기, 완벽한 정중앙 밸런스를 적용한 스타일
                   style={{
                     width: '92px',                  // "잠재력 초월"이 가려지지 않는 완벽한 고정 너비
-                    padding: '6px 14px 6px 14px',    // 우측 화살표 여백(20px)을 고려해 왼쪽(14px)과 밸런스를 맞춰 글자를 중앙으로 밀어줌
+                    padding: '6px 0',                // 🌟 좌우 패딩을 0으로 제거하여 가운데 정렬 기준점을 완벽하게 대칭으로 확보
                     fontSize: '12px',
                     fontWeight: 600,
-                    background: owned ? TYPE_COLOR[mainType] + 'cc' : '#2a2a40', // 캐릭터 타입별 포인트 색상 배경 유지 (미보유 시 다크 그레이)
+                    background: owned ? TYPE_COLOR[mainType] + 'cc' : '#2a2a40', 
                     color: '#fff',
                     border: '1px solid rgba(255, 255, 255, 0.15)',
                     borderRadius: '6px',
                     cursor: 'pointer',
                     outline: 'none',
                     appearance: 'none',
-                    
-                    // 닫혀있을 때의 텍스트 정중앙 정렬
                     textAlign: 'center',
                     textAlignLast: 'center',
-                    
-                    // 화살표 아이콘을 우측 벽에 깔끔하게 배치
                     backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23ffffff' viewBox='0 0 16 16'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")`,
                     backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'calc(100% - 8px) center',
+                    backgroundPosition: 'calc(100% - 10px) center', // 화살표를 우측 끝으로 바짝 정렬
                     transition: 'all 0.2s',
                   }}
                   
@@ -245,6 +249,7 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
 
                     const nextUserCharacters = { ...userCharacters, [char.id]: updatedState };
                     setUserCharacters(nextUserCharacters);
+                    onTierChange(nextUserCharacters);
                   }}
                 >
                   {/* 🌟 드롭다운을 열었을 때 리스트 백그라운드 색상 고정 및 시각적 중앙 배치 트릭 */}

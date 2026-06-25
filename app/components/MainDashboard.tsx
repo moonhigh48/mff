@@ -52,6 +52,7 @@ export default function MainDashboard({
   const [abxLayout, setAbxLayout] = useState<EolbaeLayoutData>(initialData?.abxLayout || {});
   const [ablLayout, setAblLayout] = useState<EolbaeLayoutData>(initialData?.ablLayout || {});
   const [stageConditions, setStageConditions] = useState<StageConditionData>(initialData?.stageConditions || {});
+  const [scores, setScores] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (!userId) return;
@@ -71,6 +72,7 @@ export default function MainDashboard({
         if (data.ablLayout) setAblLayout(data.ablLayout);
         if (data.placementMode) setPlacementMode(data.placementMode);
         if (data.stageConditions) setStageConditions(data.stageConditions);
+        if (data.scores) setScores(data.scores);
 
         // 로컬스토리지 캐시도 최신으로 동기화
         localStorage.setItem("mff_initial_data", JSON.stringify(data));
@@ -87,7 +89,8 @@ export default function MainDashboard({
     updatedSl: ShadowlandLayoutData,
     updatedAbx: EolbaeLayoutData,
     updatedAbl: EolbaeLayoutData,
-    conditions?: StageConditionData
+    updatedScores: Record<string, number>
+    conditions?: StageConditionData,
   ) => {
     const updatedPayload = {
       characters: updatedChars,
@@ -95,6 +98,7 @@ export default function MainDashboard({
       slLayout: updatedSl,
       abxLayout: updatedAbx,
       ablLayout: updatedAbl,
+      scores: updatedScores,
       ...(conditions ? { stageConditions: conditions } : {})
 
     };
@@ -154,6 +158,24 @@ export default function MainDashboard({
     setUserCharacters(nextState);
     saveAllToServer(nextState, tierList, slLayout, abxLayout, ablLayout);
   };
+
+const handleTierChange = (charId: string, updatedState: UserCharacterState) => {
+  const nextUserCharacters = { 
+    ...userCharacters, 
+    [charId]: updatedState 
+  };
+  // 상태 변경
+  setUserCharacters(nextUserCharacters);
+  // 기존에 완성해 두신 함수 호출 (점수 상태인 scores도 함께 포함)
+  saveAllToServer(nextUserCharacters, tierList, slLayout, abxLayout, ablLayout, scores);
+};
+
+// 2. 얼배 회차별 점수 변경 및 실시간 서버 업로드 함수
+const saveScoresToServer = (updatedScores: { [scoreKey: string]: number }) => {
+  setScores(updatedScores);
+  saveAllToServer(userCharacters, tierList, slLayout, abxLayout, ablLayout, updatedScores);
+};
+};
 
   const getDynamicPortrait = (char: typeof MFF_DATABASE_CHARACTERS[0]) => {
     const userState = userCharacters[char.id] || { activeUniform: '' };
@@ -260,7 +282,16 @@ export default function MainDashboard({
           </div>      </div>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem' }}>
-        {activeTab === 'characters' && <Chr userCharacters={userCharacters} toggleOwned={toggleOwned} setUserCharacters={setUserCharacters} setSelectedCharId={setSelectedCharId} getDynamicPortrait={getDynamicPortrait} />}
+        {activeTab === 'characters' && 
+        <Chr
+        userCharacters={userCharacters}
+        toggleOwned={toggleOwned}
+        setUserCharacters={setUserCharacters}
+        setSelectedCharId={setSelectedCharId}
+        getDynamicPortrait={getDynamicPortrait}
+        onTierChange={handleTierChange}
+        
+        />}
         
         {activeTab === 'eolbae' && (
           <AB 
@@ -274,7 +305,10 @@ export default function MainDashboard({
             placementMode={placementMode}
             activeSession={activeTier}
             setActiveSession={setActiveTier}
-            saveToServer={(updatedAbx, updatedAbl) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl)} 
+            scores={scores}
+            saveScoresToServer={saveScoresToServer}
+            saveToServer={(updatedAbx, updatedAbl, updatedScores) => 
+              saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl, updatedScores)} 
           />
         )}
         
