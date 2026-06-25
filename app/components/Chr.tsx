@@ -247,7 +247,7 @@ export default function Chr({
 
                     const nextUserCharacters = { ...userCharacters, [char.id]: updatedState };
                     setUserCharacters(nextUserCharacters);
-                    onTierChange(nextUserCharacters);
+                    onTierChange(char.id, updatedState);
                   }}
                 >
                   <option value="NOT_OWNED" style={{ background: '#1c1c28', color: '#fff' }}>
