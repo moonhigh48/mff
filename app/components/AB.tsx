@@ -186,9 +186,9 @@ export default function AB({
     // 콤마 제거 및 숫자 변환
     const numericValue = parseInt(value.replace(/,/g, ''), 10) || 0;
     const nextScores = {
-      ...sessionScores,
-      [scoreKey]: numericValue
-    };
+    ...(scores || {}),
+    [scoreKey]: numericValue
+  };
     
     saveScoresToServer(nextScores);
   };

@@ -136,14 +136,14 @@ export default function MainDashboard({
       [charId]: { owned: !currentState.owned, activeUniform: currentState.activeUniform || defaultUni, ownedUniforms: initialOwnedUniforms }
     };
     updateStateWithScrollLock(nextState);
-    saveAllToServer(nextState, tierList, slLayout, abxLayout, ablLayout);
+    saveAllToServer(nextState, tierList, slLayout, abxLayout, ablLayout, scores);
   };
 
   const handleUniformChange = (charId: string, uniformName: string) => {
     const currentState = userCharacters[charId] || { owned: true, activeUniform: '', ownedUniforms: {} };
     const nextState: UserCharactersData = { ...userCharacters, [charId]: { ...currentState, activeUniform: uniformName } };
     setUserCharacters(nextState);
-    saveAllToServer(nextState, tierList, slLayout, abxLayout, ablLayout);
+    saveAllToServer(nextState, tierList, slLayout, abxLayout, ablLayout, scores);
   };
 
   const toggleUniformOwned = (charId: string, uniformName: string) => {
@@ -154,7 +154,7 @@ export default function MainDashboard({
       [charId]: { ...currentState, ownedUniforms: { ...currentOwnedUniforms, [uniformName]: !currentOwnedUniforms[uniformName] } }
     };
     setUserCharacters(nextState);
-    saveAllToServer(nextState, tierList, slLayout, abxLayout, ablLayout);
+    saveAllToServer(nextState, tierList, slLayout, abxLayout, ablLayout, scores);
   };
 
   const handleTierChange = (charId: string, updatedState: any) => {

@@ -40,7 +40,7 @@ interface ChrProps {
   setSelectedCharId: (charId: string | null) => void;
   getDynamicPortrait: (char: any) => string;
   setUserCharacters: (data: UserCharactersData) => void;
-  onTierChange: (updatedChars: UserCharactersData) => void;
+  onTierChange: (charId: string, updatedState: any) => void; 
 }
 
 export default function Chr({
