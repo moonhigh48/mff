@@ -52,7 +52,6 @@ export default function Chr({
   onTierChange }: ChrProps) {
   const [charFilter, setCharFilter] = useState<string>('전체');
   const [searchQuery, setSearchQuery] = useState<string>(''); // 💡 검색어 상태 추가
-  const userState = userCharacters[char.id] || { owned: false, activeUniform: '', tier: 'NOT_OWNED' };
   
   return (
     <div>
