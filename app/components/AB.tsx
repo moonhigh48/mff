@@ -182,7 +182,6 @@ export default function AB({
       saveToServer(abxLayout, nextLayout);
     }
   };
-  const sessionScores = scores || {};
   const handleScoreChange = (scoreKey: string, value: string) => {
     // 콤마 제거 및 숫자 변환
     const numericValue = parseInt(value.replace(/,/g, ''), 10) || 0;
