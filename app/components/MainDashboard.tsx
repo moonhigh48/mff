@@ -89,7 +89,7 @@ export default function MainDashboard({
     updatedSl: ShadowlandLayoutData,
     updatedAbx: EolbaeLayoutData,
     updatedAbl: EolbaeLayoutData,
-    updatedScores: Record<string, number>,
+    updatedScores: { [scoreKey: string]: number },
     conditions?: StageConditionData,
   ) => {
     const updatedPayload = {
@@ -100,7 +100,6 @@ export default function MainDashboard({
       ablLayout: updatedAbl,
       scores: updatedScores,
       ...(conditions ? { stageConditions: conditions } : {})
-
     };
 
     if (conditions) {
@@ -113,7 +112,6 @@ export default function MainDashboard({
     
     try {
       // 'users' 컬렉션에 userId를 도큐먼트 Key로 지정하여 대입
-      // merge: true 옵션을 주면 기존 필드를 유지하면서 수정된 부분만 안전하게 덮어씁니다.
       const userDocRef = doc(db, 'users', userId);
       await setDoc(userDocRef, updatedPayload, { merge: true });
     } catch (e) { 
@@ -159,23 +157,20 @@ export default function MainDashboard({
     saveAllToServer(nextState, tierList, slLayout, abxLayout, ablLayout);
   };
 
-const handleTierChange = (charId: string, updatedState: UserCharacterState) => {
-  const nextUserCharacters = { 
-    ...userCharacters, 
-    [charId]: updatedState 
+  const handleTierChange = (charId: string, updatedState: any) => {
+    const nextUserCharacters = { 
+      ...userCharacters, 
+      [charId]: updatedState 
+    };
+    setUserCharacters(nextUserCharacters);
+    saveAllToServer(nextUserCharacters, tierList, slLayout, abxLayout, ablLayout, scores);
   };
-  // 상태 변경
-  setUserCharacters(nextUserCharacters);
-  // 기존에 완성해 두신 함수 호출 (점수 상태인 scores도 함께 포함)
-  saveAllToServer(nextUserCharacters, tierList, slLayout, abxLayout, ablLayout, scores);
-};
 
 // 2. 얼배 회차별 점수 변경 및 실시간 서버 업로드 함수
-const saveScoresToServer = (updatedScores: { [scoreKey: string]: number }) => {
-  setScores(updatedScores);
-  saveAllToServer(userCharacters, tierList, slLayout, abxLayout, ablLayout, updatedScores);
-};
-};
+  const saveScoresToServer = (updatedScores: { [scoreKey: string]: number }) => {
+    setScores(updatedScores);
+    saveAllToServer(userCharacters, tierList, slLayout, abxLayout, ablLayout, updatedScores);
+  };
 
   const getDynamicPortrait = (char: typeof MFF_DATABASE_CHARACTERS[0]) => {
     const userState = userCharacters[char.id] || { activeUniform: '' };
