@@ -180,60 +180,44 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                 <select
                   value={(() => {
                     const userState = userCharacters[char.id];
+                    if (userState?.owned === false) return 'NOT_OWNED';
 
-                    // 1. 명시적으로 미보유 처리가 된 경우에만 'NOT_OWNED'로 썹니다.
-                    if (userState?.owned === false) {
-                      return 'NOT_OWNED';
-                    }
-
-                    // 2. 보유 중이거나 데이터가 비어있는 초기 상태라면 tier에 기록된 숫자를 봅니다.
                     const currentT = userState?.tier;
                     if (currentT === 4) return 'T4';
                     if (currentT === 3) return char.tier.includes('AW') ? 'AW' : 'T3';
                     if (currentT === 2) return 'T2';
                     if (currentT === 1) return 'T1';
 
-                    // 3. 숫자가 없다면(데이터가 비어있다면), 캐릭터 데이터(char.tier)의 최하위 티어(첫 번째 값)를 기본값으로 삼습니다.
                     return char.tier && char.tier.length > 0 ? char.tier[0] : 'NOT_OWNED';
                   })()}
-
-                  style={(() => {
-                    const userState = userCharacters[char.id];
-                    let currentVal = 'NOT_OWNED';
-                    if (userState?.owned !== false) {
-                      const currentT = userState?.tier;
-                      if (currentT === 4) currentVal = 'T4';
-                      else if (currentT === 3) currentVal = char.tier.includes('AW') ? 'AW' : 'T3';
-                      else if (currentT === 2) currentVal = 'T2';
-                      else if (currentT === 1) currentVal = 'T1';
-                      else if (char.tier && char.tier.length > 0) currentVal = char.tier[0];
-                    }
-
-                    const dynamicWidth = (currentVal === 'AW' || currentVal === 'NOT_OWNED') ? '92px' : '68px';
-                    const dynamicPadding = (currentVal === 'AW' || currentVal === 'NOT_OWNED') ? '6px 6px 6px 6px' : '6px 6px 6px 6px';
+                  
+                  // 🌟 디자인, 고정 크기, 완벽한 정중앙 밸런스를 적용한 스타일
+                  style={{
+                    width: '102px',                  // "잠재력 초월"이 가려지지 않는 완벽한 고정 너비
+                    padding: '6px 20px 6px 14px',    // 우측 화살표 여백(20px)을 고려해 왼쪽(14px)과 밸런스를 맞춰 글자를 중앙으로 밀어줌
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    background: owned ? TYPE_COLOR[mainType] + 'cc' : '#2a2a40', // 캐릭터 타입별 포인트 색상 배경 유지 (미보유 시 다크 그레이)
+                    color: '#fff',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    appearance: 'none',
                     
-                    return {
-                      width: dynamicWidth,             // 💡 글자 길이에 따라 너비 자동 변경!
-                      padding: dynamicPadding,         // 💡 글자 길이에 따라 여백 밸런스 튜닝
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      background: '#1c1c28',
-                      color: '#fff',
-                      border: '1px solid #2a2a40',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      outline: 'none',
-                      appearance: 'none',
-                      textAlign: 'center',
-                      textAlignLast: 'center',
-                      backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23ffffff' viewBox='0 0 16 16'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")`,
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'calc(100% - 8px) center',
-                    };
-                  })()}
-                    onChange={async (e) => {
+                    // 닫혀있을 때의 텍스트 정중앙 정렬
+                    textAlign: 'center',
+                    textAlignLast: 'center',
+                    
+                    // 화살표 아이콘을 우측 벽에 깔끔하게 배치
+                    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23ffffff' viewBox='0 0 16 16'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'calc(100% - 8px) center',
+                    transition: 'all 0.2s',
+                  }}
+                  
+                  onChange={async (e) => {
                     const targetCode = e.target.value;
-                    
                     const existingState: UserCharacterState = userCharacters[char.id] || {
                       owned: false,
                       activeUniform: '모던',
@@ -243,11 +227,7 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     let updatedState: UserCharacterState = { ...existingState };
 
                     if (targetCode === 'NOT_OWNED') {
-                      updatedState = {
-                        ...existingState,
-                        owned: false,
-                        tier: 1
-                      };
+                      updatedState = { ...existingState, owned: false, tier: 1 };
                     } else {
                       let tValue = 1;
                       if (targetCode === 'T2') tValue = 2;
@@ -260,45 +240,24 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                         if (defaultTierCode === 'T3' || defaultTierCode === 'AW') tValue = 3;
                         if (defaultTierCode === 'T4') tValue = 4;
                       }
-
-                      updatedState = {
-                        ...existingState,
-                        owned: true,
-                        tier: tValue
-                      };
+                      updatedState = { ...existingState, owned: true, tier: tValue };
                     }
 
-                    const updated: UserCharactersData = {
-                      ...userCharacters,
-                      [char.id]: updatedState
-                    } as UserCharactersData;
-                    
-                    setUserCharacters(updated);
-
-                    try {
-                      const token = localStorage.getItem('token');
-                      if (!token) return;
-                      await fetch('/api/import-data', {
-                        method: 'POST',
-                        headers: { 
-                          'Content-Type': 'application/json',
-                          'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ userCharacters: updated })
-                      });
-                    } catch (err) {
-                      console.error('상태 저장 연동 에러:', err);
-                    }
+                    const nextUserCharacters = { ...userCharacters, [char.id]: updatedState };
+                    setUserCharacters(nextUserCharacters);
                   }}
                 >
-                  <option value="NOT_OWNED" style={{ background: '#1c1c28', color: '#fff' }}>미보유</option>
+                  {/* 🌟 드롭다운을 열었을 때 리스트 백그라운드 색상 고정 및 시각적 중앙 배치 트릭 */}
+                  <option value="NOT_OWNED" style={{ background: '#1c1c28', color: '#fff' }}>
+                    &nbsp;&nbsp;미보유&nbsp;&nbsp;
+                  </option>
                   {char.tier?.map((tCode) => (
                     <option key={tCode} value={tCode} style={{ background: '#1c1c28', color: '#fff' }}>
-                      {tCode === 'T1' && '티어 1'}
-                      {tCode === 'T2' && '티어 2'}
-                      {tCode === 'T3' && '티어 3'}
+                      {tCode === 'T1' && '\u00A0\u00A0티어 1\u00A0\u00A0'}
+                      {tCode === 'T2' && '\u00A0\u00A0티어 2\u00A0\u00A0'}
+                      {tCode === 'T3' && '\u00A0\u00A0티어 3\u00A0\u00A0'}
                       {tCode === 'AW' && '잠재력 초월'}
-                      {tCode === 'T4' && '티어 4'}
+                      {tCode === 'T4' && '\u00A0\u00A0티어 4\u00A0\u00A0'}
                     </option>
                   ))}
                 </select>
