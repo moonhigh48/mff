@@ -89,7 +89,7 @@ export default function MainDashboard({
     updatedSl: ShadowlandLayoutData,
     updatedAbx: EolbaeLayoutData,
     updatedAbl: EolbaeLayoutData,
-    updatedScores: Record<string, number>
+    updatedScores: Record<string, number>,
     conditions?: StageConditionData,
   ) => {
     const updatedPayload = {
