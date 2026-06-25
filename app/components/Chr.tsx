@@ -197,11 +197,10 @@ export default function Chr({
 
                     return char.tier && char.tier.length > 0 ? char.tier[0] : 'NOT_OWNED';
                   })()}
-                  
-                  // 🌟 디자인, 고정 크기, 완벽한 정중앙 밸런스를 적용한 스타일
+                
                   style={{
                     width: '92px',                  // "잠재력 초월"이 가려지지 않는 완벽한 고정 너비
-                    padding: '6px 0',                // 🌟 좌우 패딩을 0으로 제거하여 가운데 정렬 기준점을 완벽하게 대칭으로 확보
+                    padding: '6px 0',
                     fontSize: '12px',
                     fontWeight: 600,
                     background: owned ? TYPE_COLOR[mainType] + 'cc' : '#2a2a40', 
@@ -251,7 +250,6 @@ export default function Chr({
                     onTierChange(nextUserCharacters);
                   }}
                 >
-                  {/* 🌟 드롭다운을 열었을 때 리스트 백그라운드 색상 고정 및 시각적 중앙 배치 트릭 */}
                   <option value="NOT_OWNED" style={{ background: '#1c1c28', color: '#fff' }}>
                     &nbsp;&nbsp;미보유&nbsp;&nbsp;
                   </option>
