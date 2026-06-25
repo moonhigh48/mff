@@ -193,8 +193,8 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                   
                   // 🌟 디자인, 고정 크기, 완벽한 정중앙 밸런스를 적용한 스타일
                   style={{
-                    width: '102px',                  // "잠재력 초월"이 가려지지 않는 완벽한 고정 너비
-                    padding: '6px 20px 6px 14px',    // 우측 화살표 여백(20px)을 고려해 왼쪽(14px)과 밸런스를 맞춰 글자를 중앙으로 밀어줌
+                    width: '92px',                  // "잠재력 초월"이 가려지지 않는 완벽한 고정 너비
+                    padding: '6px 14px 6px 14px',    // 우측 화살표 여백(20px)을 고려해 왼쪽(14px)과 밸런스를 맞춰 글자를 중앙으로 밀어줌
                     fontSize: '12px',
                     fontWeight: 600,
                     background: owned ? TYPE_COLOR[mainType] + 'cc' : '#2a2a40', // 캐릭터 타입별 포인트 색상 배경 유지 (미보유 시 다크 그레이)

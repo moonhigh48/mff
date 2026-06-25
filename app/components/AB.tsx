@@ -489,30 +489,30 @@ export default function AB({
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             <div style={{ background: '#13131e', border: '1px solid #ff3e3e44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(229,62,62,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <span style={{ color: '#e53e3e', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>EXTREME MODE</span>
+                <span style={{ color: '#03aab6', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>EXTREME MODE</span>
                 <span style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>
                   {todayViewInfo.abxName}
                 </span>
               </div>
               
-              <div style={{ display: 'flex', alignItems: 'center', gap: 20, background: '#0d0d1450', padding: 16, borderRadius: 12 }}>
-                <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, background: '#0d0d1450', padding: 16, borderRadius: 12 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap',gap: 8 }}>
                   {(abxLayout[todayViewInfo.abxName] || []).map(id => {
                     const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
                     return char ? (
-                      <div key={id} style={{ width: '60px', height: '60px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #e53e3e' }}>
+                      <div key={id} style={{ width: '54px', height: '54px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #03aab6' }}>
                         <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       </div>
                     ) : null;
                   })}
                   {(abxLayout[todayViewInfo.abxName] || []).length === 0 && (
-                    <div style={{ color: '#444', fontSize: 13 }}>배치된 영웅 없음</div>
+                    <div style={{ color: '#444', fontSize: 13, padding: '16px 0' }}>배치된 영웅 없음</div>
                   )}
                 </div>
-                <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                  <div style={{ fontSize: 11, color: '#666' }}>최고 기록</div>
-                  <div style={{ fontSize: 24, fontWeight: 900, color: '#fff' }}>
-                    {(sessionScores[todayViewInfo.abxScoreKey] || 0).toLocaleString()} <span style={{ fontSize: 13, color: '#aaa' }}>점</span>
+                <div style={{ borderTop: '1px solid #2a2a40', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 12, color: '#888', fontWeight: 600 }}>오늘의 점수</span>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: '#fff' }}>
+                    {(sessionScores[todayViewInfo.abxScoreKey] || 0).toLocaleString()} <span style={{ fontSize: 13, color: '#03aab6', fontWeight: 700 }}>점</span>
                   </div>
                 </div>
               </div>
@@ -520,18 +520,18 @@ export default function AB({
 
             <div style={{ background: '#13131e', border: '1px solid #00f0ff44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(0,240,255,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <span style={{ color: '#00f0ff', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>LEGEND MODE</span>
+                <span style={{ color: '#d52626', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>LEGEND MODE</span>
                 <span style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>
                   {todayViewInfo.ablName}
                 </span>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 20, background: '#0d0d1450', padding: 16, borderRadius: 12 }}>
-                <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, background: '#0d0d1450', padding: 16, borderRadius: 12 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                   {(ablLayout[todayViewInfo.ablName] || []).map(id => {
                     const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
                     return char ? (
-                      <div key={id} style={{ width: '60px', height: '60px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #00f0ff' }}>
+                      <div key={id} style={{ width: '54px', height: '54px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #d52626' }}>
                         <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       </div>
                     ) : null;
@@ -540,10 +540,10 @@ export default function AB({
                     <div style={{ color: '#444', fontSize: 13 }}>배치된 영웅 없음</div>
                   )}
                 </div>
-                <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                  <div style={{ fontSize: 11, color: '#666' }}>최고 기록</div>
-                  <div style={{ fontSize: 24, fontWeight: 900, color: '#fff' }}>
-                    {(sessionScores[todayViewInfo.ablScoreKey] || 0).toLocaleString()} <span style={{ fontSize: 13, color: '#aaa' }}>점</span>
+                <div style={{ borderTop: '1px solid #2a2a40', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 12, color: '#888', fontWeight: 600 }}>오늘의 점수</span>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: '#fff' }}>
+                    {(sessionScores[todayViewInfo.ablScoreKey] || 0).toLocaleString()} <span style={{ fontSize: 13, color: '#d52626', fontWeight: 700 }}>점</span>
                   </div>
                 </div>
               </div>
