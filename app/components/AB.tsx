@@ -522,7 +522,11 @@ export default function AB({
                                   }}
                                   title={role}
                                 >
-                                  {ROLE_ICONS[role]}
+                                  <img 
+                                    src={ROLE_ICONS[role]} 
+                                    alt={role} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                                  />
                                 </div>
                               ))}
                             </div>
