@@ -31,6 +31,7 @@ export async function POST(request) {
       slLayout: {},
       abxLayout: {},
       ablLayout: {},
+      sessionScores: {},
       createdAt: new Date().toISOString()
     });
 
