@@ -336,7 +336,7 @@ export default function AB({
 
   const ROLE_ICONS: Record<string, string> = {
     '리더': '👑',    // 예: '/images/leader.png'
-    '딜러': '/images/dps.png',
+    '딜러': 'public/dps.png',
     '서포터': '🛡️'   // 예: '/images/supporter.png'
   };
 
