@@ -89,13 +89,12 @@ export default function MainDashboard({
     updatedAbl: EolbaeLayoutData,
     conditions?: StageConditionData
   ) => {
-    const updatedPayload = {
+    const updatedPayload: any = {
       characters: updatedChars,
       tierList: updatedTier,
       slLayout: updatedSl,
       abxLayout: updatedAbx,
       ablLayout: updatedAbl,
-      ...(conditions ? { stageConditions: conditions } : {})
 
     };
 
@@ -260,7 +259,13 @@ export default function MainDashboard({
           </div>      </div>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem' }}>
-        {activeTab === 'characters' && <Chr userCharacters={userCharacters} toggleOwned={toggleOwned} setUserCharacters={setUserCharacters} setSelectedCharId={setSelectedCharId} getDynamicPortrait={getDynamicPortrait} />}
+        {activeTab === 'characters' &&
+          <Chr
+            userCharacters={userCharacters}
+            toggleOwned={toggleOwned}
+            setUserCharacters={setUserCharacters}
+            setSelectedCharId={setSelectedCharId}
+            getDynamicPortrait={getDynamicPortrait} />}
         
         {activeTab === 'eolbae' && (
           <AB 

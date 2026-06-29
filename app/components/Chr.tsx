@@ -204,16 +204,8 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     cursor: 'pointer',
                     outline: 'none',
                     appearance: 'none',
-                    
-                    // 닫혀있을 때의 텍스트 정중앙 정렬
                     textAlign: 'center',
                     textAlignLast: 'center',
-                    
-                    // 화살표 아이콘을 우측 벽에 깔끔하게 배치
-                    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23ffffff' viewBox='0 0 16 16'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'calc(100% - 8px) center',
-                    transition: 'all 0.2s',
                   }}
                   
                   onChange={async (e) => {
@@ -245,6 +237,14 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
 
                     const nextUserCharacters = { ...userCharacters, [char.id]: updatedState };
                     setUserCharacters(nextUserCharacters);
+                    await saveAllToServer(
+                      nextUserCharacters, // 👈 방금 바꾼 따끈따끈한 캐릭터 데이터
+                      tierList, 
+                      slLayout, 
+                      abxLayout, 
+                      ablLayout, 
+                      stageConditions
+                    );
                   }}
                 >
                   {/* 🌟 드롭다운을 열었을 때 리스트 백그라운드 색상 고정 및 시각적 중앙 배치 트릭 */}
