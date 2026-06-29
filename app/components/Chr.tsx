@@ -43,7 +43,7 @@ interface ChrProps {
   saveToServer: (updatedChars: UserCharactersData) => Promise<void>;
 }
 
-export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, getDynamicPortrait, setUserCharacters }: ChrProps) {
+export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, getDynamicPortrait, setUserCharacters, saveToServer }: ChrProps) {
   const [charFilter, setCharFilter] = useState<string>('전체');
   const [searchQuery, setSearchQuery] = useState<string>(''); // 💡 검색어 상태 추가
 
