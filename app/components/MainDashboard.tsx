@@ -79,7 +79,7 @@ export default function MainDashboard({
 
     // 컴포넌트가 언마운트될 때 감시를 종료하여 메모리 누수 방지
     return () => unsubscribe();
-  }, [userCharacters]);
+  }, [userId]);
 
   const saveAllToServer = async (
     updatedChars: UserCharactersData, 
@@ -265,7 +265,10 @@ export default function MainDashboard({
             toggleOwned={toggleOwned}
             setUserCharacters={setUserCharacters}
             setSelectedCharId={setSelectedCharId}
-            getDynamicPortrait={getDynamicPortrait} />}
+            getDynamicPortrait={getDynamicPortrait}
+            saveToServer={(updatedChars) => 
+              saveAllToServer(updatedChars, tierList, slLayout, abxLayout, ablLayout, stageConditions)
+            } />}
         
         {activeTab === 'eolbae' && (
           <AB 

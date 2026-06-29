@@ -40,6 +40,7 @@ interface ChrProps {
   setSelectedCharId: (charId: string | null) => void;
   getDynamicPortrait: (char: any) => string;
   setUserCharacters: (data: UserCharactersData) => void;
+  saveToServer: (updatedChars: UserCharactersData) => Promise<void>;
 }
 
 export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, getDynamicPortrait, setUserCharacters }: ChrProps) {
@@ -237,14 +238,7 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
 
                     const nextUserCharacters = { ...userCharacters, [char.id]: updatedState };
                     setUserCharacters(nextUserCharacters);
-                    await saveAllToServer(
-                      nextUserCharacters, // 👈 방금 바꾼 따끈따끈한 캐릭터 데이터
-                      tierList, 
-                      slLayout, 
-                      abxLayout, 
-                      ablLayout, 
-                      stageConditions
-                    );
+                    await saveToServer(nextUserCharacters);
                   }}
                 >
                   {/* 🌟 드롭다운을 열었을 때 리스트 백그라운드 색상 고정 및 시각적 중앙 배치 트릭 */}
