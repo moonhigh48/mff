@@ -335,9 +335,8 @@ export default function AB({
   }, [todaySessionInfo]);
 
   const ROLE_ICONS: Record<string, string> = {
-    '리더': '👑',    // 예: '/images/leader.png'
+    '리더': '/leader.png',
     '딜러': '/dps.png',
-    '서포터': '🛡️'   // 예: '/images/supporter.png'
   };
 
   return (
@@ -357,8 +356,7 @@ export default function AB({
         position: 'sticky', 
         top: '53px', 
         zIndex: 45, 
-        background: '#0d0d14', 
-        padding: '12px 0', 
+        background: '#0d0d14',
         borderBottom: '1px solid #2a2a4060', 
         display: 'flex', 
         justifyContent: 'space-between', 
