@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { MFF_DATABASE_CHARACTERS } from '../data/Characters';
+import { useEffect } from 'react';
 
 const TYPE_COLOR: Record<string, string> = { '컴뱃': '#e53e3e', '블래스트': '#319795', '스피드': '#38a169', '유니버셜': '#805ad5' };
 
@@ -39,10 +40,11 @@ interface ABProps {
   ablLayout: EolbaeLayoutData;
   setAblLayout: (layout: EolbaeLayoutData) => void;
   getDynamicPortrait: (char: any) => string;
-  saveToServer: (updatedAbx: EolbaeLayoutData, updatedAbl: EolbaeLayoutData) => void;
+  saveToServer: (updatedAbx: EolbaeLayoutData, updatedAbl: EolbaeLayoutData, updatedScores?: Record<string, number>) => Promise<void>;
   placementMode: 'drag' | 'click';
   activeSession: string | null;
   setActiveSession: (session: string | null) => void;
+  sessionScores: Record<string, number>;
 }
 
 export default function AB({
@@ -56,7 +58,8 @@ export default function AB({
   saveToServer,
   placementMode,
   activeSession,
-  setActiveSession
+  setActiveSession,
+  sessionScores
 }: ABProps) {
 
   const [abMode, setAbMode] = useState<'abx' | 'abl'>('abx');
@@ -68,9 +71,8 @@ export default function AB({
   const [filterFaction, setFilterFaction] = useState<string>('전체');
   const [filterElement, setFilterElement] = useState<string>('전체');
   const [filterAbility, setFilterAbility] = useState<string>('전체');
-  
-  const [sessionScores, setSessionScores] = useState<Record<string, number>>({});
-  
+  const [localScores, setLocalScores] = useState<Record<string, number>>(sessionScores);
+
   const todaySessionInfo = useMemo(() => {
     const today = new Date();
     const dayOfWeek = today.getDay();
@@ -111,6 +113,17 @@ export default function AB({
       sessionIndex: currentSessionNum - 1
     };
   }, []);
+
+  const handleScoreChange = async (key: string, value: number) => {
+    // 현재 부모에게 받은 sessionScores 복사 후 새 점수 대입
+    const nextScores = { ...sessionScores, [key]: value };
+    // 부모의 saveToServer를 호출하여 리액트 상태 갱신 + 파이어베이스 저장을 동시에 처리!
+    await saveToServer(abxLayout, ablLayout, nextScores);
+  };
+
+  useEffect(() => {
+    setLocalScores(sessionScores);
+  }, [sessionScores]);
 
   const handleDragStart = (e: React.DragEvent, charId: string, fromSession?: string) => {
     e.dataTransfer.setData('text/plain', charId);
@@ -378,7 +391,10 @@ export default function AB({
                         value={sessionScores[currentKey] || ''}
                         onChange={(e) => {
                           const val = parseInt(e.target.value, 10) || 0;
-                          setSessionScores(prev => ({ ...prev, [currentKey]: val }));
+                          setLocalScores(prev => ({ ...prev, [currentKey]: val }));
+                        }}
+                        onBlur={async () => {
+                          await handleScoreChange(currentKey, localScores[currentKey] || 0);
                         }}
                         style={{ width: '75px', padding: '6px 8px', fontSize: '12px', background: '#0d0d14', border: '1px solid #2a2a40', borderRadius: 6, color: '#fff', textAlign: 'right', outline: 'none' }}
                       />
@@ -453,8 +469,8 @@ export default function AB({
                       }
                     }}
                     style={{ 
-                      width: '48px', 
-                      height: '48px', 
+                      width: '48px',
+                      height: '48px',
                       borderRadius: '10px', 
                       overflow: 'hidden', 
                       border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}88`, 

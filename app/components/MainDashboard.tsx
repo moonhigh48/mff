@@ -31,6 +31,7 @@ interface MainDashboardProps {
     abxLayout?: EolbaeLayoutData;
     ablLayout?: EolbaeLayoutData;
     placementMode?: 'drag' | 'click';
+    sessionScores?: Record<string, number>;
   };
   onLogout: () => void; 
 }
@@ -52,6 +53,7 @@ export default function MainDashboard({
   const [abxLayout, setAbxLayout] = useState<EolbaeLayoutData>(initialData?.abxLayout || {});
   const [ablLayout, setAblLayout] = useState<EolbaeLayoutData>(initialData?.ablLayout || {});
   const [stageConditions, setStageConditions] = useState<StageConditionData>(initialData?.stageConditions || {});
+  const [sessionScores, setSessionScores] = useState<Record<string, number>>(initialData?.sessionScores || {});
 
   useEffect(() => {
     if (!userId) return;
@@ -71,6 +73,7 @@ export default function MainDashboard({
         if (data.ablLayout) setAblLayout(data.ablLayout);
         if (data.placementMode) setPlacementMode(data.placementMode);
         if (data.stageConditions) setStageConditions(data.stageConditions);
+        if (data.sessionScores) setSessionScores(data.sessionScores);
 
         // 로컬스토리지 캐시도 최신으로 동기화
         localStorage.setItem("mff_initial_data", JSON.stringify(data));
@@ -88,6 +91,7 @@ export default function MainDashboard({
     updatedAbx: EolbaeLayoutData,
     updatedAbl: EolbaeLayoutData,
     conditions?: StageConditionData,
+    updatedScores?: Record<string, number>,
   ) => {
     const updatedPayload = {
       characters: updatedChars,
@@ -95,6 +99,7 @@ export default function MainDashboard({
       slLayout: updatedSl,
       abxLayout: updatedAbx,
       ablLayout: updatedAbl,
+      sessionScores: updatedScores || sessionScores,
       ...(conditions ? { stageConditions: conditions } : {}),
     };
 
@@ -282,7 +287,8 @@ export default function MainDashboard({
             placementMode={placementMode}
             activeSession={activeTier}
             setActiveSession={setActiveTier}
-            saveToServer={(updatedAbx, updatedAbl) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl)} 
+            sessionScores={sessionScores}
+            saveToServer={(updatedAbx, updatedAbl, updatedScores) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl, stageConditions, updatedScores)} 
           />
         )}
         
