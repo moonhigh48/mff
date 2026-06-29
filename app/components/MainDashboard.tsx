@@ -18,7 +18,7 @@ interface UserCharacterState { owned: boolean; activeUniform: string; ownedUnifo
 type UserCharactersData = Record<string, UserCharacterState>;
 type TierListData = Record<string, string[]>;
 type ShadowlandLayoutData = Record<number, string[]>;
-type EolbaeLayoutData = Record<string, string[]>;
+type EolbaeLayoutData = Record<string, (string | { id: string; abrole: string[] })[]>;
 type StageConditionData = Record<number, { id: string; matchTypes: string[]; }>;
 
 interface MainDashboardProps { 
@@ -69,8 +69,8 @@ export default function MainDashboard({
         if (data.characters) setUserCharacters(data.characters);
         if (data.tierList) setTierList(data.tierList);
         if (data.slLayout) setSlLayout(data.slLayout);
-        if (data.abxLayout) setAbxLayout(data.abxLayout);
-        if (data.ablLayout) setAblLayout(data.ablLayout);
+        if (data.abxLayout) setAbxLayout(data.abxLayout as EolbaeLayoutData);
+        if (data.ablLayout) setAblLayout(data.ablLayout as EolbaeLayoutData);
         if (data.placementMode) setPlacementMode(data.placementMode);
         if (data.stageConditions) setStageConditions(data.stageConditions);
         if (data.sessionScores) setSessionScores(data.sessionScores);

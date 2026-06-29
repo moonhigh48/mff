@@ -30,7 +30,11 @@ interface UserCharacterState {
   scores?: Record<string, number>;
 }
 type UserCharactersData = Record<string, UserCharacterState>;
-type EolbaeLayoutData = Record<string, string[]>;
+interface SessionCharObject {
+  id: string;
+  abrole: string[];
+}
+type EolbaeLayoutData = Record<string, (string | SessionCharObject)[]>;
 
 interface ABProps {
   userCharacters: UserCharactersData;
@@ -72,6 +76,7 @@ export default function AB({
   const [filterRole, setfilterRole] = useState<string>('전체');
   const [filterAbility, setFilterAbility] = useState<string>('전체');
   const [localScores, setLocalScores] = useState<Record<string, number>>(sessionScores);
+  const [isDealerMode, setIsDealerMode] = useState<boolean>(false);
 
   const todaySessionInfo = useMemo(() => {
     const today = new Date();
@@ -125,6 +130,32 @@ export default function AB({
     setLocalScores(sessionScores);
   }, [sessionScores]);
 
+  const parseLayout = (rawList: (string | SessionCharObject)[]): SessionCharObject[] => {
+    return (rawList || []).map((item, idx) => {
+      if (typeof item === 'string') {
+        const defaultRole = idx === 0 ? ['리더'] : idx === 1 ? ['딜러'] : ['서포터'];
+        return { id: item, abrole: defaultRole };
+      }
+      return item;
+    });
+  };
+
+  // 💡 순서가 변경되었을 때 인덱스에 따라 기본 역할을 재계산해주는 함수 (원치 않으시면 역할 고정으로 로직 수정 가능)
+  const reassignDefaultRoles = (list: SessionCharObject[]): SessionCharObject[] => {
+    return list.map((char, idx) => {
+      const defaultRole = idx === 0 ? '리더' : idx === 1 ? '딜러' : '서포터';
+      // 기존 커스텀 지정했던 역할들 중 기본군(리더/딜러/서포터) 성격은 밀어버리고 순서 우선 부여하되, 다중역할 꼬임 방지
+      // 여기서는 심플하게 '넣는 순서' 기준의 역할 초기화 방식을 타거나, 기존 abrole을 유지할 수 있습니다.
+      // 요구사항인 "넣는 순서에 따라 기본 지정"을 위해 새로 정렬된 인덱스로 기본 역할을 재배정합니다.
+      let nextRoles = [...char.abrole];
+      if (idx === 0 && !nextRoles.includes('리더')) nextRoles = ['리더', ...nextRoles.filter(r => r !== '딜러' && r !== '서포터')];
+      else if (idx === 1 && !nextRoles.includes('딜러')) nextRoles = ['딜러', ...nextRoles.filter(r => r !== '리더' && r !== '서포터')];
+      else if (idx > 1 && !nextRoles.includes('서포터') && !nextRoles.includes('딜러')) nextRoles = ['서포터']; 
+      
+      return { ...char, abrole: nextRoles };
+    });
+  };
+
   const handleDragStart = (e: React.DragEvent, charId: string, fromSession?: string) => {
     e.dataTransfer.setData('text/plain', charId);
     if (fromSession) {
@@ -143,21 +174,24 @@ export default function AB({
     const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
     const setLayout = abMode === 'abx' ? setAbxLayout : setAblLayout;
     
-    let currentLayout = [...(currentLayoutData[session] || [])];
+    let currentLayout = parseLayout(currentLayoutData[session] || []);
+    const existingIds = currentLayout.map(c => c.id);
 
     if (fromSession === session) {
-      const fromIndex = currentLayout.indexOf(charId);
+      const fromIndex = existingIds.indexOf(charId);
       if (fromIndex === -1) return;
       
-      currentLayout.splice(fromIndex, 1);
-      
+      const [movedChar] = currentLayout.splice(fromIndex, 1);
+
       if (targetCharId) {
-        const toIndex = currentLayout.indexOf(targetCharId);
-        currentLayout.splice(toIndex, 0, charId);
+        const toIndex = currentLayout.map(c => c.id).indexOf(targetCharId);
+        currentLayout.splice(toIndex, 0, movedChar);
       } else {
-        currentLayout.push(charId);
+        currentLayout.push(movedChar);
       }
 
+      currentLayout = reassignDefaultRoles(currentLayout);
+      
       const nextLayout = { ...currentLayoutData, [session]: currentLayout };
       setLayout(nextLayout);
       if (abMode === 'abx') saveToServer(nextLayout, ablLayout);
@@ -165,14 +199,19 @@ export default function AB({
       return;
     }
 
-    if (currentLayout.includes(charId)) return;
+    if (existingIds.includes(charId)) return;
     
+    const insertIdx = targetCharId ? currentLayout.map(c => c.id).indexOf(targetCharId) : currentLayout.length;
+    const defaultRole = insertIdx === 0 ? ['리더'] : insertIdx === 1 ? ['딜러'] : ['서포터'];
+    const newCharObj = { id: charId, abrole: defaultRole };
+
     if (targetCharId) {
-      const toIndex = currentLayout.indexOf(targetCharId);
-      currentLayout.splice(toIndex, 0, charId);
+      currentLayout.splice(insertIdx, 0, newCharObj);
     } else {
-      currentLayout.push(charId);
+      currentLayout.push(newCharObj);
     }
+
+    currentLayout = reassignDefaultRoles(currentLayout);
 
     const nextLayout = { ...currentLayoutData, [session]: currentLayout };
     setLayout(nextLayout);
@@ -181,15 +220,39 @@ export default function AB({
   };
 
   const removeCharFromSession = (session: string, charId: string) => {
-    if (abMode === 'abx') {
-      const nextLayout = { ...abxLayout, [session]: (abxLayout[session] || []).filter(id => id !== charId) };
-      setAbxLayout(nextLayout);
-      saveToServer(nextLayout, ablLayout);
-    } else {
-      const nextLayout = { ...ablLayout, [session]: (ablLayout[session] || []).filter(id => id !== charId) };
-      setAblLayout(nextLayout);
-      saveToServer(abxLayout, nextLayout);
-    }
+    const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
+    const setLayout = abMode === 'abx' ? setAbxLayout : setAblLayout;
+
+    let filtered = parseLayout(currentLayoutData[session] || []).filter(c => c.id !== charId);
+    filtered = reassignDefaultRoles(filtered);
+
+    const nextLayout = { ...currentLayoutData, [session]: filtered };
+    setLayout(nextLayout);
+    if (abMode === 'abx') saveToServer(nextLayout, ablLayout);
+    else saveToServer(abxLayout, nextLayout);
+  };
+  
+  const handleToggleDealerRole = (session: string, charId: string) => {
+    const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
+    const setLayout = abMode === 'abx' ? setAbxLayout : setAblLayout;
+
+    const updated = parseLayout(currentLayoutData[session] || []).map(char => {
+      if (char.id === charId) {
+        const hasDealer = char.abrole.includes('딜러');
+        return {
+          ...char,
+          abrole: hasDealer 
+            ? char.abrole.filter(r => r !== '딜러') 
+            : [...char.abrole, '딜러'] // 순서대로 뒤에 오버레이가 붙도록 push
+        };
+      }
+      return char;
+    });
+
+    const nextLayout = { ...currentLayoutData, [session]: updated };
+    setLayout(nextLayout);
+    if (abMode === 'abx') saveToServer(nextLayout, ablLayout);
+    else saveToServer(abxLayout, nextLayout);
   };
 
   const currentSessions = abMode === 'abx' ? ABX_SESSIONS : ABL_SESSIONS;
@@ -249,14 +312,12 @@ export default function AB({
           if (!matchAll) return false;
         }
       }
-
       if (filterType !== '전체' && baseType !== filterType) return false;
       if (filterRace !== '전체' && race !== filterRace) return false;
       if (filterGender !== '전체' && gender !== filterGender) return false;
       if (filterFaction !== '전체' && faction !== filterFaction) return false;
       if (filterRole !== '전체' && !activeUni.role.includes(filterRole)) return false;
       if (filterAbility !== '전체' && !activeUni.ability.includes(filterAbility)) return false;
-
       return true;
     }).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   }, [userCharacters, selectedSessionKey, filterType, filterRace, filterGender, filterFaction, filterRole, filterAbility, abMode, abxLayout, ablLayout, placementMode, activeSession, currentSessions]);
@@ -273,6 +334,12 @@ export default function AB({
     };
   }, [todaySessionInfo]);
 
+  const ROLE_ICONS: Record<string, string> = {
+    '리더': '👑',    // 예: '/images/leader.png'
+    '딜러': '/images/dps.png',
+    '서포터': '🛡️'   // 예: '/images/supporter.png'
+  };
+
   return (
     <div>
       <style>{`
@@ -286,21 +353,43 @@ export default function AB({
         }
       `}</style>
       
-      {/* 상단 탭 배치 수정 (편집/보기가 왼쪽, 극한/레전드가 오른쪽) */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 16 }}>
-        {/* 1-1. 편집 / 보기 탭 (왼쪽 고정) */}
-        <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
-          <button 
-            onClick={() => setActiveTab('view')} 
-            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'view' ? '#0ea5e9' : 'transparent', color: activeTab === 'view' ? '#fff' : '#888', transition: 'all 0.2s' }}
-          >보기</button>
-          <button 
-            onClick={() => setActiveTab('edit')} 
-            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'edit' ? '#5b8dee' : 'transparent', color: activeTab === 'edit' ? '#fff' : '#888', transition: 'all 0.2s' }}
-          >편집</button>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          {/* 1-1. 편집 / 보기 탭 */}
+          <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
+            <button 
+              onClick={() => { setActiveTab('view'); setIsDealerMode(false); }} 
+              style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'view' ? '#0ea5e9' : 'transparent', color: activeTab === 'view' ? '#fff' : '#888', transition: 'all 0.2s' }}
+            >보기</button>
+            <button 
+              onClick={() => setActiveTab('edit')} 
+              style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'edit' ? '#5b8dee' : 'transparent', color: activeTab === 'edit' ? '#fff' : '#888', transition: 'all 0.2s' }}
+            >편집</button>
+          </div>
+
+          {/* 💡 딜러 설정 버튼 (편집 모드에서만 노출) */}
+          {activeTab === 'edit' && (
+            <button
+              onClick={() => setIsDealerMode(!isDealerMode)}
+              style={{
+                padding: '8px 14px',
+                borderRadius: 8,
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: 'pointer',
+                border: 'none',
+                background: isDealerMode ? '#e53e3e' : '#2a2a40',
+                color: '#fff',
+                transition: 'all 0.15s',
+                boxShadow: isDealerMode ? '0 0 10px #e53e3e50' : 'none'
+              }}
+            >
+              {isDealerMode ? '📢 초상화 클릭 시 딜러 지정 해제 가능' : '⚔️ 딜러 설정 모드'}
+            </button>
+          )}
         </div>
 
-        {/* 1-2. 극한 / 레전드 탭 (오른쪽 배치 + 편집 모드일 때만 조건부 노출) */}
+        {/* 1-2. 극한 / 레전드 탭 */}
         {activeTab === 'edit' && (
           <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
             <button 
@@ -322,14 +411,18 @@ export default function AB({
               const currentKey = `${session}-${index}`;
               const isSelected = selectedSessionKey === currentKey;
               const isClickTarget = placementMode === 'click' && activeSession === session;
+              const structuredLayout = parseLayout(currentLayoutData[session] || []);
 
               return (
                 <div 
                   key={currentKey}
                   onClick={() => {
-                    setSelectedSessionKey(isSelected ? null : currentKey);
-                    if (placementMode === 'click') {
-                      setActiveSession(activeSession === session ? null : session);
+                    // 딜러 수정 모드가 아닐 때만 세션 선택 핸들링 수행
+                    if (!isDealerMode) {
+                      setSelectedSessionKey(isSelected ? null : currentKey);
+                      if (placementMode === 'click') {
+                        setActiveSession(activeSession === session ? null : session);
+                      }
                     }
                   }}
                   onDragOver={handleDragOver}
@@ -342,7 +435,7 @@ export default function AB({
                     display: 'flex', 
                     flexDirection: 'column', 
                     gap: 8,
-                    cursor: 'pointer',
+                    cursor: isDealerMode ? 'default' : 'pointer',
                     boxShadow: isClickTarget ? '0 0 14px #0ea5e930' : (isSelected ? '0 0 12px #5b8dee20' : 'none'),
                     transition: 'all 0.15s'
                   }}
@@ -358,31 +451,76 @@ export default function AB({
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
                     <div onClick={e => e.stopPropagation()}
                     style={{ display: 'flex', flexWrap: 'wrap', gap: 8, flex: 1, minHeight: '44px', alignItems: 'center', background: '#0d0d1440', borderRadius: 6, padding: '6px'}}>
-                      {(currentLayoutData[session] || []).map(id => {
-                        const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
+                      {structuredLayout.map(charObj => {
+                        const char = MFF_DATABASE_CHARACTERS.find(c => c.id === charObj.id);
                         if (!char) return null;
                         const userState = userCharacters[char.id] || { activeUniform: '' };
                         const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
 
                         return (
                           <div 
-                            key={id}
-                            draggable={true}
-                            onDragStart={(e) => handleDragStart(e, id, session)}
+                            key={charObj.id}
+                            draggable={!isDealerMode}
+                            onDragStart={(e) => handleDragStart(e, charObj.id, session)}
                             onDragOver={handleDragOver}
                             onDrop={(e) => {
                               e.stopPropagation();
-                              handleDropToSession(e, session, id);
+                              handleDropToSession(e, session, charObj.id);
                             }}
-                            onClick={() => removeCharFromSession(session, id)}
-                            style={{ width: '42px', height: '42px', borderRadius: '10px', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}aa`, cursor: 'move' }}
-                            title="드래그: 순서 변경 / 클릭: 팀에서 제외"
+                            onClick={() => {
+                              if (isDealerMode) {
+                                handleToggleDealerRole(session, charObj.id);
+                              } else {
+                                removeCharFromSession(session, charObj.id);
+                              }
+                            }}
+                            style={{ 
+                              position: 'relative', // 💡 역할군 오버레이 아이콘을 띄우기 위한 기준점 마련
+                              width: '44px', 
+                              height: '44px', 
+                              borderRadius: '10px', 
+                              border: isDealerMode ? '2px dashed #e53e3e' : `2px solid ${TYPE_COLOR[currentUni.type[0]]}aa`, 
+                              cursor: isDealerMode ? 'pointer' : 'move' 
+                            }}
+                            title={isDealerMode ? "클릭: '딜러' 추가 설정/해제" : "드래그: 순서 변경 / 클릭: 팀에서 제외"}
                           >
                             <img src={getDynamicPortrait(char)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
+                            
+                            {/* 💡 🌟 좌측 상단 오버레이 영역 순서대로 가로 정렬 */}
+                            <div style={{
+                              position: 'absolute',
+                              top: '-4px',
+                              left: '-4px',
+                              display: 'flex',
+                              gap: '2px',
+                              flexDirection: 'row',
+                              pointerEvents: 'none'
+                            }}>
+                              {charObj.abrole.map((role, rIdx) => (
+                                <div
+                                  key={rIdx}
+                                  style={{
+                                    width: '15px',
+                                    height: '15px',
+                                    background: '#13131e',
+                                    border: `1px solid ${role === '딜러' ? '#e53e3e' : role === '리더' ? '#d69e2e' : '#3182ce'}`,
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '9px',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.6)'
+                                  }}
+                                  title={role}
+                                >
+                                  {ROLE_ICONS[role]}
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         );
                       })}
-                      {(currentLayoutData[session] || []).length === 0 && <span style={{ color: '#444', fontSize: 11 }}>캐릭터를 배치하세요.</span>}
+                      {structuredLayout.length === 0 && <span style={{ color: '#444', fontSize: 11 }}>캐릭터를 배치하세요.</span>}
                     </div>
                     
                     <div onClick={e => e.stopPropagation()} style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
@@ -407,6 +545,7 @@ export default function AB({
             })}
           </div>
 
+          {/* 대기 캐릭터 목록 생략 (동일) */}
           <div style={{ background: '#13131e', border: '1px solid #2a2a40', borderRadius: 12, padding: '1rem', position: 'sticky', top: 70 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#aaa', marginBottom: 12 }}>📥 얼배 대기 캐릭터 목록 ({abMode === 'abx' ? '극한' : '레전드'})</div>
             
@@ -458,10 +597,10 @@ export default function AB({
                 return (
                   <div 
                     key={char.id}
-                    draggable={placementMode === 'drag'} 
+                    draggable={placementMode === 'drag' && !isDealerMode} 
                     onDragStart={(e) => handleDragStart(e, char.id)}
                     onClick={() => {
-                      if (placementMode === 'click' && activeSession) {
+                      if (placementMode === 'click' && activeSession && !isDealerMode) {
                         const mockEvent = {
                           dataTransfer: { getData: () => char.id },
                           preventDefault: () => {}
@@ -475,8 +614,8 @@ export default function AB({
                       borderRadius: '10px', 
                       overflow: 'hidden', 
                       border: `2px solid ${TYPE_COLOR[currentUni.type[0]]}88`, 
-                      cursor: placementMode === 'click' ? (activeSession ? 'pointer' : 'not-allowed') : 'grab',
-                      opacity: placementMode === 'click' && !activeSession ? 0.35 : 1,
+                      cursor: isDealerMode ? 'not-allowed' : (placementMode === 'click' ? (activeSession ? 'pointer' : 'not-allowed') : 'grab'),
+                      opacity: (placementMode === 'click' && !activeSession) || isDealerMode ? 0.35 : 1,
                       transition: 'opacity 0.2s'
                     }}
                     title={char.name}
@@ -493,8 +632,6 @@ export default function AB({
 
       {activeTab === 'view' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '10px' }}>
-          
-          {/* 2. 타이틀 통합 및 페이지 가운데 정렬 처리 */}
           <div style={{ fontSize: '18px', fontWeight: 800, color: '#0ea5e9', textAlign: 'center', width: '100%', margin: '10px 0 6px 0' }}>
             <span>
               {todaySessionInfo.isSunday 
@@ -504,25 +641,29 @@ export default function AB({
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            {/* EXTREME MODE */}
             <div style={{ background: '#13131e', border: '1px solid #00f0ff44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(229,62,62,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <span style={{ color: '#03aab6', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>EXTREME MODE</span>
-                <span style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>
-                  {todayViewInfo.abxName}
-                </span>
+                <span style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>{todayViewInfo.abxName}</span>
               </div>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16, background: '#0d0d1450', padding: 16, borderRadius: 12 }}>
-                <div style={{ display: 'flex', flexWrap: 'wrap',gap: 8 }}>
-                  {(abxLayout[todayViewInfo.abxName] || []).map(id => {
-                    const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {parseLayout(abxLayout[todayViewInfo.abxName] || []).map(charObj => {
+                    const char = MFF_DATABASE_CHARACTERS.find(c => c.id === charObj.id);
                     return char ? (
-                      <div key={id} style={{ width: '54px', height: '54px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #03aab6' }}>
+                      <div key={charObj.id} style={{ position: 'relative', width: '54px', height: '54px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #03aab6' }}>
                         <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <div style={{ position: 'absolute', top: '2px', left: '2px', display: 'flex', gap: '1px' }}>
+                          {charObj.abrole.map((r, idx) => (
+                            <span key={idx} style={{ fontSize: '9px', background: '#13131ea0', borderRadius: '50%', padding: '1px' }}>{ROLE_ICONS[r]}</span>
+                          ))}
+                        </div>
                       </div>
                     ) : null;
                   })}
-                  {(abxLayout[todayViewInfo.abxName] || []).length === 0 && (
+                  {parseLayout(abxLayout[todayViewInfo.abxName] || []).length === 0 && (
                     <div style={{ color: '#444', fontSize: 13, padding: '16px 0' }}>배치된 영웅 없음</div>
                   )}
                 </div>
@@ -535,25 +676,29 @@ export default function AB({
               </div>
             </div>
 
+            {/* LEGEND MODE */}
             <div style={{ background: '#13131e', border: '1px solid #ff3e3e44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(0,240,255,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <span style={{ color: '#d52626', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>LEGEND MODE</span>
-                <span style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>
-                  {todayViewInfo.ablName}
-                </span>
+                <span style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>{todayViewInfo.ablName}</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16, background: '#0d0d1450', padding: 16, borderRadius: 12 }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {(ablLayout[todayViewInfo.ablName] || []).map(id => {
-                    const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
+                  {parseLayout(ablLayout[todayViewInfo.ablName] || []).map(charObj => {
+                    const char = MFF_DATABASE_CHARACTERS.find(c => c.id === charObj.id);
                     return char ? (
-                      <div key={id} style={{ width: '54px', height: '54px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #d52626' }}>
+                      <div key={charObj.id} style={{ position: 'relative', width: '54px', height: '54px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #d52626' }}>
                         <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <div style={{ position: 'absolute', top: '2px', left: '2px', display: 'flex', gap: '1px' }}>
+                          {charObj.abrole.map((r, idx) => (
+                            <span key={idx} style={{ fontSize: '9px', background: '#13131ea0', borderRadius: '50%', padding: '1px' }}>{ROLE_ICONS[r]}</span>
+                          ))}
+                        </div>
                       </div>
                     ) : null;
                   })}
-                  {(ablLayout[todayViewInfo.ablName] || []).length === 0 && (
+                  {parseLayout(ablLayout[todayViewInfo.ablName] || []).length === 0 && (
                     <div style={{ color: '#444', fontSize: 13, padding: '16px 0' }}>배치된 영웅 없음</div>
                   )}
                 </div>
