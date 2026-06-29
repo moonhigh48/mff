@@ -241,7 +241,6 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                     await saveToServer(nextUserCharacters);
                   }}
                 >
-                  {/* 🌟 드롭다운을 열었을 때 리스트 백그라운드 색상 고정 및 시각적 중앙 배치 트릭 */}
                   <option value="NOT_OWNED" style={{ background: '#1c1c28', color: '#fff' }}>
                     &nbsp;&nbsp;미보유&nbsp;&nbsp;
                   </option>
