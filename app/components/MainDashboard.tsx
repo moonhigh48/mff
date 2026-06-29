@@ -79,7 +79,7 @@ export default function MainDashboard({
 
     // 컴포넌트가 언마운트될 때 감시를 종료하여 메모리 누수 방지
     return () => unsubscribe();
-  }, [userId]);
+  }, [userCharacters]);
 
   const saveAllToServer = async (
     updatedChars: UserCharactersData, 
