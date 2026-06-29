@@ -87,15 +87,15 @@ export default function MainDashboard({
     updatedSl: ShadowlandLayoutData,
     updatedAbx: EolbaeLayoutData,
     updatedAbl: EolbaeLayoutData,
-    conditions?: StageConditionData
+    conditions?: StageConditionData,
   ) => {
-    const updatedPayload: any = {
+    const updatedPayload = {
       characters: updatedChars,
       tierList: updatedTier,
       slLayout: updatedSl,
       abxLayout: updatedAbx,
       ablLayout: updatedAbl,
-
+      ...(conditions ? { stageConditions: conditions } : {}),|
     };
 
     if (conditions) {
