@@ -388,7 +388,7 @@ export default function AB({
                       <input 
                         type="number"
                         placeholder="0"
-                        value={sessionScores[currentKey] || ''}
+                        value={localScores[currentKey] ?? ''}
                         onChange={(e) => {
                           const val = parseInt(e.target.value, 10) || 0;
                           setLocalScores(prev => ({ ...prev, [currentKey]: val }));
