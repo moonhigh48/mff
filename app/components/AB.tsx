@@ -43,8 +43,6 @@ interface ABProps {
   placementMode: 'drag' | 'click';
   activeSession: string | null;
   setActiveSession: (session: string | null) => void;
-  scores: Record<string, number>; // 💡 추가
-  saveScoresToServer: (updatedScores: Record<string, number>) => void;
 }
 
 export default function AB({
@@ -58,9 +56,7 @@ export default function AB({
   saveToServer,
   placementMode,
   activeSession,
-  setActiveSession,
-  scores,
-  saveScoresToServer
+  setActiveSession
 }: ABProps) {
 
   const [abMode, setAbMode] = useState<'abx' | 'abl'>('abx');
@@ -182,17 +178,7 @@ export default function AB({
       saveToServer(abxLayout, nextLayout);
     }
   };
-  const handleScoreChange = (scoreKey: string, value: string) => {
-    // 콤마 제거 및 숫자 변환
-    const numericValue = parseInt(value.replace(/,/g, ''), 10) || 0;
-    const nextScores = {
-    ...(scores || {}),
-    [scoreKey]: numericValue
-  };
-    
-    saveScoresToServer(nextScores);
-  };
-  
+
   const currentSessions = abMode === 'abx' ? ABX_SESSIONS : ABL_SESSIONS;
   const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
 
@@ -392,14 +378,7 @@ export default function AB({
                         value={sessionScores[currentKey] || ''}
                         onChange={(e) => {
                           const val = parseInt(e.target.value, 10) || 0;
-                          const nextScores = {
-                            ...sessionScores,
-                            [currentKey]: val
-                          };
-                          // 2. 화면에 실시간으로 반영하기 위해 로컬 상태를 변경합니다.
-                          setSessionScores(nextScores);
-                          // 3. 💡 [여기에 추가!] 부모에게 최신 점수 객체를 넘겨 데이터베이스에 실시간 적재합니다.
-                          saveScoresToServer(nextScores);
+                          setSessionScores(prev => ({ ...prev, [currentKey]: val }));
                         }}
                         style={{ width: '75px', padding: '6px 8px', fontSize: '12px', background: '#0d0d14', border: '1px solid #2a2a40', borderRadius: 6, color: '#fff', textAlign: 'right', outline: 'none' }}
                       />

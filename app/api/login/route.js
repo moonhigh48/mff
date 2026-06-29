@@ -33,8 +33,7 @@ export async function POST(request) {
       tierList: user.tierList || { S: [], A: [], B: [], C: [], D: [], E: [] },
       slLayout: user.slLayout || {},
       abxLayout: user.abxLayout || {},
-      ablLayout: user.ablLayout || {},
-      scores: user.scores || {}
+      ablLayout: user.ablLayout || {}
     }, { status: 200 });
   } catch (error) {
     console.error("로그인 에러:", error);
