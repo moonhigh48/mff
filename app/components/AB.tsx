@@ -336,7 +336,7 @@ export default function AB({
 
   const ROLE_ICONS: Record<string, string> = {
     '리더': '👑',    // 예: '/images/leader.png'
-    '딜러': 'public/dps.png',
+    '딜러': '/dps.png',
     '서포터': '🛡️'   // 예: '/images/supporter.png'
   };
 
@@ -353,7 +353,18 @@ export default function AB({
         }
       `}</style>
       
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 16 }}>
+      <div style={{ 
+        position: 'sticky', 
+        top: '53px', 
+        zIndex: 45, 
+        background: '#0d0d14', 
+        padding: '12px 0', 
+        borderBottom: '1px solid #2a2a4060', 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        gap: 16 
+      }}>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {/* 1-1. 편집 / 보기 탭 */}
           <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
