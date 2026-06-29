@@ -29,6 +29,7 @@ interface UserCharacterState {
   owned: boolean;
   activeUniform: string;
   ownedUniforms?: Record<string, boolean>;
+  tier?: number;
 }
 
 type UserCharactersData = Record<string, UserCharacterState>;
@@ -38,9 +39,11 @@ interface ChrProps {
   toggleOwned: (charId: string) => void;
   setSelectedCharId: (charId: string | null) => void;
   getDynamicPortrait: (char: any) => string;
+  setUserCharacters: (data: UserCharactersData) => void;
+  saveToServer: (updatedChars: UserCharactersData) => Promise<void>;
 }
 
-export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, getDynamicPortrait }: ChrProps) {
+export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, getDynamicPortrait, setUserCharacters, saveToServer }: ChrProps) {
   const [charFilter, setCharFilter] = useState<string>('전체');
   const [searchQuery, setSearchQuery] = useState<string>(''); // 💡 검색어 상태 추가
 
@@ -159,35 +162,120 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                 flexDirection: 'column'
               }}
             >
+              {/* 상단: 캐릭터 초상화 및 일체형 상태/티어 드롭다운 */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+                {/* 왼쪽: 초상화 구역 */}
                 <div 
-                  onClick={() => owned && setSelectedCharId(char.id)}
-                  style={{ position: 'relative', flexShrink: 0, cursor: owned ? 'pointer' : 'default' }}
+                  onClick={() => userCharacters[char.id]?.owned && setSelectedCharId(char.id)}
+                  style={{ position: 'relative', flexShrink: 0, cursor: userCharacters[char.id]?.owned ? 'pointer' : 'default' }}
                 >
-                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${owned ? TYPE_COLOR[mainType] + 'aa' : '#2a2a40'}`, background: '#0d0d14', boxShadow: owned ? `0 0 8px ${TYPE_COLOR[mainType]}44` : 'none' }}>
+                  <div style={{ width: '64px', height: '64px', borderRadius: '6px', overflow: 'hidden', border: `2px solid ${userCharacters[char.id]?.owned ? TYPE_COLOR[mainType] + 'aa' : '#2a2a40'}`, background: '#0d0d14', boxShadow: userCharacters[char.id]?.owned ? `0 0 8px ${TYPE_COLOR[mainType]}44` : 'none' }}>
                     <img src={dynamicPortrait} alt={char.name} style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }} />
                   </div>
-                  <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '24px', height: '24px', borderRadius: '50%', background: '#0d0d14', border: `1px solid ${TYPE_COLOR[mainType]}88`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', zIndex: 2 }}>
+                  <div style={{ position: 'absolute', bottom: '-4px', right: '-4px', width: '24px', height: '24px', borderRadius: '50%', background: '#0d0d14', border: `1px solid ${TYPE_COLOR[mainType]}88`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', zIndex: 2 }}>
                     <img src={TYPE_ICON[mainType]} alt={mainType} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                   </div>
                 </div>
-                <button onClick={() => toggleOwned(char.id)} style={{ background: owned ? TYPE_COLOR[mainType] : '#2a2a40', border: 'none', borderRadius: 6, color: '#fff', fontSize: 11, padding: '4px 10px', cursor: 'pointer', fontWeight: 700 }}>
-                  {owned ? '보유' : '미보유'}
-                </button>
+
+                {/* 오른쪽: [변경] 보유 버튼이 있던 자리에 상태 통합 드롭다운 배치 */}
+                <select
+                  value={(() => {
+                    const userState = userCharacters[char.id];
+                    if (!userState || userState?.owned === false) return 'NOT_OWNED';
+
+                    const currentT = userState?.tier;
+                    if (currentT === 4) return 'T4';
+                    if (currentT === 3) return char.tier.includes('AW') ? 'AW' : 'T3';
+                    if (currentT === 2) return 'T2';
+                    if (currentT === 1) return 'T1';
+
+                    return char.tier && char.tier.length > 0 ? char.tier[0] : 'NOT_OWNED';
+                  })()}
+                  
+                  // 🌟 디자인, 고정 크기, 완벽한 정중앙 밸런스를 적용한 스타일
+                  style={{
+                    width: '84px',
+                    padding: '6px 0',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    background: owned ? TYPE_COLOR[mainType] + 'cc' : '#2a2a40', // 캐릭터 타입별 포인트 색상 배경 유지 (미보유 시 다크 그레이)
+                    color: '#fff',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    appearance: 'none',
+                    textAlign: 'center',
+                    textAlignLast: 'center',
+                  }}
+                  
+                  onChange={async (e) => {
+                    const targetCode = e.target.value;
+                    const existingState: UserCharacterState = userCharacters[char.id] || {
+                      owned: false,
+                      activeUniform: '모던',
+                      tier: 1
+                    };
+
+                    let updatedState: UserCharacterState = { ...existingState };
+
+                    if (targetCode === 'NOT_OWNED') {
+                      updatedState = { ...existingState, owned: false, tier: 1 };
+                    } else {
+                      let tValue = 1;
+                      if (targetCode === 'T2') tValue = 2;
+                      if (targetCode === 'T3' || targetCode === 'AW') tValue = 3;
+                      if (targetCode === 'T4') tValue = 4;
+
+                      if (!existingState.owned && char.tier && char.tier.length > 0) {
+                        const defaultTierCode = char.tier[0];
+                        if (defaultTierCode === 'T2') tValue = 2;
+                        if (defaultTierCode === 'T3' || defaultTierCode === 'AW') tValue = 3;
+                        if (defaultTierCode === 'T4') tValue = 4;
+                      }
+                      updatedState = { ...existingState, owned: true, tier: tValue };
+                    }
+
+                    const nextUserCharacters = { ...userCharacters, [char.id]: updatedState };
+                    setUserCharacters(nextUserCharacters);
+                    await saveToServer(nextUserCharacters);
+                  }}
+                >
+                  <option value="NOT_OWNED" style={{ background: '#1c1c28', color: '#fff' }}>
+                    &nbsp;&nbsp;미보유&nbsp;&nbsp;
+                  </option>
+                  {char.tier?.map((tCode) => (
+                    <option key={tCode} value={tCode} style={{ background: '#1c1c28', color: '#fff', textAlign: 'center' }}>
+                      {tCode === 'T1' && '티어 1'}
+                      {tCode === 'T2' && '티어 2'}
+                      {tCode === 'T3' && '티어 3'}
+                      {tCode === 'AW' && '잠재력 초월'}
+                      {tCode === 'T4' && '티어 4'}
+                    </option>
+                  ))}
+                </select>
               </div>
+
+              {/* 중간: 영웅 이름 및 유니폼 정보 */}
               <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 2 }}>{char.name}</div>
               <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{currentUni.name}</div>
-              {owned && (
-                <div style={{ marginTop: 'auto' }}>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                    {currentUni.type
-                        .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜'].includes(t))
-                        .map(t => (
-                        <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>{t}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
+
+              {/* 하단: 기존 유니폼 세부 속성 태그 출력 구역 (상시 노출) */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4}}>
+                {currentUni.type
+                  .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜', '질서', '정의', '파멸', '냉혹'].includes(t))
+                  .map(t => (
+                    <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>
+                      {t}
+                    </span>
+                  ))}
+                {currentUni.role
+                  .map(t => (
+                    <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>
+                      {t}
+                    </span>
+                  ))}
+              </div>
             </div>
           );
         })}

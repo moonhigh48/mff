@@ -7,11 +7,12 @@ export type MffElement = '파멸' | '냉혹' | '질서' | '정의';
 
 // 2. 지정하신 [클래스, 종족, 성별, 진영, 천성] 순서를 엄격하게 강제하는 튜플(Tuple) 타입 정의
 export type MffCharacterTypeTuple = [MffClass, MffRace, MffGender, MffFaction, MffElement];
+export type MFFTierType = 'T1' | 'T2' | 'AW' | 'T3' | 'T4';
 
 export interface UniformInfo {
   name: string;
   type: MffCharacterTypeTuple; // 무조건 정의한 순서대로 5개의 값이 들어가야 함
-  role: ('리더' | '딜러' | '서포터' | '')[];
+  role: string[];
   ability: string[];
 }
 
@@ -19,6 +20,7 @@ export interface CharacterData {
   id: string;
   name: string;
   portrait: string;
+  tier: MFFTierType[];
   uniforms: UniformInfo[];
 }
 
@@ -27,6 +29,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Abomination',
   name: '어보미네이션',
   portrait: '/images/abomination.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: ' 모던', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러', '서포터'], ability: ['감마선', '내구력'] },
     { name: '감염된 생물병기', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러', '서포터'], ability: ['감마선', '내구력', '좀비'] }
@@ -36,6 +39,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Absorbing Man',
   name: '앱소빙 맨',
   portrait: '/images/absorbingman.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['괴력'] },
     { name: '피어 잇셀프', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['괴력'] }
@@ -45,6 +49,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Adam Warlock',
   name: '아담 워록',
   portrait: '/images/adamwarlock.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '창조물', '남성', '영웅', '질서'], role: ['딜러'], ability: ['마법', '타임프리징 면역'] },
     { name: "인피니티 카운트다운", type: ['블래스트', '창조물', '남성', '영웅', '질서'], role: ['딜러'], ability: ['마법', '타임프리징 면역'] },
@@ -55,6 +60,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'aero',
   name: '에어로',
   portrait: '/images/aero.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     {name: "모던", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '고속 이동']},
     {name: "클래식", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '고속 이동']}
@@ -64,6 +70,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Agent Venom',
   name: '에이전트 베놈',
   portrait: '/images/agentvenom.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['심비오트', '영웅심', '요원'] },
     { name: '에이전트 안티 베놈', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['심비오트', '영웅심', '요원'] },
@@ -75,6 +82,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'America Chavez',
   name: '아메리카 차베스',
   portrait: '/images/americachavez.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: '얼티미츠', type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['괴력', '고속 이동'] },
     { name: '클래식', type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['괴력', '고속 이동'] },
@@ -86,6 +94,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ancient one',
   name: '에인션트 원',
   portrait: '/images/ancientone.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['마법', '영웅심'] },
     { name: "무비: 닥터 스트레인지", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['마법', '영웅심'] },
@@ -97,6 +106,8 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Angel',
   name: '엔젤',
   portrait: '/images/angel.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
+
   uniforms: [
     { name: "모던", type: ['스피드', '뮤턴트', '남성', '영웅', '질서'], role: [''], ability: ['고속 이동', '영웅심'] },
     { name: "엑스 포스", type: ['스피드', '뮤턴트', '남성', '슈퍼 빌런', '질서'], role: [''], ability: ['고속 이동', '영웅심'] },
@@ -108,6 +119,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Angela',
   name: '안젤라',
   portrait: '/images/angela.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['무기 전문가']},
     { name: "시크릿 워즈: 1602 위치 헌터 안젤라", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['무기 전문가']},
@@ -119,6 +131,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'AntMan',
   name: '앤트맨',
   portrait: '/images/antman.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] },
     { name: "무비: 앤트맨", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] },
@@ -133,6 +146,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'AntiMan',
   name: '안티맨',
   portrait: '/images/antiman.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['유니버셜', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러'], ability: ['고속 이동', '에너지 투사'] },
     { name: "얼티미츠", type: ['유니버셜', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러'], ability: ['고속 이동', '에너지 투사'] }
@@ -142,16 +156,19 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Apocalypse',
   name: '아포칼립스',
   portrait: '/images/apocalypse.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: '에이지 오브 아포칼립스', type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['고속 이동', '사악', '내구력'] },
     { name: '메시아 콤플렉스', type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['고속 이동', '사악', '내구력'] },
-    { name: '아포칼립스의 전령', type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['고속 이동', '사악', '내구력'] }
+    { name: '아포칼립스의 전령', type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['고속 이동', '사악', '내구력'] },
+    { name: "엑스맨 '97", type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['고속 이동', '사악', '내구력'] }
   ]
 },
 {
   id: 'Arachknight',
   name: '아라크나이트',
   portrait: '/images/arachknight.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "어벤져스: 인피니티 워프", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '인피니티 워프', '스파이더 센스'] },
     { name: "아라크나이트 2099", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['영웅심', '인피니티 워프', '스파이더 센스'] }
@@ -161,6 +178,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ares',
   name: '아레스',
   portrait: '/images/ares.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['다크 어벤져스', '무기 전문가', '괴력'] },
     { name: '퍼니셔', type: ['컴뱃', '외계인', '남성', '슈퍼 빌런', '질서'], role: ['딜러'], ability: ['무기 전문가', '괴력', '올림포스'] }
@@ -170,6 +188,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Athena',
   name: '아테나',
   portrait: '/images/athena.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: '인크레더블 헤라클레스', type: ['컴뱃', '외계인', '여성', '영웅', '질서'], role: ['서포터'], ability: ['민첩', '치유력', '올림포스'] }
   ]
@@ -178,6 +197,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Baron Mordo',
   name: '모르도 남작',
   portrait: '/images/baronmordo.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "클래식", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['마법', '사악'] },
     { name: "무비: 닥터 스트레인지", type: ['스피드', '인간', '남성', '영웅', '냉혹'], role: ['딜러'], ability: ['민첩', '초감각', '마법'] },
@@ -188,6 +208,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Baron Zemo',
   name: '바론 제모',
   portrait: '/images/baronzemo.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러'], ability: ['민첩', '사악'] },
     { name: "팔콘과 윈터 솔져", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러'], ability: ['민첩', '사악'] }
@@ -197,6 +218,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Beast',
   name: '비스트',
   portrait: '/images/beast.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: '클래식', type: ['컴뱃', '뮤턴트', '남성', '영웅', '질서'], role: ['리더'], ability: ['괴력', '민첩'] },
     { name: '에이지 오브 아포칼립스', type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '질서'], role: ['리더'], ability: ['괴력', '민첩'] },
@@ -209,6 +231,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Beta Ray Bill',
   name: '베타 레이 빌',
   portrait: '/images/betaraybill.png',
+  tier: ['T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['전격', '영웅심', '어나이얼레이터'] },
     { name: "베타 레이 빌", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러', '서포터'], ability: ['화염', '영웅심', '어나이얼레이터'] }
@@ -218,6 +241,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Bishop',
   name: '비숍',
   portrait: '/images/bishop.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "디스어셈블드", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['에너지 투사'] },
     { name: "엑스맨 '97", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['에너지 투사'] }
@@ -227,6 +251,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Black Bolt',
   name: '블랙 볼트',
   portrait: '/images/blackbolt.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인휴먼', '남성', '영웅', '질서'], role: ['리더'], ability: ['고속 이동', '에너지 투사'] },
     { name: "올-뉴, 올-디프런트", type: ['유니버셜', '인휴먼', '남성', '영웅', '질서'], role: ['리더'], ability: ['고속 이동', '에너지 투사'] },
@@ -239,17 +264,20 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Black Cat',
   name: '블랙 캣',
   portrait: '/images/blackcat.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['민첩'] },
     { name: "클로우즈", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['민첩'] },
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['민첩'] },
-    { name: "윈터 크리미널", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더', '서포터'], ability: ['민첩'] }
+    { name: "윈터 크리미널", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더', '서포터'], ability: ['민첩'] },
+    { name: "퀸 인 블랙", type: ['유니버셜', '인간', '여성', '영웅', '냉혹'], role: ['리더', '서포터'], ability: ['민첩']}
   ]
 },
 {
   id: 'Black Dwarf',
   name: '블랙 드워프',
   portrait: '/images/blackdwarf.png',
+  tier: ['T2', 'AW'],
   uniforms: [
     { name: "인피니티", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: [''], ability: ['괴력', '내구력', '블랙 오더'] },
     { name: "어벤져스: 인피니티 워", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['괴력', '내구력', '블랙 오더'] },
@@ -260,6 +288,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Black Knight',
   name: '블랙 나이트',
   portrait: '/images/blackknight.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: '새비지 어벤져스', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['무기 전문가'] }
   ]
@@ -268,6 +297,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Black Panther',
   name: '블랙 팬서',
   portrait: '/images/blackpanther.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '지휘'] },
     { name: '캡틴 아메리카: 시빌 워', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '지휘'] },
@@ -280,6 +310,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Black Swan',
   name: '블랙 스완',
   portrait: '/images/blackswan.png',
+  tier: ['T3'],
   uniforms: [
     { name: "블랙 오더", type: ['스피드', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['사악', '블랙 오더'] }
   ]
@@ -288,6 +319,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Black Widow',
   name: '블랙 위도우',
   portrait: '/images/blackwidow.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "어벤져스", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '요원'] },
     { name: "어벤져스: 에이지 오브 울트론", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '요원'] },
@@ -307,6 +339,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Blade',
   name: '블레이드',
   portrait: '/images/blade.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: [''], ability: ['치유력', '무기 전문가'] },
     { name: "70년대 클래식", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: [''], ability: ['치유력', '무기 전문가'] },
@@ -317,6 +350,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
 {
   id: 'Blue Dragon',
   name: '블루 드래곤',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   portrait: '/images/bluedragon.png',
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['워리어즈 오브 더 스카이', '영웅심', '전격'] },
@@ -327,6 +361,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Blue Marvel',
   name: '블루 마블',
   portrait: '/images/bluemarvel.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "얼티미츠", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '에너지 투사'] },
     { name: "클래식", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '에너지 투사'] },
@@ -336,6 +371,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Bullseye',
   name: '불스아이',
   portrait: '/images/bullseye.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: [''], ability: ['무기 전문가', '사악'] },
     { name: '시크릿 워즈: 1872', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: [''], ability: ['무기 전문가', '사악'] },
@@ -347,6 +383,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Cable',
   name: '케이블',
   portrait: '/images/cable.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['무기 전문가', '영웅심', '기계'] },
     { name: "엑스 포스", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['무기 전문가', '영웅심', '기계'] },
@@ -360,6 +397,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Captain America',
   name: '캡틴 아메리카',
   portrait: '/images/captainamerica.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: '어벤져스', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: [''], ability: ['영웅심', '지휘'] },
     { name: '어벤져스: 에이지 오브 울트론', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '지휘'] },
@@ -382,6 +420,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Captain Marvel',
   name: '캡틴 마블',
   portrait: '/images/captainmarvel.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: '모던', type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['고속 이동', '영웅심', '에너지 투사'] },
     { name: '시크릿 워즈: 캡틴 마블 & 캐럴 코어', type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['고속 이동', '영웅심', '에너지 투사'] },
@@ -397,6 +436,8 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'sharonrogers',
   name: '캡틴 아메리카(샤론 로저스)',
   portrait: '/images/sharonrogers.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
+
   uniforms: [
     { name: "캡틴 아메리카 75주년 기념", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '에너지 투사'] },
     { name: "스타 라이트 아머", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '에너지 투사'] },
@@ -411,6 +452,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Carnage',
   name: '카니지',
   portrait: '/images/carnage.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: '올-뉴, 올-디프런트', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '치유력', '심비오트'] },
     { name: '앱솔루트 카니지', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '치유력', '심비오트'] },
@@ -422,6 +464,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Cassandra Nova',
   name: '카산드라 노바',
   portrait: '/images/cassandranova.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "데드풀과 울버린", type: ['블래스트', '뮤턴트', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['정신', '정신 저항', '사악'] }
   ]
@@ -430,6 +473,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Cassie Lang',
   name: '캐시 랭',
   portrait: '/images/cassielang.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "앤트맨과 와스프: 퀀텀매니아", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['서포터'], ability: ['고속 이동', '민첩'] }
   ]
@@ -438,6 +482,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Clea',
   name: '클레아',
   portrait: '/images/clea.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '여성', '영웅', '질서'], role: ['딜러'], ability: ['마법', '고속 이동'] }
   ]
@@ -446,6 +491,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Colossus',
   name: '콜로서스',
   portrait: '/images/colossus.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '뮤턴트', '남성', '영웅', '질서'], role: [''], ability: ['괴력', '영웅심'] },
     { name: '엑스 포스', type: ['컴뱃', '뮤턴트', '남성', '영웅', '질서'], role: [''], ability: ['괴력', '영웅심'] },
@@ -455,8 +501,9 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
 },
 {
   id: 'Corvus Glaive',
-  name: '콜버스 그레이브',
+  name: '콜버스 글레이브',
   portrait: '/images/corvusglaive.png',
+  tier: ['T2', 'AW'],
   uniforms: [
     { name: "인피니티", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['민첩', '고속 이동', '블랙 오더'] },
     { name: "어벤져스: 인피니티 워", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['민첩', '고속 이동', '블랙 오더'] },
@@ -467,6 +514,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Crescent',
   name: '크레센트',
   portrait: '/images/crescent.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['영웅심', '내구력', '괴력'] },
     { name: '라이프스타일 시리즈 1', type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['영웅심', '내구력', '괴력'] },
@@ -478,6 +526,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Crossbones',
   name: '크로스본즈',
   portrait: '/images/crossbones.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: '캡틴 아메리카: 시빌 워', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['무기 전문가'] },
     { name: '모던', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['무기 전문가'] },
@@ -488,6 +537,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Crystal',
   name: '크리스탈',
   portrait: '/images/crystal.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['블래스트', '인휴먼', '여성', '영웅', '질서'], role: ['리더'], ability: ['지휘', '에너지 투사'] },
     { name: "로열 슈트", type: ['블래스트', '인휴먼', '여성', '영웅', '질서'], role: ['리더'], ability: ['지휘', '에너지 투사'] },
@@ -499,6 +549,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Cyclops',
   name: '사이클롭스',
   portrait: '/images/cyclops.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['리더', '서포터'], ability: ['에너지 투사', '지휘'] },
     { name: "에이지 오브 아포칼립스", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '질서'], role: ['리더', '서포터'], ability: ['에너지 투사', '지휘'] },
@@ -512,6 +563,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Daisy Johnson',
   name: '데이지 존슨',
   portrait: '/images/daisyjohnson.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "에이전트 오브 쉴드", type: ['블래스트', '인휴먼', '여성', '영웅', '질서'], role: ['딜러'], ability: ['정신 저항', '요원'] },
     { name: "모던", type: ['블래스트', '인휴먼', '여성', '영웅', '질서'], role: ['딜러'], ability: ['지휘', '요원'] },
@@ -522,6 +574,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Daken',
   name: '다켄',
   portrait: '/images/daken.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: '모던', type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['무기 전문가', '치유력'] },
     { name: '다크 울버린', type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['무기 전문가', '치유력'] },
@@ -531,6 +584,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Daredevil',
   name: '데어데블',
   portrait: '/images/daredevil.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['초감각', '디펜더스', '영웅심'] },
     { name: "헬스 키친의 악마", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['초감각', '디펜더스', '영웅심'] },
@@ -543,6 +597,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Darkhawk',
   name: '다크호크',
   portrait: '/images/darkhawk.png',
+  tier: ['T1', 'T2'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '고속 이동'] },
   ]
@@ -551,6 +606,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Dazzler',
   name: '대즐러',
   portrait: '/images/dazzler.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러', '서포터'], ability: ['에너지 투사'] },
     { name: "X의 노래", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러', '서포터'], ability: ['에너지 투사'] },
@@ -560,6 +616,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Deadpool',
   name: '데드풀',
   portrait: '/images/deadpool.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['치유력', '무기 전문가'] },
     { name: "엑스 포스", type: ['스피드', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['치유력', '무기 전문가'] },
@@ -576,6 +633,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Deathlok',
   name: '데쓰록',
   portrait: '/images/deathlok.png',
+  tier: ['T1', 'T2'],
   uniforms: [
     { name: "에이전트 오브 쉴드", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['기계', '요원'] },
     { name: '모던', type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['기계', '요원'] }
@@ -585,6 +643,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Destroyer',
   name: '디스트로이어',
   portrait: '/images/destroyer.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "클래식", type: ['유니버셜', '창조물', '성별 없음', '중립', '파멸'], role: ['딜러'], ability: ['화염', '기계'] },
     { name: "프로메테우스", type: ['유니버셜', '창조물', '성별 없음', '중립', '파멸'], role: ['딜러'], ability: ['에너지 투사', '기계'] },
@@ -595,6 +654,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Doctor Doom',
   name: '닥터 둠',
   portrait: '/images/doctordoom.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '마법'] },
     { name: "3099", type: ['유니버셜', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '마법'] },
@@ -605,6 +665,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Doctor Octopus',
   name: '닥터 옥토퍼스',
   portrait: '/images/doctoroctopus.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: '클래식', type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['기계', '내구력', '시니스터 식스'] },
     { name: '슈피리어 스파이더맨', type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['기계', '스파이더 센스', '민첩'] },
@@ -617,6 +678,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Doctor Strange',
   name: '닥터 스트레인지',
   portrait: '/images/doctorstrange.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['마법', '고속 이동'] },
     { name: "무비: 닥터 스트레인지", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['마법', '고속 이동'] },
@@ -631,6 +693,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Doctor Voodoo',
   name: '닥터 부두',
   portrait: '/images/doctorvoodoo.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: [''], ability: ['마법', '지휘'] },
     { name: "스트레인지 아카데미", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['마법', '지휘'] },
@@ -641,6 +704,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Domino',
   name: '도미노',
   portrait: '/images/domino.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "엑스 포스", type: ['스피드', '뮤턴트', '여성', '영웅', '질서'], role: [''], ability: ['민첩', '무기 전문가'] },
     { name: "마블 나우!", type: ['스피드', '뮤턴트', '여성', '영웅', '질서'], role: [''], ability: ['민첩', '무기 전문가'] },
@@ -651,6 +715,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Dormammu',
   name: '도르마무',
   portrait: '/images/dormammu.png',
+  tier: ['T2', 'T3'],
   uniforms: [
     { name: "클래식", type: ['유니버셜', '불명', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['마법', '사악'] },
     { name: "댐네이션", type: ['유니버셜', '불명', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['마법', '사악'] }
@@ -660,6 +725,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Drax',
   name: '드랙스',
   portrait: '/images/drax.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: [''], ability: ['치유력'] },
     { name: "올-뉴, 올-디프런트", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: [''], ability: ['치유력'] },
@@ -670,6 +736,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ebony Maw',
   name: '에보니 모',
   portrait: '/images/ebonymaw.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "인피니티", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['사악', '정신 저항', '블랙 오더'] },
     { name: "어벤져스: 인피니티 워", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러', '서포터'], ability: ['사악', '정신 저항', '블랙 오더'] },
@@ -681,6 +748,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Echo',
   name: '에코',
   portrait: '/images/echo.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "엔터 더 피닉스", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['피닉스 포스', '민첩'] },
     { name: "호크아이", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러', '서포터'], ability: ['민첩'] },
@@ -691,6 +759,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Electro',
   name: '일렉트로',
   portrait: '/images/electro.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러'], ability: ['사악', '전격', '시니스터 식스'] },
     { name: "스파이더맨: 노 웨이 홈", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러'], ability: ['사악', '전격', '시니스터 식스'] }
@@ -700,6 +769,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Elektra',
   name: '엘렉트라',
   portrait: '/images/elektra.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['무기 전문가'] },
     { name: "마블 데어데블", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['무기 전문가'] },
@@ -711,6 +781,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Elsa Bloodstone',
   name: '엘사 블러드스톤',
   portrait: '/images/elsabloodstone.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['무기 전문가'] },
     { name: "시크릿 워즈: 마블 좀비스", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['무기 전문가'] },
@@ -721,6 +792,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Emma Frost',
   name: '엠마 프로스트',
   portrait: '/images/emmafrost.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['정신 저항', '내구력'] },
     { name: "마블 나우!", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['정신 저항', '내구력'] },
@@ -733,6 +805,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Enchantress',
   name: '인챈트리스',
   portrait: '/images/enchantress.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['블래스트', '외계인', '여성', '슈퍼 빌런', '파멸'], role: [''], ability: ['마법', '정신'] },
     { name: "썸머 데이즈", type: ['블래스트', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러', '서포터'], ability: ['마법', '정신'] },
@@ -743,6 +816,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Exodus',
   name: '엑소더스',
   portrait: '/images/exodus.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '뮤턴트', '남성', '영웅', '질서'], role: ['리더', '서포터'], ability: ['에너지 투사', '지휘'] }
   ]
@@ -751,6 +825,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Falcon',
   name: '팔콘',
   portrait: '/images/falcon.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "캡틴 아메리카: 윈터 솔져", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['고속 이동', '영웅심'] },
     { name: "올-뉴 캡틴 아메리카", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['고속 이동', '영웅심'] },
@@ -765,6 +840,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Joaquin Torres',
   name: '팔콘 (호아킨 토레스)',
   portrait: '/images/joaquintorres.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "캡틴 아메리카: 브레이브 뉴 월드", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['서포터'], ability: ['고속 이동', '영웅심'] }
   ]
@@ -773,6 +849,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Fandral',
   name: '팬드럴',
   portrait: '/images/fandral.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['민첩'] }
   ]
@@ -781,6 +858,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Fantomex',
   name: '판토멕스',
   portrait: '/images/fantomex.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "엑스 포스", type: ['스피드', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '무기 전문가'] }
   ]
@@ -789,6 +867,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Franklin Richards',
   name: '프랭클린 리처즈',
   portrait: '/images/franklinrichards.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['에너지 투사', '정신', '판타스틱 4'] }
   ]
@@ -797,16 +876,18 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Gambit',
   name: '갬빗',
   portrait: '/images/gambit.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '정신'] },
     { name: "엑스칼리버", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '정신'] },
-    { name: "엑스맨 송년기념회", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '정신'] }
+    { name: "엑스맨 송년회", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '정신'] }
   ]
 },
 {
   id: 'Gamora',
   name: '가모라',
   portrait: '/images/gamora.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시", type: ['스피드', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '무기 전문가'] },
     { name: "올-뉴, 올-디프런트", type: ['스피드', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '무기 전문가'] },
@@ -820,6 +901,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ghost',
   name: '고스트',
   portrait: '/images/ghost.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '서포터'], ability: ['무기 전문가', '기계'] },
     { name: "무비: 앤트맨과 와스프", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더', '서포터'], ability: ['무기 전문가', '기계'] },
@@ -830,6 +912,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ghost Panther',
   name: '고스트 팬서',
   portrait: '/images/ghostpanther.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "인피니티 워프", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['민첩', '화염', '인피니티 워프'] }
   ]
@@ -838,6 +921,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ghost Rider',
   name: '고스트 라이더',
   portrait: '/images/ghostrider.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '화염'] },
     { name: "70년대 클래식", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '화염'] },
@@ -851,6 +935,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Robbie Reyes',
   name: '고스트 라이더 (로비 레예스)',
   portrait: '/images/robbiereyes.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "마블 나우!", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['고속 이동', '화염'] },
     { name: "복수의 군주", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러', '서포터'], ability: ['고속 이동', '화염'] }
@@ -860,6 +945,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'GiantMan',
   name: '자이언트맨',
   portrait: '/images/giantman.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: [''], ability: ['괴력'] },
     { name: "모던 (골리앗)", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: [''], ability: ['괴력'] },
@@ -870,6 +956,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Gilgamesh',
   name: '길가메시',
   portrait: '/images/gilgamesh.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '이터널스'] },
     { name: "이터널스", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '이터널스'] }
@@ -878,6 +965,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
 {
   id: 'Gladiator',
   name: '글래디에이터',
+  tier: ['T2', 'T3', 'T4'],
   portrait: '/images/gladiator.png',
   uniforms: [
     { name: "모던", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['어나이얼레이터', '괴력', '영웅심'] },
@@ -888,6 +976,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Goliath',
   name: '골리앗',
   portrait: '/images/goliath.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "클래식", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['괴력', '내구력'] }
   ]
@@ -896,6 +985,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Gorgon',
   name: '고르곤',
   portrait: '/images/gorgon.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "워 오브 킹즈", type: ['컴뱃', '인휴먼', '남성', '영웅', '질서'], role: ['리더'], ability: ['괴력'] }
   ]
@@ -904,6 +994,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'GorillaMan',
   name: '고릴라맨',
   portrait: '/images/gorillaman.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['괴력', '민첩', '무기 전문가'] }
   ]
@@ -912,6 +1003,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Gorr',
   name: '고르',
   portrait: '/images/gorr.png',
+  tier: ['T3', 'T4'],
   uniforms: [
     { name: "토르: 러브 앤 썬더", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'],  role: ['딜러'], ability: ['치유력', '사악', '고속 이동'] },
     { name: "신 도살자", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['치유력', '사악', '심비오트'] }
@@ -921,6 +1013,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Green Goblin',
   name: '그린 고블린',
   portrait: '/images/greengoblin.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "클래식", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['독', '고속 이동', '시니스터 식스'] },
     { name: "얼티밋", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['화염', '고속 이동', '시니스터 식스'] },
@@ -933,6 +1026,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Groot',
   name: '그루트',
   portrait: '/images/groot.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: [''], ability: ['치유력'] },
     { name: "시크릿 워즈: 토르즈", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: [''], ability: ['치유력'] },
@@ -947,6 +1041,8 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Gwenpool',
   name: '그웬풀',
   portrait: '/images/gwenpool.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
+
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] },
     { name: "그웬 풀", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] },
@@ -959,6 +1055,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hades',
   name: '하데스 (플루토)',
   portrait: '/images/hades.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['화염', '사악', '올림포스'] }
   ]
@@ -967,6 +1064,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Havok',
   name: '하복',
   portrait: '/images/havok.png',
+  tier: ['T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['에너지 투사'] }
   ]
@@ -975,6 +1073,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hawkeye',
   name: '호크아이',
   portrait: '/images/hawkeye.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "어벤져스", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['무기 전문가', '요원'] },
     { name: "어벤져스: 에이지 오브 울트론", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['무기 전문가', '요원'] },
@@ -989,6 +1088,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kate Bishop',
   name: '호크아이 (케이트 비숍)',
   portrait: '/images/katebishop.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "마블 나우!", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '요원'] },
     { name: "호크아이", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '요원'] },
@@ -999,6 +1099,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Heimdall',
   name: '헤임달',
   portrait: '/images/heimdall.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "토르: 라그나로크", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['괴력'] },
     { name: "아스가르드 침공", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '영웅심'] }
@@ -1008,6 +1109,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hela',
   name: '헬라',
   portrait: '/images/hela.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['지휘', '사악'] },
     { name: "토르: 라그나로크", type: ['유니버셜', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['리더', '서포터'], ability: ['지휘', '사악'] },
@@ -1019,6 +1121,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hellcat',
   name: '헬캣',
   portrait: '/images/hellcat.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] }
   ]
@@ -1027,6 +1130,8 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hellstorm',
   name: '헬스톰',
   portrait: '/images/hellstorm.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
+
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['마법', '화염'] },
     { name: "TVA", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['마법', '화염'] }
@@ -1036,6 +1141,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hercules',
   name: '헤라클레스',
   portrait: '/images/hercules.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '영웅심', '올림포스'] }
   ]
@@ -1044,6 +1150,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hogun',
   name: '호건',
   portrait: '/images/hogun.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: ['리더'], ability: ['괴력'] }
   ]
@@ -1052,6 +1159,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hope Summers',
   name: '호프 서머스',
   portrait: '/images/hopesummers.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '뮤턴트', '여성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['피닉스 포스', '괴력'] }
   ]
@@ -1060,6 +1168,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Human Torch',
   name: '휴먼 토치',
   portrait: '/images/humantorch.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['화염', '고속 이동', '판타스틱 4'] },
     { name: "퓨처 파운데이션", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['화염', '고속 이동', '판타스틱 4'] },
@@ -1072,6 +1181,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hulk',
   name: '헐크',
   portrait: '/images/hulk.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "어벤져스", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['감마선', '내구력'] },
     { name: "시크릿 워즈: 퓨처 임퍼펙트", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '정의'], role: ['리더'], ability: ['감마선', '내구력'] },
@@ -1088,6 +1198,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Amadeus Cho',
   name: '헐크 (아마데우스 조)',
   portrait: '/images/amadeuscho.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "토탈리 어썸 헐크", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['감마선', '내구력'] },
     { name: "몬스터즈 언리쉬드! (MFF 배리언트)", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['감마선', '내구력'] },
@@ -1099,6 +1210,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hulkbuster',
   name: '헐크버스터(아이언맨 마크 44)',
   portrait: '/images/hulkbuster.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "어벤져스: 에이지 오브 울트론", type: ['컴뱃', '창조물', '남성', '영웅', '질서'], role: ['리더'], ability: ['괴력', '기계'] },
     { name: "헤비 듀티 아머", type: ['컴뱃', '창조물', '남성', '영웅', '질서'], role: ['리더'], ability: ['괴력', '기계'] },
@@ -1111,6 +1223,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hulkling',
   name: '헐클링',
   portrait: '/images/hulkling.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "뉴 어벤져스", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '내구력'] }
   ]
@@ -1119,6 +1232,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'HydroMan',
   name: '하이드로맨',
   portrait: '/images/hydroman.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "스파이더맨: 파 프롬 홈", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악'] }
   ]
@@ -1127,6 +1241,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Hyperion',
   name: '하이페리온',
   portrait: '/images/hyperion.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['영웅심', '에너지 투사', '이터널스'] },
     { name: "클래식", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['영웅심', '에너지 투사', '이터널스'] },
@@ -1137,6 +1252,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Iceman',
   name: '아이스맨',
   portrait: '/images/iceman.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['냉기', '냉혈'] },
     { name: "엑스맨 블루", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['냉기', '냉혈'] },
@@ -1147,6 +1263,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ikaris',
   name: '이카리스',
   portrait: '/images/ikaris.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['에너지 투사', '영웅심', '이터널스'] },
     { name: "이터널스", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['에너지 투사', '영웅심', '이터널스'] }
@@ -1156,6 +1273,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ikon',
   name: '아이콘',
   portrait: '/images/ikon.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '에너지 투사', '어나이얼레이터'] }
   ]
@@ -1164,6 +1282,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Inferno',
   name: '인페르노',
   portrait: '/images/inferno.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['블래스트', '인휴먼', '남성', '영웅', '질서'], role: ['딜러'], ability: ['화염'] },
     { name: "모던", type: ['블래스트', '인휴먼', '남성', '영웅', '질서'], role: ['딜러'], ability: ['화염'] }
@@ -1173,6 +1292,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Invisible Woman',
   name: '인비저블 우먼',
   portrait: '/images/invisiblewoman.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['에너지 투사', '판타스틱 4'] },
     { name: "퓨처 파운데이션", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['에너지 투사', '판타스틱 4'] },
@@ -1185,6 +1305,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Iron Fist',
   name: '아이언 피스트',
   portrait: '/images/ironfist.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "클래식", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '치유력', '디펜더스'] },
     { name: "뉴 어벤져스", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '치유력', '디펜더스'] },
@@ -1197,6 +1318,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Iron Hammer',
   name: '아이언 해머',
   portrait: '/images/ironhammer.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "인피니티 워프", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더'], ability: ['기계', '전격', '인피니티 워프'] }
   ]
@@ -1205,6 +1327,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Iron Man',
   name: '아이언맨',
   portrait: '/images/ironman.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['기계', '에너지 투사'] },
     { name: "어벤져스: 에이지 오브 울트론", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['기계', '에너지 투사'] },
@@ -1223,6 +1346,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ironheart',
   name: '아이언하트',
   portrait: '/images/ironheart.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "마블 나우!", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['기계', '에너지 투사'] },
     { name: "블랙 팬서: 와칸다 포에버", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['기계', '에너지 투사'] },
@@ -1233,6 +1357,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Jean Grey',
   name: '진 그레이',
   portrait: '/images/jeangrey.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "피닉스", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['정신', '정신 저항', '피닉스 포스'] },
     { name: "엑스맨 레드", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['정신', '정신 저항', '피닉스 포스'] },
@@ -1244,6 +1369,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Jeff the Land Shark',
   name: '땅상어 제프',
   portrait: '/images/jeffthelandshark.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "마블 라이벌즈", type: ['블래스트', '창조물', '남성', '영웅', '질서'], role: ['서포터'], ability: ['민첩', '치유력'] }
   ]
@@ -1252,6 +1378,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Jessica Jones',
   name: '제시카 존스',
   portrait: '/images/jessicajones.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: [''], ability: ['괴력', '내구력', '디펜더스'] },
     { name: "쥬얼", type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['괴력', '내구력', '디펜더스'] }
@@ -1261,14 +1388,17 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Jubilee',
   name: '주빌리',
   portrait: '/images/jubilee.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
-    { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['에너지 투사'] }
+    { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['에너지 투사'] },
+    { name: "엑스맨 '97", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러', '서포터'], ability: ['에너지 투사'] },
   ]
 },
 {
   id: 'Juggernaut',
   name: '저거너트',
   portrait: '/images/juggernaut.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "브라더후드 오브 뮤턴츠", type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['괴력', '내구력', '사악'] },
     { name: "피어 잇셀프", type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['괴력', '내구력', '사악'] },
@@ -1279,6 +1409,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kaecilius',
   name: '케실리우스',
   portrait: '/images/kaecilius.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "무비: 닥터 스트레인지", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['마법', '민첩'] }
   ]
@@ -1287,6 +1418,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kahhori',
   name: '카호리',
   portrait: '/images/kahhori.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['에너지 투사', '고속 이동', '코스믹 큐브'] }
   ]
@@ -1295,6 +1427,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kang',
   name: '정복자 캉',
   portrait: '/images/kang.png',
+  tier: ['T3', 'T4'],
   uniforms: [
     { name: "엔트맨과 와스프: 퀀텀매니아", type: ['유니버셜', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '고속 이동'] },
     { name: "라마투트", type: ['유니버셜', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '고속 이동'] }
@@ -1304,6 +1437,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Karnak',
   name: '카르낙',
   portrait: '/images/karnak.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "워 오브 킹즈", type: ['스피드', '인휴먼', '남성', '영웅', '질서'], role: ['딜러'], ability: ['초감각'] },
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '남성', '영웅', '질서'], role: ['딜러'], ability: ['초감각'] }
@@ -1313,6 +1447,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Katy',
   name: '케이티',
   portrait: '/images/katy.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "샹치와 텐 링즈의 전설", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러', '서포터'], ability: ['무기 전문가', '민첩'] }
   ]
@@ -1321,6 +1456,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kid Kaiju',
   name: '키드 카이쥬',
   portrait: '/images/kidkaiju.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "몬스터즈 언리쉬드! (MFF 배리언트)", type: ['스피드', '인휴먼', '남성', '영웅', '질서'], role: ['리더'], ability: ['지휘'] },
     { name: "몬스터즈 언리쉬드! (MFF 배리언트)", type: ['스피드', '인휴먼', '남성', '영웅', '질서'], role: ['리더'], ability: ['지휘'] }
@@ -1330,6 +1466,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kid Omega',
   name: '키드 오메가',
   portrait: '/images/kidomega.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['리더'], ability: ['피닉스 포스', '에너지 투사'] },
     { name: "언캐니 엑스맨", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['피닉스 포스', '에너지 투사'] }
@@ -1339,6 +1476,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Killmonger',
   name: '킬몽거',
   portrait: '/images/killmonger.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "클래식", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['괴력', '지휘'] },
     { name: "무비: 블랙 팬서", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['괴력', '지휘'] }
@@ -1348,6 +1486,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kingo',
   name: '킨고',
   portrait: '/images/kingo.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['이터널스', '영웅심', '에너지 투사'] },
     { name: "이터널스", type: ['블래스트', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['이터널스', '영웅심', '에너지 투사'] }
@@ -1357,6 +1496,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kingpin',
   name: '킹핀',
   portrait: '/images/kingpin.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: [''], ability: ['괴력', '지휘'] },
     { name: "시크릿 워즈: 아머 워즈", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: [''], ability: ['괴력', '지휘', '기계'] },
@@ -1368,6 +1508,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kitty Pryde',
   name: '키티 프라이드',
   portrait: '/images/kittypryde.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['스피드', '뮤턴트', '여성', '영웅', '질서'], role: ['리더'], ability: ['지휘', '무기 전문가'] },
     { name: "레드 퀸", type: ['스피드', '뮤턴트', '여성', '영웅', '질서'], role: ['리더'], ability: ['지휘', '무기 전문가'] }
@@ -1377,6 +1518,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Knull',
   name: '널',
   portrait: '/images/knull.png',
+  tier: ['T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['심비오트', '괴력', '사악'] },
     { name: "에인션트 히스토리", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['심비오트', '괴력', '사악'] }
@@ -1386,6 +1528,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'korath',
   name: '코라스',
   portrait: '/images/korath.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     {name: "무비: 캡틴 마블", type: ['스피드', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['무기 전문가', '사악']}
   ]
@@ -1394,6 +1537,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Kraven the Hunter',
   name: '크레이븐',
   portrait: '/images/kraventhehunter.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['무기 전문가', '민첩', '시니스터 식스'] },
     { name: "이차원의 사냥꾼", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['서포터'], ability: ['무기 전문가', '민첩', '시니스터 식스'] }
@@ -1403,6 +1547,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Lash',
   name: '래쉬',
   portrait: '/images/lash.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "에이전트 오브 쉴드", type: ['블래스트', '인휴먼', '남성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['에너지 투사'] },
     { name: "모던", type: ['블래스트', '인휴먼', '남성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['에너지 투사'] }
@@ -1412,6 +1557,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Leader',
   name: '리더',
   portrait: '/images/leader.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '서포터'], ability: ['정신 저항', '사악'] }
   ]
@@ -1420,6 +1566,8 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Lincoln Campbell',
   name: '링컨 캠벨',
   portrait: '/images/lincolncampbell.png',
+  
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "에이전트 오브 쉴드", type: ['블래스트', '인휴먼', '남성', '영웅', '질서'], role: ['리더'], ability: ['전격'] }
   ]
@@ -1428,6 +1576,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Lizard',
   name: '리자드',
   portrait: '/images/lizard.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['치유력', '시니스터 식스'] }
   ]
@@ -1436,6 +1585,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Loki',
   name: '로키',
   portrait: '/images/loki.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "어벤져스", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['정신', '냉기'] },
     { name: "레이디 로키", type: ['유니버셜', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['정신', '냉기'] },
@@ -1452,6 +1602,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Luke Cage',
   name: '루크 케이지',
   portrait: '/images/lukecage.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: [''], ability: ['괴력', '내구력', '디펜더스'] },
     { name: "올-뉴, 올-디프런트", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: [''], ability: ['괴력', '내구력', '디펜더스'] },
@@ -1463,6 +1614,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Luna Snow',
   name: '루나 스노우',
   portrait: '/images/lunasnow.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '냉혈'] },
     { name: "안드로메다 수트", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '냉혈'] },
@@ -1476,6 +1628,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: "MBaku",
   name: "음바쿠",
   portrait: "/images/mbaku.png",
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "블랙 팬서: 와칸다 포에버", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['영웅심', '괴력'] }
   ]
@@ -1484,6 +1637,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'modok',
   name: 'M.O.D.O.K.',
   portrait: '/images/modok.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "클래식", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['정신', '기계', '사악'] },
     { name: "스파이독", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['정신', '기계', '사악'] },
@@ -1495,6 +1649,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Madelyne Pryor',
   name: '매들린 프라이어',
   portrait: '/images/madelynepryor.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "고블린 퀸", type: ['블래스트', '뮤턴트', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['정신', '정신 저항'] },
     { name: "겨울 여왕", type: ['블래스트', '뮤턴트', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['냉기', '정신 저항'] }
@@ -1504,6 +1659,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Magik',
   name: '매직',
   portrait: '/images/magik.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['마법', '정신 저항'] },
     { name: "피닉스 파이브", type: ['블래스트', '뮤턴트', '여성', '슈퍼 빌런', '질서'], role: ['딜러'], ability: ['마법', '정신 저항', '피닉스 포스'] },
@@ -1515,17 +1671,20 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Magneto',
   name: '매그니토',
   portrait: '/images/magneto.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['에너지 투사', '정신 저항'] },
     { name: "마블 나우!", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['에너지 투사', '정신 저항'] },
     { name: "하우스 오브 X", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['에너지 투사', '정신 저항'] },
-    { name: "크라코아의 겨울", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['에너지 투사', '정신 저항'] }
+    { name: "크라코아의 겨울", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['에너지 투사', '정신 저항'] },
+    { name: "엑스맨 '97", type: ['블래스트', '뮤턴트', '남성', '영웅', '파멸'], role: ['리더', '딜러'], ability: ['에너지 투사', '정신 저항'] }
   ]
 },
 {
   id: 'Makkari',
   name: '마카리',
   portrait: '/images/makkari.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['이터널스', '영웅심', '고속 이동'] },
     { name: "이터널스", type: ['스피드', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['이터널스', '영웅심', '고속 이동'] }
@@ -1535,6 +1694,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Malekith',
   name: '말레키스',
   portrait: '/images/malekith.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "토르: 더 다크 월드", type: ['블래스트', '외계인', '남성', '슈퍼 빌런', '파멸'], role: [''], ability: ['사악'] },
     { name: "올-뉴, 올-디프런트", type: ['블래스트', '외계인', '남성', '슈퍼 빌런', '파멸'], role: [''], ability: ['사악'] },
@@ -1545,6 +1705,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'ManThing',
   name: '맨-씽',
   portrait: '/images/manthing.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['괴력', '치유력', '마법'] }
   ]
@@ -1553,6 +1714,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Mantis',
   name: '맨티스',
   portrait: '/images/mantis.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시 2", type: ['블래스트', '외계인', '여성', '영웅', '질서'], role: [''], ability: ['정신', '치유력'] },
     { name: "가디언즈 오브 갤럭시: Volume 3", type: ['블래스트', '외계인', '여성', '영웅', '질서'], role: [''], ability: ['정신', '치유력', '가디언즈 오브 갤럭시'] }
@@ -1562,6 +1724,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Marvel Boy',
   name: '마블 보이',
   portrait: '/images/marvelboy.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['딜러', '서포터'], ability: ['고속 이동', '영 어벤져스'] }
   ]
@@ -1570,6 +1733,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Maximus',
   name: '막시무스',
   portrait: '/images/maximus.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "워 오브 킹즈", type: ['블래스트', '인휴먼', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['정신 저항', '사악'] }
   ]
@@ -1578,6 +1742,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Medusa',
   name: '메두사',
   portrait: '/images/medusa.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['유니버셜', '인휴먼', '여성', '영웅', '질서'], role: ['리더'], ability: ['지휘'] },
     { name: "몬스터즈 언리쉬드! (MFF 배리언트)", type: ['유니버셜', '인휴먼', '여성', '영웅', '질서'], role: ['리더'], ability: ['지휘'] },
@@ -1589,6 +1754,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Mephisto',
   name: '메피스토',
   portrait: '/images/mephisto.png',
+  tier: ['T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '불명', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['화염', '마법', '사악'] },
     { name: "마스터 오브 헬", type: ['유니버셜', '불명', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['화염', '마법', '사악'] }
@@ -1598,6 +1764,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Minn-Erva',
   name: '미네-르바',
   portrait: '/images/minn-erva.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['괴력', '민첩', '사악'] },
     { name: "무비: 캡틴 마블", type: ['컴뱃', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['괴력', '민첩', '사악'] }
@@ -1607,6 +1774,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Mister Fantastic',
   name: '미스터 판타스틱',
   portrait: '/images/misterfantastic.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['내구력', '영웅심', '판타스틱 4'] },
     { name: "퓨처 파운데이션", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['내구력', '영웅심', '판타스틱 4'] },
@@ -1619,6 +1787,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Mister Sinister',
   name: '미스터 시니스터',
   portrait: '/images/mistersinister.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['사악', '에너지 투사', '치유력'] },
     { name: "헬파이어 갈라", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['사악', '에너지 투사', '치유력'] }
@@ -1628,6 +1797,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Misty Knight',
   name: '미스티 나이트',
   portrait: '/images/mistyknight.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['요원', '무기 전문가'] }
   ]
@@ -1636,6 +1806,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Mockingbird',
   name: '모킹버드',
   portrait: '/images/mockingbird.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "히로익 에이지", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '요원'] },
     { name: "에이전트 오브 쉴드", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '요원'] },
@@ -1646,6 +1817,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Molecule Man',
   name: '몰큘맨',
   portrait: '/images/moleculeman.png',
+  tier: ['T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['고속 이동', '에너지 투사'] }
   ]
@@ -1654,6 +1826,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Molten Man',
   name: '몰튼맨',
   portrait: '/images/moltenman.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "스파이더맨: 파 프롬 홈", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '내구력', '화염'] }
   ]
@@ -1662,6 +1835,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Moon Girl',
   name: '문 걸',
   portrait: '/images/moongirl.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "마블 나우!", type: ['블래스트', '인휴먼', '여성', '영웅', '질서'], role: ['리더'], ability: ['무기 전문가', '영웅심'] },
     { name: "몬스터즈 언리쉬드! (MFF 배리언트)", type: ['블래스트', '인휴먼', '여성', '영웅', '질서'], role: ['리더'], ability: ['무기 전문가', '영웅심'] }
@@ -1671,6 +1845,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Moon Knight',
   name: '문 나이트',
   portrait: '/images/moonknight.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role:['딜러'], ability: ['무기 전문가', '영웅심'] },
     { name: "아머드", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role:['딜러'], ability: ['무기 전문가', '영웅심'] },
@@ -1683,6 +1858,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Moonstone',
   name: '문스톤',
   portrait: '/images/moonstone.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['다크 어벤져스', '에너지 투사'] }
   ]
@@ -1691,6 +1867,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Morbius',
   name: '모비어스',
   portrait: '/images/morbius.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['괴력', '민첩'] }
   ]
@@ -1699,15 +1876,26 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Morgan Le Fay',
   name: '모건 르 페이',
   portrait: '/images/morganlefay.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['마법', '사악'] },
     { name: "타락한 영혼", type: ['유니버셜', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['딜러', '서포터'], ability: ['마법', '사악'] }
   ]
 },
 {
+  id: 'Morph',
+  name: '모프',
+  portrait: '/images/morph.png',
+  tier: ['T1', 'T2', 'T3'],
+  uniforms: [
+    { name: "엑스맨 '97", type: ['컴뱃', '뮤턴트', '성별 없음', '영웅', '질서'], role: ['서포터'], ability: ['무기 전문가', '민첩']}
+  ]
+},
+{
   id: 'Kamala Khan',
   name: '미즈 마블(카말라 칸)',
   portrait: '/images/kamalakhan.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['컴뱃', '인휴먼', '여성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '치유력'] },
     { name: "카라치 코스튬", type: ['스피드', '인휴먼', '여성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '치유력'] },
@@ -1721,6 +1909,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'mysterio',
   name: '미스테리오',
   portrait: '/images/mysterio.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "클래식", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['정신', '시니스터 식스']},
     { name: "스파이더맨: 파 프롬 홈", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['정신', '시니스터 식스']},
@@ -1731,6 +1920,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Mystique',
   name: '미스틱',
   portrait: '/images/mystique.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '뮤턴트', '여성', '슈퍼 빌런', '파멸'], role: ['딜러', '서포터'], ability: ['민첩', '무기 전문가'] },
     { name: "헬파이어 갈라", type: ['스피드', '뮤턴트', '여성', '슈퍼 빌런', '파멸'], role: ['딜러', '서포터'], ability: ['민첩', '무기 전문가'] }
@@ -1740,6 +1930,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Namor',
   name: '네이머',
   portrait: '/images/namor.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['컴뱃', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '내구력'] },
     { name: "피닉스 파이브", type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '질서'], role: ['딜러'], ability: ['괴력', '내구력', '피닉스 포스'] },
@@ -1750,6 +1941,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Nebula',
   name: '네뷸라',
   portrait: '/images/nebula.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시", type: ['컴뱃', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['전격', '무기 전문가', '기계'] },
     { name: "클래식", type: ['컴뱃', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['전격', '무기 전문가', '기계'] },
@@ -1762,6 +1954,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Negasonic Teenage Warhead',
   name: '네가소닉 틴에이지 워헤드',
   portrait: '/images/negasonicteenagewarhead.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '고속 이동', '에너지 투사'] }
   ]
@@ -1770,6 +1963,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Nick Fury',
   name: '닉 퓨리',
   portrait: '/images/nickfury.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['요원', '영웅심', '무기 전문가'] },
     { name: "무비: 캡틴 마블", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['요원', '영웅심', '무기 전문가'] },
@@ -1781,6 +1975,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Nightcrawler',
   name: '나이트크롤러',
   portrait: '/images/nightcrawler.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '영웅심'] },
     { name: "엑스 포스", type: ['스피드', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '영웅심'] },
@@ -1791,6 +1986,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'nova',
   name: '노바 (리처드 라이더)',
   portrait: '/images/nova.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러', '서포터'], ability: ['에너지 투사', '영웅심'] },
     { name: "마블 코스믹 인베이전", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['에너지 투사', '영웅심'] }
@@ -1800,6 +1996,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sam Alexander',
   name: '노바 (샘 알렉산더)',
   portrait: '/images/samalexander.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['고속 이동', '에너지 투사'] },
   ]
@@ -1808,6 +2005,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Odin',
   name: '오딘',
   portrait: '/images/odin.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['지휘', '에너지 투사'] },
     { name: "올-파더", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['지휘', '에너지 투사'] },
@@ -1819,6 +2017,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Okoye',
   name: '오코예',
   portrait: '/images/okoye.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "왓 이프... 좀비스?!", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '무기 전문가'] }
   ]
@@ -1826,6 +2025,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
 {
   id: 'Omega Red',
   name: '오메가 레드',
+  tier: ['T1', 'T2', 'T3'],
   portrait: '/images/omegared.png',
   uniforms: [
     { name: "모던", type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['치유력', '사악', '괴력'] }
@@ -1835,6 +2035,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Phil Coulson',
   name: '필 콜슨',
   portrait: '/images/philcoulson.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "에이전트 오브 쉴드", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['서포터'], ability: ['지휘', '요원'] },
     { name: "A.O.S. 시즌 3", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['서포터'], ability: ['지휘', '요원'] },
@@ -1845,6 +2046,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'PhylaVell',
   name: '파일라-벨',
   portrait: '/images/phylavell.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['서포터'], ability: ['에너지 투사', '영웅심'] },
     { name: "마블 코스믹 인베이전", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['서포터'], ability: ['에너지 투사', '영웅심'] }
@@ -1854,6 +2056,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Polaris',
   name: '폴라리스',
   portrait: '/images/polaris.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['리더', '서포터'], ability: ['에너지 투사', '고속 이동'] },
     { name: "언캐니 엑스맨", type: ['블래스트', '뮤턴트', '여성', '슈퍼 빌런', '질서'], role: ['리더', '서포터'], ability: ['에너지 투사', '고속 이동'] }
@@ -1863,6 +2066,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Professor X',
   name: '프로페서 X',
   portrait: '/images/professorx.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['영웅심', '정신', '정신 저항'] },
     { name: "클래식", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['영웅심', '정신', '정신 저항'] },
@@ -1873,6 +2077,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Proxima Midnight',
   name: '프록시마 미드나이트',
   portrait: '/images/proximamidnight.png',
+  tier: ['T2', 'T3'],
   uniforms: [
     { name: "인피니티", type: ['유니버셜', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['민첩', '고속 이동', '블랙 오더'] },
     { name: "어벤져스: 인피니티 워", type: ['유니버셜', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['민첩', '고속 이동', '블랙 오더'] },
@@ -1883,6 +2088,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Psylocke',
   name: '사일록',
   portrait: '/images/psylocke.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '정신'] },
     { name: "디스어셈블드", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '정신'] },
@@ -1894,6 +2100,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Punisher',
   name: '퍼니셔',
   portrait: '/images/punisher.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['영웅심', '무기 전문가'] },
     { name: "누아르", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['영웅심', '무기 전문가'] },
@@ -1909,6 +2116,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Quasar',
   name: '퀘이사 (에이브릴 킨케이드)',
   portrait: '/images/quasar.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['초감각', '에너지 투사'] },
     { name: "클래식", type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['초감각', '에너지 투사'] }
@@ -1918,6 +2126,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Wendell Vaughn',
   name: '퀘이사 (웬델 본)',
   portrait: '/images/wendellvaughn.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['에너지 투사', '고속 이동', '어나이얼레이터'] }
   ]
@@ -1926,6 +2135,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Quicksilver',
   name: '퀵실버',
   portrait: '/images/quicksilver.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['스피드', '인간', '남성', '영웅', '질서'], role: ['딜러'], ability: ['고속 이동', '민첩'] },
     { name: "마블 레거시", type: ['스피드', '인간', '남성', '영웅', '질서'], role: ['딜러'], ability: ['고속 이동', '민첩'] },
@@ -1938,6 +2148,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Rachel Summers',
   name: '레이첼 서머스',
   portrait: '/images/rachelsummers.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['피닉스 포스', '고속 이동'] },
     { name: "엑스맨: 데이즈 오브 퓨처 패스트", type: ['유니버셜', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['피닉스 포스', '고속 이동'] }
@@ -1947,6 +2158,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Red Guardian',
   name: '레드 가디언',
   portrait: '/images/redguardian.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['괴력', '민첩'] },
     { name: "무비: 블랙 위도우", type: ['컴뱃', '인간', '남성', '영웅', '냉혹'], role: ['딜러'], ability: ['괴력', '민첩'] },
@@ -1957,6 +2169,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Red Hulk',
   name: '레드 헐크',
   portrait: '/images/redhulk.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['화염', '감마선'] },
     { name: "마블 나우!", type: ['컴뱃', '인간', '남성', '영웅', '냉혹'], role: ['리더'], ability: ['화염', '감마선'] },
@@ -1968,6 +2181,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Red SheHulk',
   name: '레드 쉬헐크',
   portrait: '/images/redshehulk.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['감마선', '내구력', '화염'] }
   ]
@@ -1976,6 +2190,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Red Skull',
   name: '레드 스컬',
   portrait: '/images/redskull.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "캡틴 아메리카: 퍼스트 어벤져", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '지휘'] },
     { name: "시크릿 워즈: 레드 스컬", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '지휘'] },
@@ -1986,6 +2201,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Rescue',
   name: '레스큐',
   portrait: '/images/rescue.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "어벤져스: 엔드게임", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['기계', '영웅심'] },
     { name: "3099", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: [''], ability: ['기계', '영웅심'] },
@@ -1996,6 +2212,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Rhino',
   name: '라이노',
   portrait: '/images/rhino.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['괴력', '내구력', '시니스터 식스'] }
   ]
@@ -2004,6 +2221,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Rocket Raccoon',
   name: '로켓 라쿤',
   portrait: '/images/rocketraccoon.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시", type: ['블래스트', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['무기 전문가'] },
     { name: "올-뉴, 올-디프런트", type: ['블래스트', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['무기 전문가'] },
@@ -2018,6 +2236,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Rogue',
   name: '로그',
   portrait: '/images/rogue.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['스피드', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['치유력', '고속 이동'] },
     { name: "에이지 오브 아포칼립스", type: ['스피드', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['치유력', '고속 이동'] },
@@ -2030,6 +2249,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ronan',
   name: '로난',
   portrait: '/images/ronan.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '서포터'], ability: ['정신 저항', '지휘', '어나이얼레이터'] },
     { name: "어나이얼레이션", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '서포터'], ability: ['정신 저항', '지휘', '어나이얼레이터'] },
@@ -2041,6 +2261,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sabretooth',
   name: '세이버투스',
   portrait: '/images/sabretooth.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "브라더후드 오브 뮤턴츠", type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['사악', '민첩'] },
     { name: "언캐니 어벤져스", type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['사악', '민첩'] },
@@ -2051,6 +2272,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sandman',
   name: '샌드맨',
   portrait: '/images/sandman.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "클래식", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['내구력', '시니스터 식스'] }
   ]
@@ -2059,6 +2281,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Satana',
   name: '사타나',
   portrait: '/images/satana.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['마법', '화염'] },
     { name: "마블 레거시", type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['마법', '화염'] },
@@ -2069,6 +2292,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Scarlet Spider',
   name: '스칼렛 스파이더',
   portrait: '/images/scarletspider.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['서포터'], ability: ['스파이더 센스', '영웅심', '민첩'] },
     { name: "다크 웹", type: ['스피드', '인간', '남성', '슈퍼 빌런', '정의'], role: ['서포터'], ability: ['스파이더 센스', '영웅심', '민첩'] },
@@ -2079,6 +2303,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Scarlet Witch',
   name: '스칼렛 위치',
   portrait: '/images/scarletwitch.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['블래스트', '인간', '여성', '영웅', '질서'], role: ['리더'], ability: ['파워 코스믹', '고속 이동'] },
     { name: "어벤져스: 인피니티 워", type: ['블래스트', '인간', '여성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['파워 코스믹', '고속 이동'] },
@@ -2094,6 +2319,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Scorpion',
   name: '스콜피온',
   portrait: '/images/scorpion.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '내구력', '독'] }
   ]
@@ -2102,6 +2328,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Scream',
   name: '스크림',
   portrait: '/images/scream.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['괴력', '사악', '심비오트'] },
     { name: "사일런스", type: ['컴뱃', '인간', '여성', '영웅', '냉혹'], role: ['딜러'], ability: ['괴력', '영웅심', '심비오트'] }
@@ -2111,6 +2338,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sentinel',
   name: '센티넬',
   portrait: '/images/sentinel.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '불명', '성별 없음', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['기계', '사악'] },
     { name: "님로드 더 레서", type: ['유니버셜', '불명', '성별 없음', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['기계', '사악'] },
@@ -2121,6 +2349,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sentry',
   name: '센트리',
   portrait: '/images/sentry.png',
+  tier: ['T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['다크 어벤져스', '영웅심', '에너지 투사'] },
     { name: "어둠의 결합", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['다크 어벤져스', '영웅심', '에너지 투사'] },
@@ -2131,6 +2360,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sersi',
   name: '세르시',
   portrait: '/images/sersi.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '외계인', '여성', '영웅', '질서'], role: ['딜러', '서포터'], ability: ['이터널스', '영웅심', '마법'] },
     { name: "이터널스", type: ['블래스트', '외계인', '여성', '영웅', '질서'], role: ['딜러', '서포터'], ability: ['이터널스', '영웅심', '마법'] }
@@ -2140,6 +2370,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Shadow Shell',
   name: '섀도우 셸',
   portrait: '/images/shadowshell.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['워리어즈 오브 더 스카이', '민첩', '독'] },
     { name: "달의 신전의 수호자", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['워리어즈 오브 더 스카이', '민첩', '독'] }
@@ -2149,6 +2380,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'shangchi',
   name: '샹치',
   portrait: '/images/shangchi.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['민첩', '영웅심'] },
     { name: "샹치와 텐 링즈의 전설", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['민첩', '영웅심'] },
@@ -2159,6 +2391,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sharoncarter',
   name: '에이전트 13',
   portrait: '/images/sharoncarter.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: '모던', type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['요원'] },
     { name: '캡틴 아메리카: 시빌 워', type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['요원'] }
@@ -2168,6 +2401,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'SheHulk',
   name: '쉬헐크',
   portrait: '/images/shehulk.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "시크릿 워즈: 에이포스", type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['감마선', '내구력'] },
     { name: "올-뉴", type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['감마선', '내구력'] },
@@ -2180,6 +2414,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Shuri',
   name: '슈리',
   portrait: '/images/shuri.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "마블 레거시", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['서포터'], ability: ['초감각', '영웅심'] },
     { name: "무비: 블랙 팬서", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['서포터'], ability: ['초감각', '영웅심'] },
@@ -2191,6 +2426,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sif',
   name: '시프',
   portrait: '/images/sif.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "에이전트 오브 쉴드", type: ['컴뱃', '외계인', '여성', '영웅', '질서'], role: ['리더'], ability: ['민첩'] },
     { name: "모던", type: ['컴뱃', '외계인', '여성', '영웅', '질서'], role: ['리더'], ability: ['민첩'] },
@@ -2201,6 +2437,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Silk',
   name: '실크',
   portrait: '/images/silk.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '민첩'] },
     { name: "웹 슈트", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '민첩'] },
@@ -2211,6 +2448,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Silver Samurai',
   name: '실버 사무라이',
   portrait: '/images/silversamurai.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러', '서포터'], ability: ['무기 전문가', '사악'] }
   ]
@@ -2219,6 +2457,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Silver Surfer',
   name: '실버 서퍼',
   portrait: '/images/silversurfer.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['파워 코스믹', '어나이얼레이터'] },
     { name: "블랙", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['파워 코스믹', '어나이얼레이터'] },
@@ -2229,6 +2468,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'ShallaBal',
   name: '실버 서퍼(샬라-발)',
   portrait: '/images/shallabal.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['파워 코스믹'] }
   ]
@@ -2237,6 +2477,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sin',
   name: '신',
   portrait: '/images/sin.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['무기 전문가', '사악'] },
     { name: "레이지 리턴드", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더', '서포터'], ability: ['무기 전문가', '사악'] }
@@ -2246,6 +2487,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Singularity',
   name: '싱귤래리티',
   portrait: '/images/singularity.png',
+  tier: ['T1', 'T2'],
   uniforms: [
     { name: "시크릿 워즈: 에이포스", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['리더'], ability: ['고속 이동', '에너지 투사'] },
   ]
@@ -2254,6 +2496,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sister Grimm',
   name: '시스터 그림',
   portrait: '/images/sistergrimm.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "시크릿 워즈: 에이포스", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['마법'] },
     { name: "올-뉴, 올-디프런트", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['마법'] },
@@ -2264,6 +2507,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Skurge',
   name: '스커지',
   portrait: '/images/skurge.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "토르: 라그나로크", type: ['컴뱃', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['괴력', '내구력'] }
   ]
@@ -2272,6 +2516,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Slapstick',
   name: '슬랩스틱',
   portrait: '/images/slapstick.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] }
   ]
@@ -2280,6 +2525,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sleeper',
   name: '슬리퍼',
   portrait: '/images/sleeper.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '외계인', '성별 없음', '영웅', '질서'], role: ['리더', '서포터'], ability: ['심비오트', '치유력', '영웅심'] }
   ]
@@ -2288,6 +2534,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Songbird',
   name: '송버드',
   portrait: '/images/songbird.png',
+  tier: ['T1', 'T2'],
   uniforms: [
     { name: "뉴 어벤져스", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['고속 이동', '요원'] }
   ]
@@ -2296,6 +2543,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Spectrum',
   name: '스펙트럼',
   portrait: '/images/spectrum.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['영웅심', '에너지 투사'] },
     { name: "더 마블스", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['영웅심', '에너지 투사'] }
@@ -2305,6 +2553,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Spider Gwen',
   name: '스파이더 그웬',
   portrait: '/images/spidergwen.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '민첩', '영웅심'] },
     { name: "그웬돌린 스테이시", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '민첩', '영웅심'] },
@@ -2316,6 +2565,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'SpiderMan',
   name: '스파이더맨',
   portrait: '/images/spiderman.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '영웅심', '민첩'] },
     { name: "시크릿 워즈: 리뉴 유어 바우", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '영웅심', '민첩'] },
@@ -2335,6 +2585,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Miles Morales',
   name: '스파이더맨(마일즈 모랄레스)',
   portrait: '/images/milesmorales.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '민첩', '영웅심'] },
     { name: "뉴 유니버스", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '민첩', '영웅심'] },
@@ -2348,6 +2599,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'SpiderMan 2099',
   name: '스파이더맨 2099',
   portrait: '/images/spiderman2099.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '영웅심', '민첩'] },
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '영웅심', '민첩'] },
@@ -2358,6 +2610,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'SpiderWoman',
   name: '스파이더 우먼',
   portrait: '/images/spiderwoman.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['스파이더 센스', '영웅심', '민첩'] },
     { name: "스파이더맨: 어크로스 더 유니버스", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러', '서포터'], ability: ['스파이더 센스', '영웅심', '민첩'] }
@@ -2367,6 +2620,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Spot',
   name: '스팟',
   portrait: '/images/spot.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "스파이더맨: 어크로스 더 유니버스", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['고속 이동', '사악'] }
   ]
@@ -2375,6 +2629,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Squirrel Girl',
   name: '스쿼럴 걸',
   portrait: '/images/squirrelgirl.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "뉴 어벤져스", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] },
     { name: "마블 나우!", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] },
@@ -2385,6 +2640,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'StarLord',
   name: '스타 로드',
   portrait: '/images/starlord.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시", type: ['블래스트', '외계인', '남성', '영웅', '질서'], role: ['리더'], ability: ['무기 전문가', '지휘'] },
     { name: "스페이스 아머", type: ['블래스트', '외계인', '남성', '영웅', '질서'], role: ['리더'], ability: ['무기 전문가', '지휘'] },
@@ -2399,6 +2655,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Storm',
   name: '스톰',
   portrait: '/images/storm.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['전격', '지휘'] },
     { name: "엑스맨 레드", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['전격', '지휘'] },
@@ -2411,6 +2668,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: "Stryfe",
   name: "스트라이프",
   portrait: '/images/stryfe.png',
+  tier: ['T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['사악', '에너지 투사'] },
     { name: "클래식", type: ['블래스트', '뮤턴트', '남성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['사악', '에너지 투사'] }, 
@@ -2421,6 +2679,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sun Bird',
   name: '썬 버드',
   portrait: '/images/sunbird.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러', '서포터'], ability: ['워리어즈 오브 더 스카이', '민첩', '화염'] },
     { name: "달의 신전의 수호자", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러', '서포터'], ability: ['워리어즈 오브 더 스카이', '민첩', '화염'] }
@@ -2430,6 +2689,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sunspot',
   name: '선스팟',
   portrait: '/images/sunspot.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "엑스맨 '97", type: ['블래스트', '뮤턴트', '남성', '영웅', '질서' ], role: ['딜러', '서포터'], ability: ['화염', '고속 이동'] }
   ]
@@ -2438,6 +2698,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Supergiant',
   name: '슈퍼자이언트',
   portrait:'/images/supergiant.png',
+  tier: ['T2', 'AW'],
   uniforms: [
     { name: "인피니티", type: ['유니버셜', '외계인', '여성', '슈퍼 빌런', '파멸'], role: [''], ability: ['정신', '정신 저항', '블랙 오더'] },
     { name: "다크 옵시디언 아머", type: ['유니버셜', '외계인', '여성', '슈퍼 빌런', '파멸'], role: ['딜러'], ability: ['정신', '정신 저항', '블랙 오더'] }
@@ -2447,6 +2708,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sword Master',
   name: '소드 마스터',
   portrait: '/images/swordmaster.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '무기 전문가'] },
     { name: "클래식", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['영웅심', '무기 전문가'] }
@@ -2456,6 +2718,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Sylvie',
   name: '실비',
   portrait: '/images/sylvie.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "로키", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['정신', '냉기'] }
   ]
@@ -2464,6 +2727,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Taskmaster',
   name: '태스크마스터',
   portrait: '/images/taskmaster.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['서포터'], ability: ['무기 전문가', '사악'] },
     { name: "무비: 블랙 위도우", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['서포터'], ability: ['무기 전문가', '사악'] },
@@ -2474,6 +2738,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Thane',
   name: '테인',
   portrait: '/images/thane.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인휴먼', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['괴력', '내구력', '사악'] },
     { name: "피닉스 포스", type: ['유니버셜', '인휴먼', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['피닉스 포스', '내구력', '사악'] }
@@ -2483,6 +2748,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Thanos',
   name: '타노스',
   portrait: '/images/thanos.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "인피니티", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['파워 코스믹', '내구력', '사악'] },
     { name: "시크릿 워즈: 인피니티", type: ['유니버셜', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['파워 코스믹', '내구력', '사악'] },
@@ -2497,6 +2763,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'The Hood',
   name: '더 후드',
   portrait: '/images/thehood.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "아이언하트", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['리더', '딜러'], ability: ['사악', '고속 이동'] }
   ]
@@ -2505,6 +2772,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Thing',
   name: '씽',
   portrait: '/images/thing.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['서포터'], ability: ['괴력', '내구력', '판타스틱 4'] },
     { name: "퓨처 파운데이션", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['서포터'], ability: ['괴력', '내구력', '판타스틱 4'] },
@@ -2517,6 +2785,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Thena',
   name: '테나',
   portrait: '/images/thena.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['영웅심', '이터널스'] },
     { name: "이터널스", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['딜러'], ability: ['영웅심', '이터널스'] }
@@ -2526,6 +2795,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Thor',
   name: '토르',
   portrait: '/images/thor.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "어벤져스", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['전격', '영웅심'] },
     { name: "어벤져스: 에이지 오브 울트론", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['전격', '영웅심'] },
@@ -2543,6 +2813,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Jane Foster',
   name: '토르 (제인 포스터)',
   portrait: '/images/janefoster.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['전격', '고속 이동'] },
     { name: "토르: 러브 앤 썬더", type: ['유니버셜', '인간', '여성', '영웅', '정의'], role: ['딜러', '서포터'], ability: ['전격', '고속 이동'] }
@@ -2552,6 +2823,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Titania',
   name: '타이타니아',
   portrait: '/images/titania.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['괴력'] },
     { name: "피어 잇셀프", type: ['컴뱃', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더', '서포터'], ability: ['괴력'] }
@@ -2561,6 +2833,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Toxin',
   name: '톡신',
   portrait: '/images/toxin.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩', '심비오트', '괴력'] }
   ]
@@ -2569,6 +2842,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'USAgent',
   name: 'U.S.에이전트',
   portrait: '/images/usagent.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "썬더볼츠*", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['리더', '딜러'], ability: ['영웅심', '지휘', '썬더볼츠'] }
   ]
@@ -2577,6 +2851,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ulik',
   name: '율리크',
   portrait: '/images/ulik.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '외계인', '남성', '슈퍼 빌런', '파멸'], role: ['리더'], ability: ['괴력', '내구력'] }
   ]
@@ -2585,6 +2860,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ultron',
   name: '울트론',
   portrait: '/images/ultron.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '불명', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['기계', '사악'] },
     { name: "어벤져스: 에이지 오브 울트론 (울트론 프라임)", type: ['유니버셜', '불명', '남성', '슈퍼 빌런', '파멸'], role: ['리더', '딜러'], ability: ['기계', '사악'] },
@@ -2598,6 +2874,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Ulysses Klaue',
   name: '율리시스 클로',
   portrait: '/images/ulyssesklaue.png',
+  tier: ['T1', 'T2'],
   uniforms: [
     { name: "무비: 블랙 팬서", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: [''], ability: ['무기 전문가'] }
   ]
@@ -2606,6 +2883,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Valeria Richards',
   name: '발레리아 리처즈',
   portrait: '/images/valeriarichards.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['영웅심', '판타스틱 4'] }
   ]
@@ -2614,6 +2892,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Valkyrie',
   name: '발키리',
   portrait: '/images/valkyrie.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "토르: 라그나로크", type: ['컴뱃', '외계인', '여성', '영웅', '질서'], role: ['서포터'], ability: ['괴력'] },
     { name: "피어리스 디펜더스", type: ['컴뱃', '외계인', '여성', '영웅', '질서'], role: ['딜러', '서포터'], ability: ['괴력'] },
@@ -2625,6 +2904,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Venom',
   name: '베놈',
   portrait: '/images/venom.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: [''], ability: ['치유력', '심비오트'] },
     { name: "시크릿 워즈: 마블 좀비스", type: ['컴뱃', '인간', '남성', '슈퍼 빌런', '냉혹'], role: [''], ability: ['치유력', '심비오트'] },
@@ -2639,6 +2919,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Venus',
   name: '비너스 (아프로디테)',
   portrait: '/images/venus.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "인크레더블 헤라클레스", type: ['유니버셜', '외계인', '여성', '영웅', '질서'], role: ['서포터'], ability: ['정신', '정신 저항', '올림포스'] }
   ]
@@ -2647,6 +2928,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Victorious',
   name: '빅토리어스',
   portrait: '/images/victorious.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['고속 이동', '에너지 투사'] },
     { name: "엠페러 가더", type: ['유니버셜', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['고속 이동', '에너지 투사'] },
@@ -2656,6 +2938,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Viper',
   name: '바이퍼',
   portrait: '/images/viper.png',
+  tier: ['T1', 'T2'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['리더'], ability: ['독', '사악'] }
   ]
@@ -2664,6 +2947,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Vision',
   name: '비전',
   portrait: '/images/vision.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '창조물', '남성', '영웅', '질서'], role: ['딜러'], ability: ['고속 이동', '기계', '내구력'] },
     { name: "어벤져스: 인피니티 워", type: ['유니버셜', '창조물', '남성', '영웅', '질서'], role: ['딜러'], ability: ['고속 이동', '기계', '내구력'] },
@@ -2676,6 +2960,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Volstagg',
   name: '볼스탁',
   portrait: '/images/volstagg.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['내구력'] }
   ]
@@ -2684,6 +2969,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Vulture',
   name: '벌쳐',
   portrait: '/images/vulture.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     {name: "클래식", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['고속 이동', '민첩', '시니스터 식스']},
     {name: "스파이더맨: 홈커밍", type: ['스피드', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['고속 이동', '민첩', '시니스터 식스']}
@@ -2693,6 +2979,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'War Machine',
   name: '워머신',
   portrait: '/images/warmachine.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['기계', '영웅심'] },
     { name: "아이언 패트리어트", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['기계', '영웅심'] },
@@ -2709,6 +2996,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'War Tiger',
   name: '워 타이거',
   portrait: '/images/wartiger.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['워리어즈 오브 더 스카이', '괴력', '내구력'] },
     { name: "달의 신전의 수호자", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['워리어즈 오브 더 스카이', '괴력', '내구력'] }
@@ -2718,6 +3006,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Warpath',
   name: '워패스',
   portrait: '/images/warpath.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "엑스 포스", type: ['컴뱃', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['괴력', '영웅심'] }
   ]
@@ -2726,6 +3015,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Warwolf',
   name: '워울프',
   portrait: '/images/warwolf.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "하울링 코만도스 오브 쉴드", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['서포터'], ability: ['치유력', '요원'] }
   ]
@@ -2734,6 +3024,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Wasp',
   name: '와스프',
   portrait: '/images/wasp.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['고속 이동'] },
     { name: "올-뉴, 올-디프런트", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['리더'], ability: ['고속 이동'] },
@@ -2745,6 +3036,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Nadia Van Dyne',
   name: '와스프 (나디아 반 다인)',
   portrait: '/images/nadiavandyne.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "모던", type: ['블래스트', '인간', '여성', '영웅', '정의'], role: ['서포터'], ability: ['요원', '고속 이동'] }
   ]
@@ -2753,6 +3045,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Wave',
   name: '웨이브',
   portrait: '/images/wave.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     {name: "모던", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['초감각', '민첩']},
     {name: "클래식", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['초감각', '민첩']}
@@ -2762,6 +3055,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Weapon Hex',
   name: '웨폰 헥스',
   portrait: '/images/weaponhex.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "인피니티 워프", type: ['블래스트', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러', '서포터'], ability: ['인피니티 워프', '치유력', '혼돈 마법'] },
     { name: "감염된 생물병기", type: ['블래스트', '뮤턴트', '여성', '슈퍼 빌런', '질서'], role: ['딜러', '서포터'], ability: ['좀비', '치유력', '혼돈 마법'] }
@@ -2771,6 +3065,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Wenwu',
   name: '웬우',
   portrait: '/images/wenwu.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "샹치와 텐 링즈의 전설", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['민첩', '사악'] },
     { name: "왓 이프...?", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['민첩', '사악'] }
@@ -2780,6 +3075,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Whiplash',
   name: '위플래쉬',
   portrait: '/images/whiplash.png',
+  tier: ['T1', 'T2'],
   uniforms: [
     { name: "무비: 아이언맨 2", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['전격', '기계'] }
   ]
@@ -2788,16 +3084,19 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'White Fox',
   name: '화이트 폭스',
   portrait: '/images/whitefox.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['민첩', '요원','영웅심'] },
     { name: "라이프스타일 시리즈 1", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더', '서포터'], ability: ['민첩', '요원','영웅심'] },
-    { name: "라이프스타일 시리즈 2", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러', '서포터'], ability: ['민첩', '요원','영웅심'] }
+    { name: "라이프스타일 시리즈 2", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러', '서포터'], ability: ['민첩', '요원','영웅심'] },
+    { name: "에이전트 F-1", type: ['스피드', '인간', '여성', '영웅', '정의'], role: ['리더', '딜러', '서포터'], ability: ['민첩', '요원', '영웅심']}
   ]
 },
 {
   id: 'White Tiger',
   name: '화이트 타이거',
   portrait: '/images/whitetiger.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "뉴 어벤져스", type: ['컴뱃', '인간', '여성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] },
     { name: "데어데블: 본 어게인", type: ['컴뱃', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['민첩'] }
@@ -2807,6 +3106,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Wiccan',
   name: '위칸',
   portrait: '/images/wiccan.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "뉴 어벤져스", type: ['블래스트', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['고속 이동', '에너지 투사'] }
   ]
@@ -2815,6 +3115,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Winter Soldier',
   name: '윈터 솔져',
   portrait: '/images/wintersoldier.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "캡틴 아메리카: 윈터 솔져", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['무기 전문가'] },
     { name: "캡틴 아메리카: 시빌 워", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['리더'], ability: ['무기 전문가'] },
@@ -2829,6 +3130,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Wolverine',
   name: '울버린',
   portrait: '/images/wolverine.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "클래식", type: ['컴뱃', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['무기 전문가', '치유력'] },
     { name: "에이지 오브 아포칼립스", type: ['컴뱃', '뮤턴트', '남성', '영웅', '질서'], role: ['딜러'], ability: ['무기 전문가', '치유력'] },
@@ -2844,6 +3146,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Wong',
   name: '웡',
   portrait: '/images/wong.png',
+  tier: ['T1', 'T2', 'T3', 'T4'],
   uniforms: [
     { name: "올-뉴, 올-디프런트", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['무기 전문가'] },
     { name: "무비: 닥터 스트레인지", type: ['스피드', '인간', '남성', '영웅', '정의'], role: ['딜러'], ability: ['무기 전문가'] },
@@ -2855,6 +3158,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'X-23',
   name: 'X-23',
   portrait: '/images/x-23.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "클래식", type: ['스피드', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '치유력'] },
     { name: "엑스 포스", type: ['스피드', '뮤턴트', '여성', '영웅', '질서'], role: ['딜러'], ability: ['민첩', '치유력'] },
@@ -2866,6 +3170,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Yelena Belova',
   name: '옐레나 벨로바',
   portrait: '/images/yelenabelova.png',
+  tier: ['T1', 'T2', 'AW', 'T4'],
   uniforms: [
     { name: "모던", type: ['스피드', '인간', '여성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['민첩', '요원'] },
     { name: "무비: 블랙 위도우", type: ['스피드', '인간', '여성', '영웅', '냉혹'], role: ['딜러'], ability: ['민첩', '요원'] },
@@ -2877,6 +3182,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Yellowjacket',
   name: '옐로우자켓',
   portrait: '/images/yellowjacket.png',
+  tier: ['T1', 'T2', 'AW'],
   uniforms: [
     { name: "무비: 앤트맨", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '기계'] },
     { name: "마블 나우!", type: ['블래스트', '인간', '남성', '슈퍼 빌런', '냉혹'], role: ['딜러'], ability: ['사악', '기계'] }
@@ -2886,6 +3192,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Yondu',
   name: '욘두',
   portrait: '/images/yondu.png',
+  tier: ['T1', 'T2', 'T3'],
   uniforms: [
     { name: "가디언즈 오브 갤럭시", type: ['스피드', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['지휘', '무기 전문가'] },
     { name: "올-뉴, 올-디프런트", type: ['스피드', '외계인', '남성', '영웅', '질서'], role: ['딜러'], ability: ['지휘', '무기 전문가'] },
@@ -2897,6 +3204,7 @@ export const MFF_DATABASE_CHARACTERS: CharacterData[] = [
   id: 'Zeus',
   name: '제우스',
   portrait: '/images/zeus.png',
+  tier: ['T2', 'T3', 'T4'],
   uniforms: [
     { name: "모던", type: ['유니버셜', '외계인', '남성', '영웅', '질서'], role: ['리더', '딜러'], ability: ['전격', '에너지 투사', '올림포스'] },
   ]

@@ -578,10 +578,10 @@ export default function SL({
                                 e.stopPropagation(); // 배경 클릭 필터 이벤트로 번지는 것 차단
                                 removeCharFromFloor(floor, id);
                               }}
-                              style={{ position: 'relative', width: '54px', height: '54px', borderRadius: '50%', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}aa`, cursor: currentVersionData.isReadOnly ? 'default' : 'pointer' }}
+                              style={{ position: 'relative', width: '54px', height: '54px', borderRadius: '10px', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}aa`, cursor: currentVersionData.isReadOnly ? 'default' : 'pointer' }}
                               title={currentVersionData.isReadOnly ? char.name : `${char.name} [클릭 시 제거]`}
                             >
-                              <img src={getDynamicPortrait(char, userState.activeUniform)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                              <img src={getDynamicPortrait(char, userState.activeUniform)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }} />
                               <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#0d0d14', border: `1px solid ${tagColor}`, color: tagColor, fontSize: 8, fontWeight: 900, padding: '1px 3px', borderRadius: 4, lineHeight: 1 }}>
                                 {charTier}
                               </span>
@@ -632,7 +632,7 @@ export default function SL({
                 </button>
               </div>
               <FilterDropdownPanel />
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, maxHeight: '340px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, maxHeight: '340px', justifyContent: 'center',overflowY: 'auto', padding: '0 4px' }}>
                 {sortedLayoutCharacters.map(char => {
                   const userState = userCharacters[char.id] || { activeUniform: '' };
                   const currentUni = char.uniforms.find((u: any) => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
@@ -670,7 +670,7 @@ export default function SL({
                         position: 'relative', 
                         width: '48px', 
                         height: '48px', 
-                        borderRadius: '50%', 
+                        borderRadius: '10px', 
                         border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, 
                         cursor: placementMode === 'click' ? 'pointer' : 'grab',
                         transition: 'transform 0.1s ease',
@@ -691,7 +691,7 @@ export default function SL({
                           width: '100%', 
                           height: '100%', 
                           objectFit: 'cover', 
-                          borderRadius: '50%', 
+                          borderRadius: '10px', 
                           pointerEvents: 'none'
                         }} 
                       />
@@ -738,7 +738,7 @@ export default function SL({
                     const currentUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
 
                     return (
-                      <div key={char.id} draggable={true} onDragStart={(e) => handleDragStart(e, char.id)} style={{ width: '52px', height: '52px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}aa`, cursor: 'grab' }}>
+                      <div key={char.id} draggable={true} onDragStart={(e) => handleDragStart(e, char.id)} style={{ width: '52px', height: '52px', borderRadius: '10px', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}aa`, cursor: 'grab' }}>
                         <img src={getDynamicPortrait(char, userState.activeUniform)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
                       </div>
                     );
@@ -792,7 +792,7 @@ export default function SL({
                       width: '64px' 
                     }}
                   >
-                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, background: '#0d0d14' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '10px', overflow: 'hidden', border: `2px solid ${TYPE_COLOR[currentUni.type[0]] || '#444'}88`, background: '#0d0d14' }}>
                       <img src={getDynamicPortrait(char, userState.activeUniform)} alt={char.name} style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
                     </div>
                     <div style={{ fontSize: 10, color: '#aaa', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%', textAlign: 'center' }}>{char.name}</div>

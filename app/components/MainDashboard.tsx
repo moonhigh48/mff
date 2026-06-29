@@ -18,7 +18,7 @@ interface UserCharacterState { owned: boolean; activeUniform: string; ownedUnifo
 type UserCharactersData = Record<string, UserCharacterState>;
 type TierListData = Record<string, string[]>;
 type ShadowlandLayoutData = Record<number, string[]>;
-type EolbaeLayoutData = Record<string, string[]>;
+type EolbaeLayoutData = Record<string, (string | { id: string; abrole: string[] })[]>;
 type StageConditionData = Record<number, { id: string; matchTypes: string[]; }>;
 
 interface MainDashboardProps { 
@@ -31,6 +31,7 @@ interface MainDashboardProps {
     abxLayout?: EolbaeLayoutData;
     ablLayout?: EolbaeLayoutData;
     placementMode?: 'drag' | 'click';
+    sessionScores?: Record<string, number>;
   };
   onLogout: () => void; 
 }
@@ -52,6 +53,7 @@ export default function MainDashboard({
   const [abxLayout, setAbxLayout] = useState<EolbaeLayoutData>(initialData?.abxLayout || {});
   const [ablLayout, setAblLayout] = useState<EolbaeLayoutData>(initialData?.ablLayout || {});
   const [stageConditions, setStageConditions] = useState<StageConditionData>(initialData?.stageConditions || {});
+  const [sessionScores, setSessionScores] = useState<Record<string, number>>(initialData?.sessionScores || {});
 
   useEffect(() => {
     if (!userId) return;
@@ -67,10 +69,11 @@ export default function MainDashboard({
         if (data.characters) setUserCharacters(data.characters);
         if (data.tierList) setTierList(data.tierList);
         if (data.slLayout) setSlLayout(data.slLayout);
-        if (data.abxLayout) setAbxLayout(data.abxLayout);
-        if (data.ablLayout) setAblLayout(data.ablLayout);
+        if (data.abxLayout) setAbxLayout(data.abxLayout as EolbaeLayoutData);
+        if (data.ablLayout) setAblLayout(data.ablLayout as EolbaeLayoutData);
         if (data.placementMode) setPlacementMode(data.placementMode);
         if (data.stageConditions) setStageConditions(data.stageConditions);
+        if (data.sessionScores) setSessionScores(data.sessionScores);
 
         // 로컬스토리지 캐시도 최신으로 동기화
         localStorage.setItem("mff_initial_data", JSON.stringify(data));
@@ -87,7 +90,8 @@ export default function MainDashboard({
     updatedSl: ShadowlandLayoutData,
     updatedAbx: EolbaeLayoutData,
     updatedAbl: EolbaeLayoutData,
-    conditions?: StageConditionData
+    conditions?: StageConditionData,
+    updatedScores?: Record<string, number>,
   ) => {
     const updatedPayload = {
       characters: updatedChars,
@@ -95,9 +99,10 @@ export default function MainDashboard({
       slLayout: updatedSl,
       abxLayout: updatedAbx,
       ablLayout: updatedAbl,
-      ...(conditions ? { stageConditions: conditions } : {})
-
+      sessionScores: updatedScores || sessionScores,
+      ...(conditions ? { stageConditions: conditions } : {}),
     };
+
     if (conditions) {
       updatedPayload.stageConditions = conditions;
     }
@@ -111,7 +116,6 @@ export default function MainDashboard({
       // merge: true 옵션을 주면 기존 필드를 유지하면서 수정된 부분만 안전하게 덮어씁니다.
       const userDocRef = doc(db, 'users', userId);
       await setDoc(userDocRef, updatedPayload, { merge: true });
-      
     } catch (e) { 
       console.error('Firebase 데이터 동기화 실패:', e); 
     }
@@ -260,20 +264,31 @@ export default function MainDashboard({
           </div>      </div>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem' }}>
-        {activeTab === 'characters' && <Chr userCharacters={userCharacters} toggleOwned={toggleOwned} setSelectedCharId={setSelectedCharId} getDynamicPortrait={getDynamicPortrait} />}
+        {activeTab === 'characters' &&
+          <Chr
+            userCharacters={userCharacters}
+            toggleOwned={toggleOwned}
+            setUserCharacters={setUserCharacters}
+            setSelectedCharId={setSelectedCharId}
+            getDynamicPortrait={getDynamicPortrait}
+            saveToServer={(updatedChars) => 
+              saveAllToServer(updatedChars, tierList, slLayout, abxLayout, ablLayout, stageConditions)
+            } />}
         
         {activeTab === 'eolbae' && (
           <AB 
             userCharacters={userCharacters} 
+            setUserCharacters={setUserCharacters}
             abxLayout={abxLayout} 
             setAbxLayout={setAbxLayout} 
             ablLayout={ablLayout} 
             setAblLayout={setAblLayout} 
             getDynamicPortrait={getDynamicPortrait}
             placementMode={placementMode}
-            activeSession={activeTier}       // MainDashboard에 선언해 둔 activeTier 상태를 요일 선택용으로 공유 연동
+            activeSession={activeTier}
             setActiveSession={setActiveTier}
-            saveToServer={(updatedAbx, updatedAbl) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl)} 
+            sessionScores={sessionScores}
+            saveToServer={(updatedAbx, updatedAbl, updatedScores) => saveAllToServer(userCharacters, tierList, slLayout, updatedAbx, updatedAbl, stageConditions, updatedScores)} 
           />
         )}
         
@@ -307,7 +322,8 @@ export default function MainDashboard({
                 const isUniOwned = charState.ownedUniforms?.[uni.name] ?? (index === 0);
                 
                 // 새로운 튜플 설계에 맞춰 인덱스로 속성을 직접 구조분해 할당 처리
-                const [uniMainType, race, gender, faction, element] = uni.type;
+                const [uniMainType, race, gender, faction] = uni.type;
+                const [role] = uni.role;
                 const safeCharId = overlayCharacter.id.toLowerCase().replace(/ /g, '');
                 const uniPortrait = index === 0 ? overlayCharacter.portrait : `/images/${safeCharId}${index}.png`;
 
@@ -330,7 +346,7 @@ export default function MainDashboard({
                       
                       {/* 메인 타입을 제외한 나머지 디테일 속성 태그들 가독성 있게 매핑 노출 */}
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
-                        {[race, gender, faction, element].map(t => (
+                        {[race, gender, faction, role].map(t => (
                           <span key={t} style={{ background: '#13131e', color: '#888', fontSize: 9, padding: '1px 4px', borderRadius: 3 }}>{t}</span>
                         ))}
                       </div>
