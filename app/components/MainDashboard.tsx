@@ -95,7 +95,7 @@ export default function MainDashboard({
       slLayout: updatedSl,
       abxLayout: updatedAbx,
       ablLayout: updatedAbl,
-      ...(conditions ? { stageConditions: conditions } : {}),|
+      ...(conditions ? { stageConditions: conditions } : {}),
     };
 
     if (conditions) {
