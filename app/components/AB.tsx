@@ -63,7 +63,7 @@ export default function AB({
 }: ABProps) {
 
   const [abMode, setAbMode] = useState<'abx' | 'abl'>('abx');
-  const [activeTab, setActiveTab] = useState<'edit' | 'view'>('edit');
+  const [activeTab, setActiveTab] = useState<'edit' | 'view'>('view');
   const [selectedSessionKey, setSelectedSessionKey] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<string>('전체');
   const [filterRace, setFilterRace] = useState<string>('전체');
@@ -291,13 +291,13 @@ export default function AB({
         {/* 1-1. 편집 / 보기 탭 (왼쪽 고정) */}
         <div style={{ display: 'flex', background: '#13131e', padding: '4px', borderRadius: 8, width: 'fit-content', border: '1px solid #2a2a40' }}>
           <button 
-            onClick={() => setActiveTab('edit')} 
-            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'edit' ? '#5b8dee' : 'transparent', color: activeTab === 'edit' ? '#fff' : '#888', transition: 'all 0.2s' }}
-          >편집</button>
-          <button 
             onClick={() => setActiveTab('view')} 
             style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'view' ? '#0ea5e9' : 'transparent', color: activeTab === 'view' ? '#fff' : '#888', transition: 'all 0.2s' }}
           >보기</button>
+          <button 
+            onClick={() => setActiveTab('edit')} 
+            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: activeTab === 'edit' ? '#5b8dee' : 'transparent', color: activeTab === 'edit' ? '#fff' : '#888', transition: 'all 0.2s' }}
+          >편집</button>
         </div>
 
         {/* 1-2. 극한 / 레전드 탭 (오른쪽 배치 + 편집 모드일 때만 조건부 노출) */}
@@ -316,8 +316,8 @@ export default function AB({
       </div>
 
       {activeTab === 'edit' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'flex-start' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: '740px', overflowY: 'auto', paddingRight: 4 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '6fr 4fr', gap: 20, alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: '740px', overflowY: 'auto', paddingRight: 4}}>
             {currentSessions.map((session, index) => {
               const currentKey = `${session}-${index}`;
               const isSelected = selectedSessionKey === currentKey;
@@ -356,7 +356,8 @@ export default function AB({
                   </div>
                   
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-                    <div onClick={e => e.stopPropagation()} style={{ display: 'flex', flexWrap: 'wrap', gap: 8, flex: 1, minHeight: '44px', alignItems: 'center', background: '#0d0d1440', borderRadius: 6, padding: '6px' }}>
+                    <div onClick={e => e.stopPropagation()}
+                    style={{ display: 'flex', flexWrap: 'wrap', gap: 8, flex: 1, minHeight: '44px', alignItems: 'center', background: '#0d0d1440', borderRadius: 6, padding: '6px'}}>
                       {(currentLayoutData[session] || []).map(id => {
                         const char = MFF_DATABASE_CHARACTERS.find(c => c.id === id);
                         if (!char) return null;
