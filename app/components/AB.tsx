@@ -487,7 +487,7 @@ export default function AB({
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            <div style={{ background: '#13131e', border: '1px solid #ff3e3e44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(229,62,62,0.05)' }}>
+            <div style={{ background: '#13131e', border: '1px solid #00f0ff44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(229,62,62,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <span style={{ color: '#03aab6', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>EXTREME MODE</span>
                 <span style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>
@@ -518,7 +518,7 @@ export default function AB({
               </div>
             </div>
 
-            <div style={{ background: '#13131e', border: '1px solid #00f0ff44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(0,240,255,0.05)' }}>
+            <div style={{ background: '#13131e', border: '1px solid #ff3e3e44', borderRadius: 16, padding: '24px', boxShadow: '0 8px 24px rgba(0,240,255,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <span style={{ color: '#d52626', fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>LEGEND MODE</span>
                 <span style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>
@@ -537,7 +537,7 @@ export default function AB({
                     ) : null;
                   })}
                   {(ablLayout[todayViewInfo.ablName] || []).length === 0 && (
-                    <div style={{ color: '#444', fontSize: 13 }}>배치된 영웅 없음</div>
+                    <div style={{ color: '#444', fontSize: 13, padding: '16px 0' }}>배치된 영웅 없음</div>
                   )}
                 </div>
                 <div style={{ borderTop: '1px solid #2a2a40', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
