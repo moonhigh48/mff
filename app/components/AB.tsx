@@ -69,7 +69,7 @@ export default function AB({
   const [filterRace, setFilterRace] = useState<string>('전체');
   const [filterGender, setFilterGender] = useState<string>('전체');
   const [filterFaction, setFilterFaction] = useState<string>('전체');
-  const [filterElement, setFilterElement] = useState<string>('전체');
+  const [filterRole, setfilterRole] = useState<string>('전체');
   const [filterAbility, setFilterAbility] = useState<string>('전체');
   const [localScores, setLocalScores] = useState<Record<string, number>>(sessionScores);
 
@@ -211,7 +211,7 @@ export default function AB({
       const userState = userCharacters[char.id];
       const activeUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
       
-      const [baseType, race, gender, faction, element] = activeUni.type;
+      const [baseType, race, gender, faction] = activeUni.type;
       
       let currentSessionIndex = -1;
       let targetSessionName = '';
@@ -254,12 +254,12 @@ export default function AB({
       if (filterRace !== '전체' && race !== filterRace) return false;
       if (filterGender !== '전체' && gender !== filterGender) return false;
       if (filterFaction !== '전체' && faction !== filterFaction) return false;
-      if (filterElement !== '전체' && element !== filterElement) return false;
+      if (filterRole !== '전체' && !activeUni.role.includes(filterRole)) return false;
       if (filterAbility !== '전체' && !activeUni.ability.includes(filterAbility)) return false;
 
       return true;
     }).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-  }, [userCharacters, selectedSessionKey, filterType, filterRace, filterGender, filterFaction, filterElement, filterAbility, abMode, abxLayout, ablLayout, placementMode, activeSession, currentSessions]);
+  }, [userCharacters, selectedSessionKey, filterType, filterRace, filterGender, filterFaction, filterRole, filterAbility, abMode, abxLayout, ablLayout, placementMode, activeSession, currentSessions]);
 
   const todayViewInfo = useMemo(() => {
     const abxName = todaySessionInfo.isSunday ? '자유' : ABX_SESSIONS[todaySessionInfo.sessionIndex];
@@ -436,9 +436,9 @@ export default function AB({
                 </select>
               </div>
               <div>
-                <label style={{ fontSize: 10, color: '#666', display: 'block', marginBottom: 3 }}>천성</label>
-                <select value={filterElement} onChange={e => setFilterElement(e.target.value)} style={{ width: '100%', background: '#1e1e2e', border: '1px solid #2a2a40', color: '#fff', fontSize: 11, padding: '4px', borderRadius: 4, outline: 'none' }}>
-                  {['전체', '파멸', '냉혹', '질서', '정의'].map(v => <option key={v} value={v}>{v}</option>)}
+                <label style={{ fontSize: 10, color: '#666', display: 'block', marginBottom: 3 }}>역할</label>
+                <select value={filterRole} onChange={e => setfilterRole(e.target.value)} style={{ width: '100%', background: '#1e1e2e', border: '1px solid #2a2a40', color: '#fff', fontSize: 11, padding: '4px', borderRadius: 4, outline: 'none' }}>
+                  {['전체', '리더', '딜러', '서포터'].map(v => <option key={v} value={v}>{v}</option>)}
                 </select>
               </div>
               <div>

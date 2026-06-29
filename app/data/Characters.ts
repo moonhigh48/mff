@@ -12,7 +12,7 @@ export type MFFTierType = 'T1' | 'T2' | 'AW' | 'T3' | 'T4';
 export interface UniformInfo {
   name: string;
   type: MffCharacterTypeTuple; // 무조건 정의한 순서대로 5개의 값이 들어가야 함
-  role: ('리더' | '딜러' | '서포터' | '')[];
+  role: string[];
   ability: string[];
 }
 

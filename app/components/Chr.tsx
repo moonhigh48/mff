@@ -261,9 +261,15 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
               <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{currentUni.name}</div>
 
               {/* 하단: 기존 유니폼 세부 속성 태그 출력 구역 (상시 노출) */}
-              <div style={{ marginTop: 'auto', display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4}}>
                 {currentUni.type
-                  .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜'].includes(t))
+                  .filter(t => !['컴뱃', '블래스트', '스피드', '유니버셜', '질서', '정의', '파멸', '냉혹'].includes(t))
+                  .map(t => (
+                    <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>
+                      {t}
+                    </span>
+                  ))}
+                {currentUni.role
                   .map(t => (
                     <span key={t} style={{ background: '#1e1e2e', color: '#aaa', fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>
                       {t}

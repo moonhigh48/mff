@@ -322,7 +322,8 @@ export default function MainDashboard({
                 const isUniOwned = charState.ownedUniforms?.[uni.name] ?? (index === 0);
                 
                 // 새로운 튜플 설계에 맞춰 인덱스로 속성을 직접 구조분해 할당 처리
-                const [uniMainType, race, gender, faction, element] = uni.type;
+                const [uniMainType, race, gender, faction] = uni.type;
+                const [role] = uni.role;
                 const safeCharId = overlayCharacter.id.toLowerCase().replace(/ /g, '');
                 const uniPortrait = index === 0 ? overlayCharacter.portrait : `/images/${safeCharId}${index}.png`;
 
@@ -345,7 +346,7 @@ export default function MainDashboard({
                       
                       {/* 메인 타입을 제외한 나머지 디테일 속성 태그들 가독성 있게 매핑 노출 */}
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
-                        {[race, gender, faction, element].map(t => (
+                        {[race, gender, faction, role].map(t => (
                           <span key={t} style={{ background: '#13131e', color: '#888', fontSize: 9, padding: '1px 4px', borderRadius: 3 }}>{t}</span>
                         ))}
                       </div>
