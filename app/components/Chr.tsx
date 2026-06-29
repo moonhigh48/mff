@@ -193,7 +193,8 @@ export default function Chr({ userCharacters, toggleOwned, setSelectedCharId, ge
                   
                   // 🌟 디자인, 고정 크기, 완벽한 정중앙 밸런스를 적용한 스타일
                   style={{
-                    width: '92px',
+                    width: '84px',
+                    padding: '6px 0',
                     fontSize: '12px',
                     fontWeight: 600,
                     background: owned ? TYPE_COLOR[mainType] + 'cc' : '#2a2a40', // 캐릭터 타입별 포인트 색상 배경 유지 (미보유 시 다크 그레이)
