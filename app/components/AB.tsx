@@ -235,18 +235,23 @@ export default function AB({
   const handleToggleDealerRole = (session: string, charId: string) => {
     const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
     const setLayout = abMode === 'abx' ? setAbxLayout : setAblLayout;
-
-    const updated = parseLayout(currentLayoutData[session] || []).map(char => {
+    const currentLayout = parseLayout(currentLayoutData[session] || []);
+    const targetChar = currentLayout.find(c => c.id === charId);
+    const isAlreadyDealer = targetChar?.abrole.includes('딜러');
+    
+    const updated = currentLayout.map(char => {
       if (char.id === charId) {
-        const hasDealer = char.abrole.includes('딜러');
         return {
           ...char,
-          abrole: hasDealer 
+          abrole: isAlreadyDealer 
             ? char.abrole.filter(r => r !== '딜러') 
-            : [...char.abrole, '딜러'] // 순서대로 뒤에 오버레이가 붙도록 push
+            : [...char.abrole, '딜러']
+        };
+      } else {
+        return {
+          ...char, abrole: isAlreadyDealer ? char.abrole : char.abrole.filter(r => r !== '딜러')
         };
       }
-      return char;
     });
 
     const nextLayout = { ...currentLayoutData, [session]: updated };
@@ -485,8 +490,8 @@ export default function AB({
                             }}
                             style={{ 
                               position: 'relative', // 💡 역할군 오버레이 아이콘을 띄우기 위한 기준점 마련
-                              width: '44px', 
-                              height: '44px', 
+                              width: '50px', 
+                              height: '50px', 
                               borderRadius: '10px', 
                               border: isDealerMode ? '2px dashed #e53e3e' : `2px solid ${TYPE_COLOR[currentUni.type[0]]}aa`, 
                               cursor: isDealerMode ? 'pointer' : 'move' 
@@ -509,11 +514,9 @@ export default function AB({
                                 <div
                                   key={rIdx}
                                   style={{
-                                    width: '15px',
-                                    height: '15px',
+                                    width: '16px',
+                                    height: '16px',
                                     background: '#13131e',
-                                    border: `1px solid ${role === '딜러' ? '#e53e3e' : role === '리더' ? '#d69e2e' : '#3182ce'}`,
-                                    borderRadius: '50%',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
