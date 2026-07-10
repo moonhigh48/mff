@@ -510,7 +510,9 @@ export default function AB({
                               flexDirection: 'row',
                               pointerEvents: 'none'
                             }}>
-                              {charObj.abrole.map((role, rIdx) => (
+                              {charObj.abrole
+                              .filter(role => role === 'leader' || role === 'dealer')
+                              .map((role, rIdx) => (
                                 <div
                                   key={rIdx}
                                   style={{
