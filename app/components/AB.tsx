@@ -272,15 +272,15 @@ export default function AB({
   }, []);
 
   const filteredCharacters = useMemo(() => {
+    const currentLayoutData = abMode === 'abx' ? abxLayout : ablLayout;
     const oppositeLayoutData = abMode === 'abx' ? ablLayout : abxLayout;
     return MFF_DATABASE_CHARACTERS.filter(char => {
       if (!userCharacters[char.id]?.owned) return false;
       
       const userState = userCharacters[char.id];
       const activeUni = char.uniforms.find(u => u.name === userState.activeUniform) || char.uniforms[char.uniforms.length - 1];
-      
       const [baseType, race, gender, faction] = activeUni.type;
-      
+
       let currentSessionIndex = -1;
       let targetSessionName = '';
 
@@ -296,14 +296,13 @@ export default function AB({
       if (currentSessionIndex !== -1) {
         const oppositeSessions = abMode === 'abx' ? ABL_SESSIONS : ABX_SESSIONS;
         const oppositeSessionName = oppositeSessions[currentSessionIndex];
-        const oppositeAllocatedIds = oppositeLayoutData[oppositeSessionName] || [];
-        
-        if (oppositeAllocatedIds.includes(char.id)) return false;
+        const oppositeAllocated = parseLayout(oppositeLayoutData[oppositeSessionName] || []);
+        if (oppositeAllocated.some(c => c.id === char.id)) return false;
       }
 
       if (targetSessionName) {
-        const currentAllocatedIds = currentLayoutData[targetSessionName] || [];
-        if (currentAllocatedIds.includes(char.id)) return false;
+        const currentAllocated = parseLayout(currentLayoutData[targetSessionName] || []);
+        if (currentAllocated.some(c => c.id === char.id)) return false;
       }
 
       if (selectedSessionKey) {
@@ -334,11 +333,12 @@ export default function AB({
     return {
       abxName,
       ablName,
-      abxScoreKey: `${abxName}-${idx}`,
-      ablScoreKey: `${ablName}-${idx}`
+      // ✨ 뒤에 _abx와 _abl을 붙여서 점수가 저장되는 방을 분리합니다.
+      abxScoreKey: abxName === '자유' ? `자유_abx_${idx}` : `${abxName}-${idx}`,
+      ablScoreKey: ablName === '자유' ? `자유_abl_${idx}` : `${ablName}-${idx}`
     };
   }, [todaySessionInfo]);
-
+  
   const ROLE_ICONS: Record<string, string> = {
     '리더': '/leader.png',
     '딜러': '/dps.png',
@@ -674,9 +674,30 @@ export default function AB({
                       <div key={charObj.id} style={{ position: 'relative', width: '54px', height: '54px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #03aab6' }}>
                         <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         <div style={{ position: 'absolute', top: '2px', left: '2px', display: 'flex', gap: '1px' }}>
-                          {charObj.abrole.map((r, idx) => (
-                            <span key={idx} style={{ fontSize: '9px', background: '#13131ea0', borderRadius: '50%', padding: '1px' }}>{ROLE_ICONS[r]}</span>
-                          ))}
+                          {charObj.abrole
+                              .filter(role => role === 'leader' || role === 'dealer')
+                              .map((role, rIdx) => (
+                                <div
+                                  key={rIdx}
+                                  style={{
+                                    width: '16px',
+                                    height: '16px',
+                                    background: '#13131e',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '9px',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.6)'
+                                  }}
+                                  title={role}
+                                >
+                                  <img 
+                                    src={ROLE_ICONS[role]} 
+                                    alt={role} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                                  />
+                                </div>
+                              ))}
                         </div>
                       </div>
                     ) : null;
@@ -709,9 +730,30 @@ export default function AB({
                       <div key={charObj.id} style={{ position: 'relative', width: '54px', height: '54px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #d52626' }}>
                         <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         <div style={{ position: 'absolute', top: '2px', left: '2px', display: 'flex', gap: '1px' }}>
-                          {charObj.abrole.map((r, idx) => (
-                            <span key={idx} style={{ fontSize: '9px', background: '#13131ea0', borderRadius: '50%', padding: '1px' }}>{ROLE_ICONS[r]}</span>
-                          ))}
+                          {charObj.abrole
+                              .filter(role => role === 'leader' || role === 'dealer')
+                              .map((role, rIdx) => (
+                                <div
+                                  key={rIdx}
+                                  style={{
+                                    width: '16px',
+                                    height: '16px',
+                                    background: '#13131e',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '9px',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.6)'
+                                  }}
+                                  title={role}
+                                >
+                                  <img 
+                                    src={ROLE_ICONS[role]} 
+                                    alt={role} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                                  />
+                                </div>
+                              ))}
                         </div>
                       </div>
                     ) : null;
