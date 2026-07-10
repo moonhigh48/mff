@@ -342,8 +342,8 @@ export default function AB({
       abxName,
       ablName,
       // ✨ 뒤에 _abx와 _abl을 붙여서 점수가 저장되는 방을 분리합니다.
-      abxScoreKey: abxName === '자유' ? `자유_abx_${idx}` : `${abxName}-${idx}`,
-      ablScoreKey: ablName === '자유' ? `자유_abl_${idx}` : `${ablName}-${idx}`
+      abxScoreKey: abxName === '자유' ? `자유_abx` : `${abxName}-${idx}`,
+      ablScoreKey: ablName === '자유' ? `자유_abl` : `${ablName}-${idx}`
     };
   }, [todaySessionInfo]);
   
