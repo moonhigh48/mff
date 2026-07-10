@@ -293,16 +293,24 @@ export default function AB({
         targetSessionName = activeSession;
       }
 
+      const getRawIds = (layoutRawData: any) => {
+        if (!layoutRawData) return [];
+        if (Array.isArray(layoutRawData)) {
+          return layoutRawData.map(item => (typeof item === 'object' && item !== null ? item.id : item));
+        }
+        return [];
+      };
+      
       if (currentSessionIndex !== -1) {
         const oppositeSessions = abMode === 'abx' ? ABL_SESSIONS : ABX_SESSIONS;
         const oppositeSessionName = oppositeSessions[currentSessionIndex];
-        const oppositeAllocated = parseLayout(oppositeLayoutData[oppositeSessionName] || []);
-        if (oppositeAllocated.some(c => c.id === char.id)) return false;
+        const oppositeAllocatedIds = getRawIds(oppositeLayoutData[oppositeSessionName]);
+        if (oppositeAllocatedIds.includes(char.id)) return false;
       }
 
       if (targetSessionName) {
-        const currentAllocated = parseLayout(currentLayoutData[targetSessionName] || []);
-        if (currentAllocated.some(c => c.id === char.id)) return false;
+        const currentAllocatedIds = getRawIds(currentLayoutData[targetSessionName]);
+        if (currentAllocatedIds.includes(char.id)) return false;
       }
 
       if (selectedSessionKey) {
@@ -422,7 +430,7 @@ export default function AB({
         <div style={{ display: 'grid', gridTemplateColumns: '6fr 4fr', gap: 20, alignItems: 'flex-start' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: '740px', overflowY: 'auto', paddingRight: 4}}>
             {currentSessions.map((session, index) => {
-              const currentKey = `${session}-${index}`;
+              const currentKey = session === '자유' ? `자유-${abMode}-${index}`  : `${session}-${index}`;
               const isSelected = selectedSessionKey === currentKey;
               const isClickTarget = placementMode === 'click' && activeSession === session;
               const structuredLayout = parseLayout(currentLayoutData[session] || []);
@@ -511,7 +519,7 @@ export default function AB({
                               pointerEvents: 'none'
                             }}>
                               {charObj.abrole
-                              .filter(role => role === 'leader' || role === 'dealer')
+                              .filter(role => role === '리더' || role === '딜러')
                               .map((role, rIdx) => (
                                 <div
                                   key={rIdx}
@@ -675,7 +683,7 @@ export default function AB({
                         <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         <div style={{ position: 'absolute', top: '2px', left: '2px', display: 'flex', gap: '1px' }}>
                           {charObj.abrole
-                              .filter(role => role === 'leader' || role === 'dealer')
+                              .filter(role => role === '리더' || role === '딜러')
                               .map((role, rIdx) => (
                                 <div
                                   key={rIdx}
@@ -731,7 +739,7 @@ export default function AB({
                         <img src={getDynamicPortrait(char)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         <div style={{ position: 'absolute', top: '2px', left: '2px', display: 'flex', gap: '1px' }}>
                           {charObj.abrole
-                              .filter(role => role === 'leader' || role === 'dealer')
+                              .filter(role => role === '리더' || role === '딜러')
                               .map((role, rIdx) => (
                                 <div
                                   key={rIdx}
